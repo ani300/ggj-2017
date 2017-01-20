@@ -43,13 +43,14 @@ bool ReceiverAlwaysOn::isOnRightNow(){
 }
 
 void drawCurrent(sf::RenderTarget& target, sf::RenderStates states){
+	//TODO: animate on/off
 	if(on)
 	{
-		//TODO: Draw on
+		target.draw(mSprite, states);
 	}
 	else
 	{
-		//TODO: Draw off
+		target.draw(mSprite, states);
 	}
 }
 
