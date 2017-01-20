@@ -13,38 +13,14 @@ namespace Textures
 {
 	enum ID
 	{
-        GameBackground1,
-        GameBackground2,
-        HelpBackground,
-        CountdownBackground,
-        Player1,
-        Player2,
-        PlayerAnimation1,
-        PlayerAnimation2,
-        Blue,
-        Red,
-        Platform1,
-        TrapBox,
-        SpikesBall,
-        PlatformWood,
-        PlatformStone,
-        IconBox,
-        IconBall,
-        IconSpikes,
-        IconSwitch,
-        Spikes,
-        Title,
-        Start,
-        Help,
-        Exit,
-        RaccoonWins,
-        FoxWins,
-        Cursor,
-        Return,
-        AButton,
-        BButton,
-        XButton,
-        YButton
+		ReceiverAlwaysOn,
+		WaveGenerator,
+		Start,
+		Help,
+		Title,
+		Exit,
+		Return,
+		HelpBackground
 	};
 }
 

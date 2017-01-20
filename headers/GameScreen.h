@@ -12,12 +12,13 @@
 #include "ResourceIdentifiers.h"
 
 class WaveGenerator;
-class AlwaysOnReceiver;
+class Receiver;
 class GameScreen: public State {
 
     public:
         //Constructor with name of the image it wants to display
-        GameScreen(int level_number, StatesStack& stack, Context& context);
+        GameScreen(StatesStack& stack, Context& context);
+
 
         void draw();
         bool update(sf::Time dt);

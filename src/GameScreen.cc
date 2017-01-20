@@ -2,9 +2,10 @@
 #include "GameScreen.h"
 #include "AnimationNode.h"
 #include "Receiver.h"
+#include "ReceiverAlwaysOn.h"
 #include "WaveGenerator.h"
 
-GameScreen::GameScreen(int level_number, StatesStack& stack, Context& context)
+GameScreen::GameScreen(StatesStack& stack, Context& context)
 	: State(stack, context)
 {
 	// TODO: read level data from files
@@ -18,12 +19,15 @@ GameScreen::GameScreen(int level_number, StatesStack& stack, Context& context)
 	receivers_positions[2] = sf::Vector2f(400, 200);
 
 	for(int i = 0; i < num_generators; ++i) {
-		WaveGenerator *generator = new WaveGenerator();
+		WaveGenerator *generator = 
+			new WaveGenerator(context.mTextures->get(Textures::WaveGenerator), 
+					"res/animations/wave_generator.anim");
 		generators.push_back(generator);
 	}
 
 	for(auto v: receivers_positions) {
-		Receiver *receiver = new AlwaysOnReceiver(&generators);
+		Receiver *receiver = 
+			new ReceiverAlwaysOn(&generators, context.mTextures->get(Textures::ReceiverAlwaysOn));
 	}
 }
 
