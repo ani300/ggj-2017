@@ -26,11 +26,11 @@ class TitleScreen: public State {
         enum class Layer {
             Background,
             Text,
-            LayerCount
+            Count
         };
 
         SceneNode mSceneGraph;
-        std::array<SceneNode*, static_cast<std::size_t>(Layer::LayerCount)> mSceneLayers;
+        std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
 
         SpriteNode* mButtonPlay;
         SpriteNode* mButtonHelp;

@@ -24,9 +24,7 @@ struct GameData {
     GameData();
 };
 
-inline GameData::GameData() :
-{
-}  
+inline GameData::GameData() {}  
 
 const float metersToPixels = 192.0f;
 const float epsilon = 1e-2f;

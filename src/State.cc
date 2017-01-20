@@ -24,7 +24,7 @@ State::State(StatesStack& stack, Context& context)
 State::~State() {
 }
 
-void State::requestStackPush(States::ID IDState) {
+void State::requestStackPush(StateType IDState) {
     mStack->pushState(IDState);
 }
 

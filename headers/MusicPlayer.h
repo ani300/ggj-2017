@@ -19,5 +19,3 @@ class MusicPlayer : private sf::NonCopyable {
         std::map<Music::ID, std::string> mFilenames;
         float mVolume;
 };
-
-#endif // MUSIC_PLAYER_H

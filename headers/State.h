@@ -33,7 +33,7 @@ class State {
         virtual bool handleEvent(const sf::Event& event) = 0;
 
     protected:
-        void requestStackPush(States::ID stateID);
+        void requestStackPush(StateType stateID);
         void requestStackPop();
         void requestStackClear();
 

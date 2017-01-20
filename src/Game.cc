@@ -18,7 +18,7 @@ Game::Game() :
 , mTextures()
 , mMusic()
 , mSound()
-, mGameData(1000,0,0,0,0,0) // Set to 1000 rounds for more fun
+, mGameData()
 , mStatesStack(State::Context(mRenderTexture, mTextures, mFonts, mScale, mWindow, mMusic, mSound, mGameData))
 , mStatisticsText()
 , mStatisticsUpdateTime()
@@ -46,7 +46,7 @@ Game::Game() :
     mWindow.setVerticalSyncEnabled(true);
 
     registerStates();
-    mStatesStack.pushState(States::Title);
+    mStatesStack.pushState(StateType::Title);
 }
 
 
@@ -137,10 +137,8 @@ void Game::updateStatistics(sf::Time dt) {
 }
 
 void Game::registerStates() {
-    mStatesStack.registerState<TitleScreen>(States::Title);
-    mStatesStack.registerState<HelpScreen>(States::Help);
-    mStatesStack.registerState<GameScreen>(States::Game);
-    mStatesStack.registerState<CountdownScreen>(States::Countdown);
-    mStatesStack.registerState<ResultsScreen>(States::Results);
+    mStatesStack.registerState<TitleScreen>(StateType::Title);
+    mStatesStack.registerState<HelpScreen>(StateType::Help);
+    mStatesStack.registerState<GameScreen>(StateType::Game);
 }
 
