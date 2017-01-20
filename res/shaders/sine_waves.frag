@@ -4,8 +4,6 @@ uniform vec2 source_pos3;
 uniform vec2 source_pos4;
 uniform vec2 source_pos5;
 
-uniform int num_sources;
-
 uniform vec4 color_min;
 uniform vec4 color_max;
 
@@ -48,7 +46,7 @@ float sum_of_sources() {
     float w5 = 2*3.141592*frequency5;
     float k5 = 2*3.141592/wavelength5;
     float val5 = 0.5 + amplitude5*0.5*sin(w5*time - k5*dist5);
-    return (val1 + val2 + val3 + val4 + val5)/num_sources;
+    return (val1 + val2 + val3 + val4 + val5)/5;
 }
 
 void main() {
