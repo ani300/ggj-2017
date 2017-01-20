@@ -2,7 +2,7 @@
 
 
 Receiver::Receiver(sf::Texture& texture, std::vector<WaveGenerator*> *generators) : 
-	AnimationNode(texture),
+	AnimationNode(texture, "res/animations/Receiver.anim"),
 	generators(generators)
 {
 }
