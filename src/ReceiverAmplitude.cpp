@@ -1,20 +1,22 @@
-#include "ReceiverAlwaysOff.h"
+#include "ReceiverAmplitude.h"
 
 
 
 const int HISTORY_LENGTH = 60;
 
-//Frames needed to consider activated
-const float ACTIVATION_THRESHOLD = 45/HISTORY_LENGTH;
+//Successive frames needed to consider activated
+const float ACTIVATION_THRESHOLD = 10/HISTORY_LENGTH;
 
-ReceiverAlwaysOff::ReceiverAlwaysOff(const sf::Texture& texture, const &vector<WaveGenerator> generators) : 
+ReceiverAmplitude::ReceiverAmplitude(const sf::Texture& texture, 
+	const &vector<WaveGenerator> generators, float t) : 
 	Receiver(texture, generators){
 
+	target = t;
 	activationHistory = new vector<bool>(HISTORY_LENGTH, false);
 	currentFrame = 0;
 }
 
-bool ReceiverAlwaysOff::isOn(){
+bool ReceiverAmplitude::isOn(){
 	int count = 0;
 	//Set current frame
 	activationHistory[currentFrame] = isOnRightNow();
@@ -29,7 +31,7 @@ bool ReceiverAlwaysOff::isOn(){
 	return count/HISTORY_LENGTH > ACTIVATION_THRESHOLD;
 }
 
-bool ReceiverAlwaysOff::isOnRightNow(){
+bool ReceiverAmplitude::isOnRightNow(){
 	float totalInput = 0;
 	for(WaveGenerator g : generators)
 	{
@@ -39,10 +41,10 @@ bool ReceiverAlwaysOff::isOnRightNow(){
 		}
 	}
 
-	return totalInput < 0;
+	return totalInput > target;
 }
 
-void ReceiverAlwaysOff::drawCurrent(sf::RenderTarget& target, sf::RenderStates states){
+void ReceiverAmplitude::drawCurrent(sf::RenderTarget& target, sf::RenderStates states){
 	//TODO: animate on/off
 	if(on)
 	{
@@ -54,6 +56,6 @@ void ReceiverAlwaysOff::drawCurrent(sf::RenderTarget& target, sf::RenderStates s
 	}
 }
 
-void ReceiverAlwaysOff::updateCurrent(sf::Time dt){
+void ReceiverAmplitude::updateCurrent(sf::Time dt){
 	on = isOn();
 }

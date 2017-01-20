@@ -26,7 +26,7 @@ bool ReceiverAlwaysOn::isOn(){
 
 	currentFrame = (currentFrame + 1) % 60;
 
-	return count/HISTORY_LENGTH < ACTIVATION_THRESHOLD;
+	return count/HISTORY_LENGTH > ACTIVATION_THRESHOLD;
 }
 
 bool ReceiverAlwaysOn::isOnRightNow(){

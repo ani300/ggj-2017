@@ -8,7 +8,7 @@
 */
 class ReceiverAlwaysOff: public Receiver{
 	public:
-		ReceiverAlwaysOff(const sf::Texture& texture);
+		ReceiverAlwaysOff(const sf::Texture& texture), std::vector<WaveGenerator>* generators;
 		
 	private:
 		const int HISTORY_LENGTH;
