@@ -19,7 +19,6 @@ class AnimationNode: public SpriteNode {
         void resetAnimation();
         float getElapsedTime() const;
 
-        virtual void createBody(b2World* world, bool dynamic, float bbscalex=1.0f, float bbscaley = 1.0f, float density = 1.0f, float rotation = 0.0f) override;
 
     protected:
         void updateCurrent(sf::Time dt) override;

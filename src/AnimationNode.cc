@@ -132,7 +132,3 @@ void AnimationNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates state
     target.draw(mSprite, states);
 }
 
-void AnimationNode::createBody(b2World* world, bool dynamic, float bbscalex, float bbscaley, float density, float rotation) {
-    setupBody(world, dynamic, bbscalex, bbscaley, density, rotation);
-    mBody->SetUserData(this);
-}

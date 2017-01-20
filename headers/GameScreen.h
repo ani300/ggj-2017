@@ -10,7 +10,6 @@
 #include "Player.h"
 #include "SpriteNode.h"
 #include "InvisibleNode.h"
-#include "PlatformNode.h"
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
 
@@ -39,9 +38,7 @@ class GameScreen: public State {
     private:
         void handleRealtimeInput();
         void handleCollisions();
-        bool checkCollision(SpriteNode* a, SpriteNode* b);
         void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
-        void activateTrap(Traps::Traps trap);
 
         enum Layer {
             Background,
@@ -58,11 +55,6 @@ class GameScreen: public State {
         SpriteNode* mGround;
         SpriteNode* mCursor;
         std::vector<AnimationNode*> mTrapButtons;
-        std::array<float, Traps::TrapsCount> mTrapCooldown;
-        std::vector<PlatformNode*> mPlatforms;
-        std::vector<PlatformNode*> mFixedPlatforms;
-
-        b2World* mWorld;
 
         TextNode* mText;
 

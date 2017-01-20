@@ -47,9 +47,9 @@ DCOMPILE_FLAGS = -D DEBUG
 INCLUDES = -I $(INC_PATH)/
 # General linker settings
 ifeq ($(shell uname -s), Darwin)
-	LINK_FLAGS = -stdlib=libc++ -L/usr/local/lib -lsfml-system -lsfml-graphics -lsfml-window -lsfml-audio -lBox2D
+	LINK_FLAGS = -stdlib=libc++ -L/usr/local/lib -lsfml-system -lsfml-graphics -lsfml-window -lsfml-audio 
 else
-	LINK_FLAGS = -lsfml-system -lsfml-graphics -lsfml-window -lsfml-audio -lBox2D
+	LINK_FLAGS = -lsfml-system -lsfml-graphics -lsfml-window -lsfml-audio
 endif
 # Additional release-specific linker settings
 RLINK_FLAGS = 

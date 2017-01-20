@@ -53,25 +53,6 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
         && event.mouseButton.button == sf::Mouse::Button::Left) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
         sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
-        sf::IntRect newGameBounds = mButtonPlay->getBounds();
-        sf::IntRect helpBounds = mButtonHelp->getBounds();
-        sf::IntRect exitBounds = mButtonExit->getBounds();
-        if (newGameBounds.contains(newPos)) {
-            getContext().mMusic->stop();
-            getContext().mSound->play(SoundEffect::Gong);
-            requestStackPop();
-            requestStackPush(States::Countdown);
-        }
-        else if (helpBounds.contains(newPos)) {
-            requestStackPop();
-            requestStackPush(States::Help);
-        }
-        else if (exitBounds.contains(newPos)) {
-            requestStackPop();
-        }
-        else {
-            std::cout << "kek" << std::endl;
-        } 
     }
     if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Return) {

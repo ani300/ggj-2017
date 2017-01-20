@@ -59,11 +59,6 @@ bool HelpScreen::handleEvent(const sf::Event& event) {
         && event.mouseButton.button == sf::Mouse::Button::Left) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
         sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
-        sf::IntRect buttonBounds = mButtonBack->getBounds();
-        if (buttonBounds.contains(newPos)) {
-            requestStackPop();
-            requestStackPush(States::Title);
-        }
     }
     return true;
 }
