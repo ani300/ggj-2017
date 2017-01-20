@@ -1,4 +1,4 @@
-#include "ReceiverAlwaysOn.h"
+#include "ReceiverAlwaysOff.h"
 
 
 
@@ -7,14 +7,14 @@ const int HISTORY_LENGTH = 60;
 //Frames needed to consider activated
 const float ACTIVATION_THRESHOLD = 45/HISTORY_LENGTH;
 
-ReceiverAlwaysOn::ReceiverAlwaysOn(const sf::Texture& texture, const &vector<WaveGenerator> generators) : 
+ReceiverAlwaysOff::ReceiverAlwaysOff(const sf::Texture& texture, const &vector<WaveGenerator> generators) : 
 	Receiver(texture, generators){
 
 	activationHistory = new vector<bool>(HISTORY_LENGTH, false);
 	currentFrame = 0;
 }
 
-bool ReceiverAlwaysOn::isOn(){
+bool ReceiverAlwaysOff::isOn(){
 	int count = 0;
 	//Set current frame
 	activationHistory[currentFrame] = isOnRightNow();
@@ -29,7 +29,7 @@ bool ReceiverAlwaysOn::isOn(){
 	return count/HISTORY_LENGTH < ACTIVATION_THRESHOLD;
 }
 
-bool ReceiverAlwaysOn::isOnRightNow(){
+bool ReceiverAlwaysOff::isOnRightNow(){
 	float totalInput = 0;
 	for(WaveGenerator g : generators)
 	{
@@ -39,10 +39,10 @@ bool ReceiverAlwaysOn::isOnRightNow(){
 		}
 	}
 
-	return totalInput > 0;
+	return totalInput < 0;
 }
 
-void ReceiverAlwaysOn::drawCurrent(sf::RenderTarget& target, sf::RenderStates states){
+void ReceiverAlwaysOff::drawCurrent(sf::RenderTarget& target, sf::RenderStates states){
 	//TODO: animate on/off
 	if(on)
 	{
@@ -54,6 +54,6 @@ void ReceiverAlwaysOn::drawCurrent(sf::RenderTarget& target, sf::RenderStates st
 	}
 }
 
-void ReceiverAlwaysOn::updateCurrent(sf::Time dt){
+void ReceiverAlwaysOff::updateCurrent(sf::Time dt){
 	on = isOn();
 }
