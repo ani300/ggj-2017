@@ -76,7 +76,7 @@ void AnimatedTextNode::updateCurrent(sf::Time dt) {
         sf::Uint8(mInitColor.g + g*elapsedTime),
         sf::Uint8(mInitColor.b + b*elapsedTime)
     );
-    mText.setColor(newColor);
+    mText.setFillColor(newColor);
     centerText();
 }
 
