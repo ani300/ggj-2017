@@ -48,3 +48,4 @@ Debug
 *.vcxproj.user
 *.swp
 waves-trigger-nodes
+.debug_time
