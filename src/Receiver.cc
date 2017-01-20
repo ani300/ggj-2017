@@ -2,7 +2,7 @@
 
 
 Receiver::Receiver(sf::Texture& texture, std::vector<WaveGenerator*> *generators) : 
-	SpriteNode(texture),
+	AnimationNode(texture),
 	generators(generators)
 {
 }

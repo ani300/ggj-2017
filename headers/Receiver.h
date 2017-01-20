@@ -1,11 +1,11 @@
 #pragma once
 
-#include "SpriteNode.h"
+#include "AnimationNode.h"
 #include "WaveGenerator.h"
 #include <vector>
 
 class WaveGenerator;
-class Receiver: public SpriteNode{
+class Receiver: public AnimationNode {
 	public:
 		Receiver(sf::Texture& texture, std::vector<WaveGenerator*>* generators);
 		//Get the current state of the receiver (on/off)
