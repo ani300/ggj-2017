@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SpriteNode.h"
+#include "WaveGenerator.h"
 #include <vector>
 
 class Receiver: public SpriteNode{
