@@ -1,5 +1,5 @@
 #include "Receiver.h"
-#include "Emitter.h"
+#include "WaveGenerator.h"
 
 #include <vector>
 
@@ -11,7 +11,7 @@ Receiver::Receiver(const sf::Texture& texture, float target) :
 void Receiver::update_input_value(const &std::vector<WaveGenerator> generators){
 	for(WaveGenerator g : generators)
 	{
-		this.input += g.value_at( this.getWorldPosition() );
+		this.input += g.amplitudeAt( this.getWorldPosition() );
 	}
 }
 
