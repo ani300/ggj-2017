@@ -2,7 +2,7 @@
 
 TextNode::TextNode(const sf::Font& font, const std::string& text) {
 	mText.setFont(font);
-	mText.setColor(sf::Color::Black);
+	mText.setFillColor(sf::Color::Black);
 	setString(text);
 }
 
@@ -20,7 +20,7 @@ void TextNode::setCharacterSize(unsigned int size) {
 }
 
 void TextNode::setColor(const sf::Color& color) {
-	mText.setColor(color);
+	mText.setFillColor(color);
 }
 
 void TextNode::centerText() {
