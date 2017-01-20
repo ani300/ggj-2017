@@ -46,3 +46,4 @@ Debug
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.swp
