@@ -5,12 +5,12 @@
 
 
 class WaveGenerator : public SpriteNode {
-	WaveGenerator();
-	WaveGenerator(float amplitude, float frequency);
+	WaveGenerator(sf::Texture &texture);
+	WaveGenerator(sf::Texture &texture, float amplitude, float frequency);
 	~WaveGenerator();
 
-	virtual updateCurrent(sf::Time dt) override; 
-	virtual drawCurrent() override;
+	virtual void updateCurrent(sf::Time dt) override; 
+	virtual void drawCurrent() const override;
 
 	float amplitudeAt(sf::Vector2f pos);	
 
