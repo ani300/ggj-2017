@@ -4,6 +4,7 @@
 #include "Receiver.h"
 #include "ReceiverAlwaysOn.h"
 #include "WaveGenerator.h"
+#include "WavePatternNode.h"
 
 GameScreen::GameScreen(StatesStack& stack, Context& context)
 	: State(stack, context)
@@ -19,16 +20,20 @@ GameScreen::GameScreen(StatesStack& stack, Context& context)
 	receivers_positions[2] = sf::Vector2f(400, 200);
 
 	for(int i = 0; i < num_generators; ++i) {
-		WaveGenerator *generator = 
-			new WaveGenerator(context.mTextures->get(Textures::WaveGenerator), 
+		auto generator = std::make_unique<WaveGenerator>(context.mTextures->get(Textures::WaveGenerator), 
 					"res/animations/wave_generator.anim");
-		generators.push_back(generator);
+		generators.push_back(generator.get());
+		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
 	}
 
 	for(auto v: receivers_positions) {
-		Receiver *receiver = 
-			new ReceiverAlwaysOn(&generators, context.mTextures->get(Textures::ReceiverAlwaysOn));
+		auto receiver = std::make_unique<Receiver>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+		receivers.push_back(receiver.get());
+		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 	}
+
+	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators);
+	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));	
 }
 
 void GameScreen::draw() {

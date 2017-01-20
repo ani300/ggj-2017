@@ -35,9 +35,9 @@ INC_PATH = headers
 LIBS =
 # General compiler flags
 ifeq ($(shell uname -s), Darwin)
-	COMPILE_FLAGS = -std=c++11 -stdlib=libc++ -Wall -Wextra -g
+	COMPILE_FLAGS = -std=c++14 -stdlib=libc++ -Wall -Wextra -g
 else
-	COMPILE_FLAGS = -std=c++11 -Wall -Wextra -g
+	COMPILE_FLAGS = -std=c++14 -Wall -Wextra -g
 endif
 # Additional release-specific flags
 RCOMPILE_FLAGS = -D NDEBUG

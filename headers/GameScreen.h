@@ -27,20 +27,20 @@ class GameScreen: public State {
     private:
         void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
 
-        enum Layer {
-            	Background,
-            	WavePattern,
-		Nodes,
-            	Text,
-            	LayerCount
+        enum class Layer {
+            Background,
+            WavePattern,
+            Nodes,
+            Text,
+            Count
         };
 
         SceneNode mSceneGraph;
-        std::array<SceneNode*, LayerCount> mSceneLayers;
+        std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
         SpriteNode* mCursor;
 
-	std::vector<WaveGenerator*> generators;
-	std::vector<Receiver*> receivers;
+        std::vector<WaveGenerator*> generators;
+        std::vector<Receiver*> receivers;
 
         TextNode* mText;
 

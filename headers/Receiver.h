@@ -7,7 +7,7 @@
 class WaveGenerator;
 class Receiver: public AnimationNode {
 	public:
-		Receiver(sf::Texture& texture, std::vector<WaveGenerator*>* generators);
+		Receiver(sf::Texture& texture, std::vector<WaveGenerator*> const& generators);
 		//Get the current state of the receiver (on/off)
 		bool getState();
 
@@ -15,7 +15,7 @@ class Receiver: public AnimationNode {
 		std::vector<bool> activationHistory;
 		int currentFrame;
 		
-		std::vector<WaveGenerator*>* generators;
+		std::vector<WaveGenerator*> const& generators;
 		
 		bool on;
 
