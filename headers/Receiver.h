@@ -1,5 +1,4 @@
-#ifndef RECEIVER_H
-#define RECEIVER_H
+#pragma once
 
 #include "SpriteNode.h"
 
@@ -11,5 +10,3 @@ class Receiver: public SpriteNode{
 	private:
 		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
         virtual void updateCurrent(sf::Time dt) override;
-
-#endif //RECEIVER_H

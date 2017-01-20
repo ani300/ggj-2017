@@ -1,7 +1,6 @@
 /********************************HelpScreen.h***************************************/
 
-#ifndef HELP_SCREEN_H
-#define HELP_SCREEN_H
+#pragma once
 
 #include "Utils.h"
 #include "State.h"
@@ -40,6 +39,3 @@ class HelpScreen: public State {
 
         std::string str;
 };
-
-
-#endif // HELP_SCREEN_H

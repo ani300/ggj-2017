@@ -1,5 +1,4 @@
-#ifndef STATES_STACK_H
-#define STATES_STACK_H
+#pragma once
 
 #include "State.h"
 #include "StateIdentifiers.h"
@@ -8,18 +7,16 @@
 
 class StatesStack : private sf::NonCopyable {
 	public:
-        enum Action {
+        enum class Action {
 			Push,
 			Pop,
 			Clear,
 		};
 
-        typedef States::ID InfoState;
-
         explicit StatesStack(State::Context context);
 
         template <typename T>
-        void registerState(States::ID IDState);
+        void registerState(StateType IDState);
 
         bool isEmpty() const;
 
@@ -29,36 +26,34 @@ class StatesStack : private sf::NonCopyable {
 
         void popState();
         void clearStates();
-        void pushState(States::ID IDState);
+        void pushState(StateType IDState);
 
         void setContext(State::Context c);
 
 	private:
-        InfoState readNextState();
+        StateType readNextState();
 
-        State::Ptr createState(States::ID IDState);
+        State::Ptr createState(StateType IDState);
         void applyPendingChanges();
 
         struct PendingChange {
-            explicit PendingChange(Action action, States::ID stateID = States::None);
+            explicit PendingChange(Action action, StateType stateID = StateType::None);
 
             Action mAction;
-            States::ID mStateID;
+            StateType mStateID;
 		};
 
         std::vector<State::Ptr>	mStack;
         std::vector<PendingChange> mPendingList;
 
         State::Context mContext;
-        std::map<States::ID, std::function<State::Ptr()>> mFactories;
+        std::map<StateType, std::function<State::Ptr()>> mFactories;
 };
 
 
 template <typename T>
-void StatesStack::registerState(States::ID IDState) {
+void StatesStack::registerState(StateType IDState) {
     mFactories[IDState] = [this] () {
         return State::Ptr(new T(*this, mContext));
 	};
 }
-
-#endif // STATES_STACK_H

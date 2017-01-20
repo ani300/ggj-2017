@@ -1,7 +1,5 @@
 /********************************ResultsScreen.h***************************************/
-
-#ifndef RESULTS_SCREEN_H
-#define RESULTS_SCREEN_H
+#pragma once
 
 #include "Utils.h"
 #include "State.h"
@@ -35,6 +33,3 @@ class ResultsScreen: public State {
         std::array<AnimatedTextNode*, 2> mTextNodes;
         AnimatedTextNode* mText;
 };
-
-
-#endif // RESULTS_SCREEN_H

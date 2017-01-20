@@ -1,5 +1,4 @@
-#ifndef MUSIC_PLAYER_H
-#define MUSIC_PLAYER_H
+#pragma once
 
 #include "Utils.h"
 #include "ResourceHolder.h"

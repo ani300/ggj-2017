@@ -1,5 +1,4 @@
-#ifndef ANIMATION_NODE_HPP
-#define ANIMATION_NODE_HPP
+#pragma once
 
 #include "Utils.h"
 #include "SpriteNode.h"
@@ -38,5 +37,3 @@ class AnimationNode: public SpriteNode {
         float mCurrentTime;
         float mTotalTime;
 };
-
-#endif // ANIMATION_NODE_HPP

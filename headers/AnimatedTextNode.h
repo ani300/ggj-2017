@@ -1,5 +1,4 @@
-#ifndef ANIMATED_TEXT_NODE_HPP
-#define ANIMATED_TEXT_NODE_HPP
+#pragma once
 
 #include "Utils.h"
 #include "TextNode.h"
@@ -31,5 +30,3 @@ class AnimatedTextNode: public TextNode {
     float mDuration;
     sf::Clock mClock;
 };
-
-#endif // ANIMATED_TEXT_NODE_HPP

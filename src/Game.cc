@@ -9,7 +9,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 //Constructor
 
 Game::Game() :
-  mWindow(sf::VideoMode(sf::VideoMode::getDesktopMode()), L"Kill Or Survive"
+  mWindow(sf::VideoMode(sf::VideoMode::getDesktopMode()), L"Waves Trigger Nodes"
     , sf::Style::None/*sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize*/)
 , mWindowSize(mWindow.getSize().x, mWindow.getSize().y)
 , mScale(float(mWindow.getSize().x)/1920.0, 9.0/16.0*float(mWindow.getSize().x)/1920.0)
@@ -33,7 +33,6 @@ Game::Game() :
     mStatesStack.setContext(State::Context(mRenderTexture, mTextures, mFonts, mScale, mWindow, mMusic, mSound, mGameData));
 
     mWindow.setKeyRepeatEnabled(false);
-    std::cout << 1 << std::endl;
     // Carrega recursos comuns
     // mFonts.load(Fonts::AlluraRegular, "res/media/AlluraRegular.otf");
     
