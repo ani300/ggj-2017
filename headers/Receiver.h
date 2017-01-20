@@ -19,4 +19,6 @@ class Receiver: public SpriteNode{
 
 		virtual bool isOnRightNow();
 		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+
         virtual void updateCurrent(sf::Time dt) override;
+};
