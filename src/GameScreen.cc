@@ -23,9 +23,11 @@ void GameScreen::draw() {
     getContext().mRTexture->draw(mSceneGraph);
 }
 bool GameScreen::update(sf::Time dt) {
+    return true;
 }
 
 bool GameScreen::handleEvent(const sf::Event& event) {
+    return true;
 }
 
 void GameScreen::handleRealtimeInput(){
