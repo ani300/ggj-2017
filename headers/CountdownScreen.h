@@ -1,7 +1,6 @@
 /********************************CountdownScreen.h***************************************/
 
-#ifndef COUNTDOWN_SCREEN_H
-#define COUNTDOWN_SCREEN_H
+#pragma once
 
 #include "Utils.h"
 #include "State.h"
@@ -38,6 +37,3 @@ class CountdownScreen: public State {
         float mWaitingTime;
         sf::Clock mClock;
 };
-
-
-#endif // COUNTDOWN_SCREEN_H

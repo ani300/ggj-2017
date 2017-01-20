@@ -1,5 +1,4 @@
-#ifndef SCENE_NODE_H
-#define SCENE_NODE_H
+#pragma once
 
 #include "Utils.h"
 
@@ -29,5 +28,3 @@ class SceneNode: public sf::Transformable, public sf::Drawable, private sf::NonC
 		SceneNode* mParent;
 		std::vector<Ptr> mChildren;
 };
-
-#endif // SCENE_NODE_H

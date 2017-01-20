@@ -1,5 +1,4 @@
-#ifndef TEXT_NODE_HPP
-#define TEXT_NODE_HPP
+#pragma once
 
 #include "Utils.h"
 #include "SceneNode.h"
@@ -18,5 +17,3 @@ class TextNode: public SceneNode {
     private:
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 };
-
-#endif // TEXT_NODE_HPP

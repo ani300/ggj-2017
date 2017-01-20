@@ -1,5 +1,4 @@
-#ifndef INVISIBLE_NODE_HPP
-#define INVISIBLE_NODE_HPP
+#pragma once
 
 #include "Utils.h"
 #include "SpriteNode.h"
@@ -11,5 +10,3 @@ class InvisibleNode: public SpriteNode {
     private:
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 };
-
-#endif // INVISIBLE_NODE_HPP

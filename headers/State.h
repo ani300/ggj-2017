@@ -1,5 +1,4 @@
-#ifndef STATE_H
-#define STATE_H
+#pragma once
 
 #include "Utils.h"
 #include "StateIdentifiers.h"
@@ -44,6 +43,3 @@ class State {
         StatesStack* mStack;
         Context mContext;
 };
-
-
-#endif // State_H

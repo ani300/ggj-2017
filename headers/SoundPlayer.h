@@ -1,5 +1,4 @@
-#ifndef SOUND_PLAYER_H
-#define SOUND_PLAYER_H
+#pragma once
 
 #include "Utils.h"
 #include "ResourceHolder.h"
@@ -17,5 +16,3 @@ class SoundPlayer : private sf::NonCopyable {
         SoundBufferHolder mSoundBuffer;
         std::list<sf::Sound> mSounds;
 };
-
-#endif // SOUND_PLAYER_H

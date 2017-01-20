@@ -1,7 +1,5 @@
 /********************************GameScreen.h***************************************/
-
-#ifndef GAME_SCREEN_H
-#define GAME_SCREEN_H
+#pragma once
 
 #include "Utils.h"
 #include "State.h"
@@ -74,6 +72,3 @@ class GameScreen: public State {
 
         sf::Clock mCountdown;
 };
-
-
-#endif // GAME_SCREEN_H
