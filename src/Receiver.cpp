@@ -3,18 +3,15 @@
 
 #include <vector>
 
-Receiver::Receiver(const sf::Texture& texture, float target) : 
+Receiver::Receiver(const sf::Texture& texture) : 
 	SpriteNode(texture){
-		this.target = target;
 }
 
 void Receiver::update_input_value(const &std::vector<WaveGenerator> generators){
+	
 	for(WaveGenerator g : generators)
 	{
-		this.input += g.amplitudeAt( this.getWorldPosition() );
+		input += g.amplitudeAt( getWorldPosition() );
 	}
 }
 
-bool Receiver::is_on(){
-	return this.input >= this.target;
-}

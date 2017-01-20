@@ -5,17 +5,11 @@
 
 class Receiver: public SpriteNode{
 	public:
-		Receiver(const sf::Texture& texture, float target);
-		//Updates input values (sum of input waves)
-		void update_input_value();
+		Receiver(const sf::Texture& texture);
 		//Check if the received value reached the target
-		bool is_on();
+		virtual bool is_on();
 	private:
-		//Sum of current input values
-		float input;
-		//Target at which the receiver "turns on"
-		float target;
-
-};
+		virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
+        virtual void updateCurrent(sf::Time dt) override;
 
 #endif //RECEIVER_H
