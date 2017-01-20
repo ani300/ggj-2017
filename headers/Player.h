@@ -1,5 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include "Utils.h"
 #include "SceneNode.h"
@@ -49,5 +48,3 @@ class Player: public AnimationNode {
         int mInGround;
         int mInWall;
 };
-
-#endif // PLAYER_H

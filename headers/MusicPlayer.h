@@ -1,5 +1,4 @@
-#ifndef MUSIC_PLAYER_H
-#define MUSIC_PLAYER_H
+#pragma once
 
 #include "Utils.h"
 #include "ResourceHolder.h"
@@ -20,5 +19,3 @@ class MusicPlayer : private sf::NonCopyable {
         std::map<Music::ID, std::string> mFilenames;
         float mVolume;
 };
-
-#endif // MUSIC_PLAYER_H

@@ -1,5 +1,4 @@
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 #include <map>
 #include <list>
@@ -22,59 +21,18 @@
 #include <SFML/Graphics.hpp>
 
 struct GameData {
-    GameData(
-        int numRounds, 
-        int roundsPassed, 
-        int pointsP1, 
-        int pointsP2, 
-        int survivingPlayer,
-        int winningPlayer
-    );
-    int mNumRounds;
-    int mRoundsPassed;
-    int mPointsP1;
-    int mPointsP2;
-    int mSurvivingPlayer;
-    int mWinningPlayer;
+    GameData();
 };
 
-inline GameData::GameData(
-    int numRounds,
-    int roundsPassed,
-    int pointsP1,
-    int pointsP2,
-    int survivingPlayer,
-    int winningPlayer) :
-    mNumRounds(numRounds),
-    mRoundsPassed(roundsPassed),
-    mPointsP1(pointsP1),
-    mPointsP2(pointsP2),
-    mSurvivingPlayer(survivingPlayer),
-    mWinningPlayer(winningPlayer) {
-}  
+inline GameData::GameData() {}  
 
 const float metersToPixels = 192.0f;
 const float epsilon = 1e-2f;
-
-const float bbscalex_p1 = 0.70f;
-const float bbscaley_p1 = 0.70f;
-
-const float bbscalex_p2 = 0.44f;
-const float bbscaley_p2 = 0.60f;
-
-enum directions {
-    dir_up, dir_down, dir_right, dir_left, dir_up_right, dir_down_left, dir_up_left, dir_down_right, dir_none
-};
 
 enum mouseButtons {
     mouse_left, mouse_right, mouse_rodeta, mouse_none
 };
 
-//                      N   S   E   W    NE     SW    NW   SE  NONE
-const float dirx[9] = { 0,  0,  1, -1,  0.5,  -0.5, -0.5, 0.5,   0};
-const float diry[9] = {-1,  1,  0,  0, -0.5,   0.5, -0.5, 0.5,   0};
-
-const float PlayerSpeed = 500.f;
 const sf::Time TimePerFrame = sf::seconds(1.f/60.f); // 60 fps
 
 const sf::Vector2u gameSize(1920,1080);
@@ -145,5 +103,3 @@ namespace Utils {
         return correct;
     }
 }
-
-#endif // UTILS_H

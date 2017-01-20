@@ -1,7 +1,5 @@
 /********************************TitleScreen.h***************************************/
-
-#ifndef TITLE_SCREEN_H
-#define TITLE_SCREEN_H
+#pragma once
 
 #include "Utils.h"
 #include "State.h"
@@ -24,14 +22,15 @@ class TitleScreen: public State {
     private:
         void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
         bool contains(const sf::FloatRect& rect, sf::Vector2i pos);
-        enum Layer {
+
+        enum class Layer {
             Background,
             Text,
-            LayerCount
+            Count
         };
 
         SceneNode mSceneGraph;
-        std::array<SceneNode*, LayerCount> mSceneLayers;
+        std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
 
         SpriteNode* mButtonPlay;
         SpriteNode* mButtonHelp;
@@ -39,6 +38,3 @@ class TitleScreen: public State {
 
         std::string str;
 };
-
-
-#endif // TITLE_SCREEN_H

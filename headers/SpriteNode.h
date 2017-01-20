@@ -1,5 +1,4 @@
-#ifndef SPRITE_NODE_HPP
-#define SPRITE_NODE_HPP
+#pragma once
 
 #include "Utils.h"
 #include "SceneNode.h"
@@ -23,5 +22,3 @@ class SpriteNode: public SceneNode {
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
         virtual void updateCurrent(sf::Time dt) override;
 };
-
-#endif // SPRITE_NODE_HPP

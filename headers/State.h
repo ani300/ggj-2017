@@ -1,5 +1,4 @@
-#ifndef STATE_H
-#define STATE_H
+#pragma once
 
 #include "Utils.h"
 #include "StateIdentifiers.h"
@@ -34,7 +33,7 @@ class State {
         virtual bool handleEvent(const sf::Event& event) = 0;
 
     protected:
-        void requestStackPush(States::ID stateID);
+        void requestStackPush(StateType stateID);
         void requestStackPop();
         void requestStackClear();
 
@@ -44,6 +43,3 @@ class State {
         StatesStack* mStack;
         Context mContext;
 };
-
-
-#endif // State_H

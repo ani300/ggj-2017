@@ -1,5 +1,4 @@
-#ifndef RESOURCE_IDENTIFIERS_H
-#define RESOURCE_IDENTIFIERS_H
+#pragma once
 
 #include <SFML/Audio.hpp>
 
@@ -90,5 +89,3 @@ class ResourceHolder;
 typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
 typedef ResourceHolder<sf::Font, Fonts::ID>	FontHolder;
 typedef ResourceHolder<sf::SoundBuffer, SoundEffect::ID> SoundBufferHolder;
-
-#endif // RESOURCE_IDENTIFIERS_H
