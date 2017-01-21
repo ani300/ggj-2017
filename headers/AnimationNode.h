@@ -6,7 +6,6 @@
 class AnimationNode: public SpriteNode {
     struct AnimFrame {
         sf::Vector2i mPos;
-        sf::Vector2i mSize;
         float mTime;
     };
 
@@ -23,7 +22,6 @@ class AnimationNode: public SpriteNode {
         void updateCurrent(sf::Time dt) override;
         
     private:
-        
         void load(const std::string& filename);
         void updateTextureRect();
 
@@ -31,6 +29,7 @@ class AnimationNode: public SpriteNode {
 
         std::map<std::string, std::vector<AnimFrame>> mAnimations;
         std::map<std::string, unsigned int> mAnimationCycles;
+        sf::Vector2i mSize;
         unsigned int mCurrentFrame;
         unsigned int mCurrentCycle;
         std::string mCurrentAnim;

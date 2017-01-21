@@ -1,5 +1,9 @@
+# cell_width cell_height
+
 # ANIM animation_name num_of_repetitions (0 for infinite)
-  # xPos yPos Width Height FrameTime
+  # xPos yPos FrameTime
+
+90 90
 
 ANIM IdleRight 1
   0 0 444 546 0.1
