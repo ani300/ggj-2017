@@ -128,6 +128,6 @@ bool ResultsScreen::handleEvent(const sf::Event& event) {
     //         }
     //     }
     // }
-    // return false;
+    return false;
 }
 

@@ -5,7 +5,6 @@
 #include "State.h"
 #include "SceneNode.h"
 #include "TextNode.h"
-#include "Player.h"
 #include "SpriteNode.h"
 #include "InvisibleNode.h"
 #include "ResourceHolder.h"
@@ -50,8 +49,6 @@ class GameScreen: public State {
         std::vector<Receiver*> receivers;
 
         TextNode* mText;
-
-        Player* mPlayer;
 
         int mSelectedGenerator;
 };

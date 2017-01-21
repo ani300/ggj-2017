@@ -20,7 +20,6 @@ class TitleScreen: public State {
         bool handleEvent(const sf::Event& event);
 
     private:
-        void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
         bool contains(const sf::FloatRect& rect, sf::Vector2i pos);
 
         enum class Layer {

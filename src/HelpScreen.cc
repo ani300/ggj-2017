@@ -63,8 +63,3 @@ bool HelpScreen::handleEvent(const sf::Event& event) {
     return true;
 }
 
-void HelpScreen::click(mouseButtons mouseButton, sf::Vector2f mouseClick) {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        //sf::Vector2i newMouse = Utils::correctMouse(mouseClick, mouseClick);
-    }
-}

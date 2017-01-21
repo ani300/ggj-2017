@@ -44,7 +44,7 @@ TitleScreen::TitleScreen(StatesStack& stack, Context& context)
 void TitleScreen::draw() {
     getContext().mRTexture->draw(mSceneGraph);
 }
-bool TitleScreen::update(sf::Time dt) {
+bool TitleScreen::update(sf::Time /*dt*/) {
     return true;
 }
 
@@ -61,10 +61,4 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
         }
     }
     return true;
-}
-
-void TitleScreen::click(mouseButtons mouseButton, sf::Vector2f mouseClick) {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        //sf::Vector2i newMouse = Utils::correctMouse(mouseClick, mouseClick);
-    }
 }

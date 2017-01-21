@@ -103,7 +103,7 @@ bool CountdownScreen::update(sf::Time dt) {
     return false;
 }
 
-bool CountdownScreen::handleEvent(const sf::Event& event) {
+bool CountdownScreen::handleEvent(sf::Event const& /*event*/) {
     return false;
 }
 
