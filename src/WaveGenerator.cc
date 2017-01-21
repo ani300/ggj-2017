@@ -1,6 +1,6 @@
 #include "WaveGenerator.h"
 #include <cmath>
-
+#include <stdlib.h>
 
 
 WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file) :
@@ -28,7 +28,7 @@ void WaveGenerator::setAngle(float angle) {
 }
 
 void WaveGenerator::updateCurrent(sf::Time dt) {
-	
+	this->move(sf::Vector2f(rand() % 3 - 1, rand() % 3 - 1));
 }
 
 float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
