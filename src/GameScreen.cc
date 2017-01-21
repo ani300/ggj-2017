@@ -31,20 +31,6 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
 	receiver_name_map["AlwaysOff"] = ReceiverTypes::AlwaysOff;
 
-	sf::Color color1(255,0,0,255);
-	sf::Color color2(0,0,0,255);
-	sf::Color color3(0,255,255,255);
-
-	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
-	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
-
-	auto grid = std::make_unique<GridNode>(sf::Vector2i(60,60), sf::Color(255,0,0,128));	
-	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
-
-	auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
-	ScaleNode* scale_node = color_scale.get();
-	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
-	scale_node->setPosition(sf::Vector2f(1850, 890));
 
 }
 
@@ -101,6 +87,10 @@ sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2f grid_size) {
 	}
 }
 
+sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2i grid_size) {
+	return snapGrid(pos, sf::Vector2f(grid_size.x, grid_size.y));
+}
+
 bool GameScreen::handleEvent(const sf::Event& event) {
 	if (event.type == sf::Event::MouseButtonPressed) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
@@ -137,6 +127,11 @@ void GameScreen::setLevel(Levels level) {
 	rgb = lua["rgb"];
 	time = lua["time"];
 
+	sol::optional<int> grid_size_x = lua["grid"]["size"][1];
+	sol::optional<int> grid_size_y = lua["grid"]["size"][2];
+	sf::Vector2i grid_size = sf::Vector2i(grid_size_x.value_or(60), grid_size_y.value_or(60));
+	
+
 	sol::table rec = lua["receivers"];
 	for(auto a: rec) {
 		auto table = a.second.as<sol::table>();
@@ -147,7 +142,7 @@ void GameScreen::setLevel(Levels level) {
 		sol::optional<float> positiony = table["position"][2];
 
 		sf::Vector2f position = sf::Vector2f(positionx.value_or(0), positiony.value_or(0));
-		position = snapGrid(position, sf::Vector2f(60, 60));
+		position = snapGrid(position, grid_size);
 
 		sol::optional<int> threshold = table["threshold"];
 		if(threshold)
@@ -223,6 +218,26 @@ void GameScreen::setLevel(Levels level) {
 			}
 			generator_index++;
 		}
-
 	}
+
+	auto pos_color = lua["colors"]["positive_amp"];
+	auto zero = lua["colors"]["zero"];
+	auto neg_color = lua["colors"]["negative_amp"];
+	auto g_color = lua["grid"]["color"];
+
+	sf::Color color1(neg_color["r"],neg_color["g"],neg_color["b"],neg_color["a"]);
+	sf::Color color2(zero["r"],zero["g"],zero["b"],zero["a"]);
+	sf::Color color3(pos_color["r"],pos_color["g"],pos_color["b"],pos_color["a"]);
+	sf::Color grid_color(g_color["r"],g_color["g"],g_color["b"],g_color["a"]);
+
+	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
+	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
+
+	auto grid = std::make_unique<GridNode>(grid_size, grid_color);	
+	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
+
+	auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
+	ScaleNode* scale_node = color_scale.get();
+	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
+	scale_node->setPosition(sf::Vector2f(1850, 890));
 }
