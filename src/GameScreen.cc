@@ -27,7 +27,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context)
 	}
 
 	for(auto v: receivers_positions) {
-		auto receiver = std::make_unique<Receiver>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+		auto receiver = std::make_unique<ReceiverAlwaysOn>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
 		receivers.push_back(receiver.get());
 		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 	}

@@ -3,12 +3,7 @@
 SoundPlayer::SoundPlayer()
 : mSoundBuffer()
 , mSounds() {
-    mSoundBuffer.load(SoundEffect::Cage, "res/sounds/cage.wav");
-    mSoundBuffer.load(SoundEffect::Gong, "res/sounds/gong.wav");
-    mSoundBuffer.load(SoundEffect::Jump, "res/sounds/jump.wav");
-    mSoundBuffer.load(SoundEffect::Spikeball, "res/sounds/spikeball.wav");
-    mSoundBuffer.load(SoundEffect::Spikes, "res/sounds/spikes.wav");
-    mSoundBuffer.load(SoundEffect::Switch, "res/sounds/switch.ogg");
+    // mSoundBuffer.load(SoundEffect::Cage, "res/sounds/cage.wav");
 }
 
 void SoundPlayer::play(SoundEffect::ID effect) {

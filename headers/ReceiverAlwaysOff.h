@@ -1,22 +1,21 @@
-#ifndef RECEIVER_ALWAYS_OFF_H
-#define RECEIVER_ALWAYS_OFF_H
+#pragma once
 
 #include "Receiver.h"
 /*
 * Receiver always off
 * This receiver is on when has been blow 0 during the last 60 frames
 */
-class ReceiverAlwaysOff: public Receiver{
-	public:
-		ReceiverAlwaysOff(const sf::Texture& texture), std::vector<WaveGenerator>* generators;
-		
-	private:
-		const int HISTORY_LENGTH;
-		const float ACTIVATION_THRESHOLD;
+class ReceiverAlwaysOff: public Receiver {
+public:
+	ReceiverAlwaysOff(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators);
+	
+private:
+	
+	const int HISTORY_LENGTH = 60;
+	//Frames needed to consider activated
+	const float ACTIVATION_THRESHOLD = 45/HISTORY_LENGTH;
 
-		bool isOn();
-		bool isOnRightNow();
-		void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-        void updateCurrent(sf::Time dt) override;
-
-#endif //RECEIVER_ALWAYS_OFF_H
+	bool isOn();
+	bool isOnRightNow();
+    void updateCurrent(sf::Time dt) override;
+};

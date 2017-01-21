@@ -38,15 +38,15 @@ Game::Game() :
     
     // mTextures.load(Textures::GameBackground1, "res/pictures/background1.png");
 
-    mStatisticsText.setFont(mFonts.get(Fonts::Sansation));
-    mStatisticsText.setPosition(5.f, 5.f);
-    mStatisticsText.setCharacterSize(10u);
-    mStatisticsText.setFillColor(sf::Color::Black);
+    // mStatisticsText.setFont(mFonts.get(Fonts::Sansation));
+    // mStatisticsText.setPosition(5.f, 5.f);
+    // mStatisticsText.setCharacterSize(10u);
+    // mStatisticsText.setFillColor(sf::Color::Black);
 
     mWindow.setVerticalSyncEnabled(true);
 
     registerStates();
-    mStatesStack.pushState(StateType::Title);
+    mStatesStack.pushState(StateType::Game);
 }
 
 

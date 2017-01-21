@@ -1,23 +1,19 @@
 #include "ReceiverAlwaysOn.h"
 #include "WaveGenerator.h"
 
-
-
-
-ReceiverAlwaysOn::ReceiverAlwaysOn(std::vector<WaveGenerator*> *generators, sf::Texture& texture) : 
-	Receiver(texture, generators){
-
+ReceiverAlwaysOn::ReceiverAlwaysOn(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators) : 
+	Receiver(texture, generators)
+{
 	activationHistory = std::vector<bool>(HISTORY_LENGTH, false);
 	currentFrame = 0;
 }
 
-bool ReceiverAlwaysOn::isOn(){
+bool ReceiverAlwaysOn::isOn() {
 	int count = 0;
 	//Set current frame
 	activationHistory[currentFrame] = isOnRightNow();
 	//Check last 60 frames
-	for(int i = (currentFrame+1)%60; i != currentFrame; i = (i+1)%60)
-	{
+	for(int i = (currentFrame+1)%60; i != currentFrame; i = (i + 1)%60)	{
 		count += activationHistory[i];
 	}
 
@@ -26,13 +22,12 @@ bool ReceiverAlwaysOn::isOn(){
 	return count/HISTORY_LENGTH < ACTIVATION_THRESHOLD;
 }
 
-bool ReceiverAlwaysOn::isOnRightNow(){
+bool ReceiverAlwaysOn::isOnRightNow() {
 	float totalInput = 0;
-	for(auto g: *generators)
-	{
+	for(auto g : generators) {
 		if(g->isPlaced())
 		{
-			totalInput += g->amplitudeAt( getWorldPosition() );
+			totalInput += g->amplitudeAt(getWorldPosition());
 		}
 	}
 
@@ -40,6 +35,6 @@ bool ReceiverAlwaysOn::isOnRightNow(){
 }
 
 
-void ReceiverAlwaysOn::updateCurrent(sf::Time dt){
+void ReceiverAlwaysOn::updateCurrent(sf::Time dt) {
 	on = isOn();
 }
