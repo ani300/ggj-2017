@@ -9,6 +9,11 @@
 GameScreen::GameScreen(StatesStack& stack, Context& context)
 	: State(stack, context)
 {
+	for (std::size_t i = 0; i < static_cast<std::size_t>(Layer::Count); ++i) {
+        SceneNode::Ptr layer(new SceneNode());
+        mSceneLayers[i] = layer.get();
+        mSceneGraph.attachChild(std::move(layer));
+    }
 	// TODO: read level data from files
 	std::vector<sf::Vector2f> receivers_positions = std::vector<sf::Vector2f>(3);
 	int num_generators;
