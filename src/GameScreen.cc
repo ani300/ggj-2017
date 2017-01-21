@@ -31,20 +31,6 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
 	receiver_name_map["AlwaysOff"] = ReceiverTypes::AlwaysOff;
 
-	sf::Color color1(255,0,0,255);
-	sf::Color color2(0,0,0,255);
-	sf::Color color3(0,255,255,255);
-
-	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
-	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
-
-	auto grid = std::make_unique<GridNode>(sf::Vector2i(60,60), sf::Color(255,0,0,128));	
-	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
-
-	auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
-	ScaleNode* scale_node = color_scale.get();
-	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
-	scale_node->setPosition(sf::Vector2f(1850, 890));
 
 }
 
@@ -137,6 +123,9 @@ void GameScreen::setLevel(Levels level) {
 	rgb = lua["rgb"];
 	time = lua["time"];
 
+	sf::Vector2i grid_size = sf::Vector2i(lua["grid_size"][1], lua["grid_size"][2]);
+	
+
 	sol::table rec = lua["receivers"];
 	for(auto a: rec) {
 		auto table = a.second.as<sol::table>();
@@ -223,6 +212,24 @@ void GameScreen::setLevel(Levels level) {
 			}
 			generator_index++;
 		}
-
 	}
+
+	auto pos_color = lua["colors"]["positive_amp"];
+	auto zero = lua["colors"]["zero"];
+	auto neg_color = lua["colors"]["negative_amp"];
+
+	sf::Color color1(neg_color["r"],neg_color["g"],neg_color["b"],neg_color["a"]);
+	sf::Color color2(zero["r"],zero["g"],zero["b"],zero["a"]);
+	sf::Color color3(pos_color["r"],pos_color["g"],pos_color["b"],pos_color["a"]);
+
+	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
+	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
+
+	auto grid = std::make_unique<GridNode>(grid_size, sf::Color(255,0,0,128));	
+	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
+
+	auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
+	ScaleNode* scale_node = color_scale.get();
+	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
+	scale_node->setPosition(sf::Vector2f(1850, 890));
 }
