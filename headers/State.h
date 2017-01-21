@@ -36,10 +36,11 @@ class State {
         void requestStackPush(StateType stateID);
         void requestStackPop();
         void requestStackClear();
+	void requestStackSetLevel(Levels level);
 
         Context	getContext() const;
 
+        Context mContext;
     private:
         StatesStack* mStack;
-        Context mContext;
 };

@@ -23,6 +23,8 @@ public:
 
 	bool isPlaced() const;
 
+	void place(bool p);
+
 protected:
 	float frequency;
 	float wavelength;

@@ -17,15 +17,18 @@ State::Context::Context(sf::RenderTexture& rTexture, TextureHolder& textures,
 }
 
 State::State(StatesStack& stack, Context& context)
-: mStack(&stack)
-, mContext(context) {
-}
+: mContext(context),mStack(&stack) 
+{}
 
 State::~State() {
 }
 
 void State::requestStackPush(StateType IDState) {
     mStack->pushState(IDState);
+}
+
+void State::requestStackSetLevel(Levels level) {
+    mStack->setLevel(level);
 }
 
 void State::requestStackPop() {

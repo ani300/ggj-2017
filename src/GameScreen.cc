@@ -7,6 +7,7 @@
 #include "ReceiverAlwaysOff.h"
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
+#include "sol/sol.h"
 
 GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	State(stack, context),
@@ -17,42 +18,23 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneLayers[i] = layer.get();
 		mSceneGraph.attachChild(std::move(layer));
 	}
-	// TODO: read level data from files
-	std::vector<sf::Vector2f> receivers_positions = std::vector<sf::Vector2f>(1);
-	int num_generators;
-
-	// HARDCODED DATA FOR NOW
-	num_generators = 3;
-	receivers_positions[0] = sf::Vector2f(400, 200);
-
-	for(int i = 0; i < num_generators; ++i) {
-		auto generator = std::make_unique<WaveGenerator>(context.mTextures->get(Textures::WaveGenerator), 
-					"res/anim/generator.anim");
-		generators.push_back(generator.get());
-		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
-	}
-	generators[0]->setPosition(sf::Vector2f(200,200));
-	generators[0]->setSize(sf::Vector2u(90, 90));
-	generators[0]->setAnimation("Generator");
-	generators[1]->setPosition(sf::Vector2f(750,979));
-	generators[1]->setSize(sf::Vector2u(90, 90));
-	generators[1]->setAnimation("Generator");
-	generators[2]->setPosition(sf::Vector2f(1200,200));
-	generators[2]->setSize(sf::Vector2u(90, 90));
-	generators[2]->setAnimation("Generator");
-
-	/*for(auto v: receivers_positions) {
-		auto receiver = std::make_unique<ReceiverAlwaysOff>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
-		receivers.push_back(receiver.get());
-		receivers.back()->setPosition(v);
-		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
-	}*/
 
 	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators);
 	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
 
 	auto grid = std::make_unique<GridNode>(sf::Vector2i(60,60), sf::Color(255,0,0,128));	
 	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
+
+	generator_name_map["StandardGenerator"] = GeneratorTypes::Standard;
+	generator_name_map["FrequencyGenerator"] = GeneratorTypes::Frequency;
+	generator_name_map["WavelengthGenerator"] = GeneratorTypes::Wavelength;
+	generator_name_map["AmplitudeGenerator"] = GeneratorTypes::Amplitude;
+	generator_name_map["EditableGenerator"] = GeneratorTypes::Editable;
+
+
+	receiver_name_map["Threshold"] = ReceiverTypes::Threshold;
+	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
+	receiver_name_map["AlwaysOff"] = ReceiverTypes::AlwaysOff;
 }
 
 void GameScreen::draw() {
@@ -65,7 +47,7 @@ bool GameScreen::isLevelCompleted() {
 			return false;
 		}
 	}
-	return /*true;/*/false;
+	return true;
 }
 
 bool GameScreen::update(sf::Time dt) {
@@ -133,4 +115,88 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 		}
 	}
 	return true;
+}
+
+void GameScreen::setLevel(Levels level) {
+	level = level;
+
+	sol::state lua;	
+
+	lua.script_file("res/levels/level1.lua");
+	rgb = lua["rgb"];
+	time = lua["time"];
+
+	sol::table rec = lua["receivers"];
+	for(auto a: rec) {
+		auto table = a.second.as<sol::table>();
+		sol::optional<std::string> o_type = table["type"];
+		std::string type = o_type.value_or("AlwaysOn");
+
+		sol::optional<float> positionx = table["position"][1];
+		sol::optional<float> positiony = table["position"][2];
+
+		sf::Vector2f position = sf::Vector2f(positionx.value_or(0), positiony.value_or(0));
+
+		sol::optional<int> threshold = table["threshold"];
+		if(threshold)
+			std::cout << threshold.value() << std::endl;
+
+		sol::optional<std::string> comparator = table["comparator"];
+		if(comparator)
+			std::cout << comparator.value() << std::endl;
+
+		sol::optional<bool> absolute = table["absolute"];
+		if(absolute)
+			std::cout << absolute.value() << std::endl;
+
+
+		auto rec_type = receiver_name_map[type];
+
+		switch(rec_type) {
+			case ReceiverTypes::AlwaysOn:
+				{
+				auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+				receiver->setPosition(position);
+				receivers.push_back(receiver.get());
+				mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
+				}
+				break;
+			case ReceiverTypes::AlwaysOff:
+			case ReceiverTypes::Threshold:
+			case ReceiverTypes::Count:
+				break;
+		}
+	}
+
+	sol::table gen = lua["generators"];
+	int generator_index = 0;
+	for(auto a: gen) {
+		auto key = a.first.as<std::string>();
+		auto value = a.second.as<int>();
+
+		auto genType = generator_name_map[key];	
+
+		for(int i = 0; i < value; ++i) {
+			switch(genType) {
+				case GeneratorTypes::Standard:
+					{
+					std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
+					generators.push_back(generator.get());
+					generator->setPosition(sf::Vector2f(100, 200 + 120*generator_index));
+					generator->setSize(sf::Vector2u(90,90));
+					generator->setAnimation("Generator");
+					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
+					}
+					break;
+				case GeneratorTypes::Wavelength:
+				case GeneratorTypes::Frequency:
+				case GeneratorTypes::Amplitude:
+				case GeneratorTypes::Editable:
+				case GeneratorTypes::Count:
+					break;
+			}
+			generator_index++;
+		}
+
+	}
 }

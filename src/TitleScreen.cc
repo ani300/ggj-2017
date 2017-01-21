@@ -87,6 +87,8 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
             //getContext().mSound->play(SoundEffect::Gong);
             requestStackPop();
             requestStackPush(StateType::Game);
+	    requestStackSetLevel(Levels::Level1);
+
         }
         else if (helpBounds.contains(newPos)) {
             requestStackPop();
