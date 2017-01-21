@@ -7,11 +7,8 @@
 #include "ReceiverAlwaysOff.h"
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
-<<<<<<< HEAD
-#include "sol/sol.h"
-=======
 #include "ScaleNode.h"
->>>>>>> Added scale
+#include "sol/sol.h"
 
 GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	State(stack, context),
