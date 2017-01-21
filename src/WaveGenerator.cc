@@ -5,14 +5,16 @@
 
 WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file) :
 	AnimationNode(texture, file),
-	frequency(1.f),
+	frequency(0.5f),
+	wavelength(60.f),
 	amplitude(1.f),
 	angle(0.f)
 {}
 
-WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file, float amplitude, float frequency) :
+WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file, float amplitude, float frequency, float wavelength) :
 	AnimationNode(texture, file),
 	frequency(frequency),
+	wavelength(wavelength),
 	amplitude(amplitude),
 	angle(0.f)
 {}

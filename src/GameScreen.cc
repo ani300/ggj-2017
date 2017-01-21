@@ -19,7 +19,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context)
 	int num_generators;
 
 	// HARDCODED DATA FOR NOW
-	num_generators = 1;
+	num_generators = 3;
 	receivers_positions[0] = sf::Vector2f(40, 40);
 	receivers_positions[1] = sf::Vector2f(200, 400);
 	receivers_positions[2] = sf::Vector2f(400, 200);
@@ -30,6 +30,9 @@ GameScreen::GameScreen(StatesStack& stack, Context& context)
 		generators.push_back(generator.get());
 		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
 	}
+	generators[0]->setPosition(sf::Vector2f(300,300));
+	generators[1]->setPosition(sf::Vector2f(1200,800));
+	generators[2]->setPosition(sf::Vector2f(1200,300));
 
 	for(auto v: receivers_positions) {
 		auto receiver = std::make_unique<ReceiverAlwaysOn>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
@@ -46,6 +49,7 @@ void GameScreen::draw() {
 }
 
 bool GameScreen::update(sf::Time dt) {
+	mSceneGraph.update(dt);
 	return true;
 }
 

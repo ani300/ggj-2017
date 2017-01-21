@@ -7,7 +7,7 @@
 class WaveGenerator : public AnimationNode {
 public:
 	WaveGenerator(sf::Texture const& texture, std::string const& file);
-	WaveGenerator(sf::Texture const& texture, std::string const& file, float amplitude, float frequency);
+	WaveGenerator(sf::Texture const& texture, std::string const& file, float amplitude, float frequency, float wavelength);
 	~WaveGenerator();
 
 	virtual void updateCurrent(sf::Time dt) override;
