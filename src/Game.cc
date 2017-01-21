@@ -141,5 +141,6 @@ void Game::registerStates() {
     mStatesStack.registerState<TitleScreen>(StateType::Title);
     mStatesStack.registerState<HelpScreen>(StateType::Help);
     mStatesStack.registerState<GameScreen>(StateType::Game);
+    mStatesStack.registerState<ResultsScreen>(StateType::Result);
 }
 

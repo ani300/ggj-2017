@@ -26,5 +26,5 @@ bool Receiver::isOn() {
 	
 	currentFrame = (currentFrame + 1) % history_length;
 
-	return activeFramesCount/history_length < activation_threshold;
+	return static_cast<double>(activeFramesCount)/history_length < activation_threshold;
 }

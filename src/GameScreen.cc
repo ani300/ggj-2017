@@ -6,23 +6,22 @@
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
 
-GameScreen::GameScreen(StatesStack& stack, Context& context)
-	: State(stack, context)
+GameScreen::GameScreen(StatesStack& stack, Context& context) :
+	State(stack, context),
+	mSelectedGenerator(-1)
 {
 	for (std::size_t i = 0; i < static_cast<std::size_t>(Layer::Count); ++i) {
-        SceneNode::Ptr layer(new SceneNode());
-        mSceneLayers[i] = layer.get();
-        mSceneGraph.attachChild(std::move(layer));
-    }
+		SceneNode::Ptr layer(new SceneNode());
+		mSceneLayers[i] = layer.get();
+		mSceneGraph.attachChild(std::move(layer));
+	}
 	// TODO: read level data from files
-	std::vector<sf::Vector2f> receivers_positions = std::vector<sf::Vector2f>(3);
+	std::vector<sf::Vector2f> receivers_positions = std::vector<sf::Vector2f>(1);
 	int num_generators;
 
 	// HARDCODED DATA FOR NOW
 	num_generators = 3;
-	receivers_positions[0] = sf::Vector2f(40, 40);
-	receivers_positions[1] = sf::Vector2f(200, 400);
-	receivers_positions[2] = sf::Vector2f(400, 200);
+	receivers_positions[0] = sf::Vector2f(400, 200);
 
 	for(int i = 0; i < num_generators; ++i) {
 		auto generator = std::make_unique<WaveGenerator>(context.mTextures->get(Textures::WaveGenerator), 
@@ -43,6 +42,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context)
 	for(auto v: receivers_positions) {
 		auto receiver = std::make_unique<ReceiverAlwaysOn>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
 		receivers.push_back(receiver.get());
+		receivers.back()->setPosition(v);
 		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 	}
 
@@ -54,25 +54,50 @@ void GameScreen::draw() {
 	getContext().mRTexture->draw(mSceneGraph);
 }
 
-bool GameScreen::isLevelCompleted(){
-	for(const auto&  r: receivers){
-		if(not r->getState()) {
+bool GameScreen::isLevelCompleted() {
+	for(const auto& r: receivers) {
+		if(!r->getState()) {
 			return false;
 		}
 	}
-
 	return true;
 }
 
 bool GameScreen::update(sf::Time dt) {
-	mSceneGraph.update(dt);
+	handleRealtimeInput();
 	if(isLevelCompleted()) {
 		requestStackPush(StateType::Result);
 	}
-
+	mSceneGraph.update(dt);
 	return true;
 }
 
+void GameScreen::handleRealtimeInput() {
+	if (mSelectedGenerator != -1) {
+		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
+		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
+		generators[mSelectedGenerator]->setPosition(sf::Vector2f(newPos));
+	}
+}
+
 bool GameScreen::handleEvent(const sf::Event& event) {
+	if (event.type == sf::Event::MouseButtonPressed) {
+		if (event.mouseButton.button == sf::Mouse::Left) {
+			// Check if clicking on a generator
+			sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
+			sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
+			for (int i = 0; i < generators.size(); ++i) {
+				sf::IntRect generator_bounds = generators[i]->getBounds();
+				if (generator_bounds.contains(newPos)) {
+					mSelectedGenerator = i;
+				}
+			}
+		}
+	}
+	if (event.type == sf::Event::MouseButtonReleased) {
+		if (event.mouseButton.button == sf::Mouse::Left) {
+			mSelectedGenerator = -1;
+		}
+	}
 	return true;
 }

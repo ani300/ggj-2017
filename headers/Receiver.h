@@ -20,7 +20,7 @@ protected:
 	
 	bool on = false;
 	int history_length = 60;
-	int activation_threshold = 45/history_length;
+	double activation_threshold = 45./history_length;
 
 	//Has been on in average during some time
 	bool isOn();

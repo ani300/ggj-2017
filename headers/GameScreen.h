@@ -37,6 +37,8 @@ class GameScreen: public State {
 
         bool isLevelCompleted();
 
+        void handleRealtimeInput();
+
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
         SpriteNode* mCursor;
@@ -47,4 +49,6 @@ class GameScreen: public State {
         TextNode* mText;
 
         Player* mPlayer;
+
+        int mSelectedGenerator;
 };
