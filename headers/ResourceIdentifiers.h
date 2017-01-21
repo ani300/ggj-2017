@@ -41,10 +41,17 @@ namespace Music
         enum ID
         {
                 MenuTheme,
-                GameTheme,
-                StartTheme,
-                FinishTheme,
-                WinningTheme,
+                Game4TBase,
+                Game4THarm1,
+                Game4THarm2,
+                Game4TMel1,
+                Game4TMel2,
+                Game4TOutro,
+                Game3TBase,
+                Game3TMel1,
+                Game3TMel2,
+                Game3TMel3,
+                Winning
         };
 }
 
