@@ -6,8 +6,9 @@ uniform vec2 source_pos3;
 uniform vec2 source_pos4;
 uniform vec2 source_pos5;
 
-uniform vec4 color_min;
-uniform vec4 color_max;
+uniform vec4 color1;
+uniform vec4 color2;
+uniform vec4 color3;
 
 uniform float time;
 
@@ -65,7 +66,7 @@ float sum_of_sources() {
 void main() {
     float sum = sum_of_sources();
     if (sum < 0.5)
-        gl_FragColor = mix(color_min, vec4(0,0,0,1.), sum*2);
+        gl_FragColor = mix(color1, color2, sum*2);
     else
-        gl_FragColor = mix(vec4(0,0,0,1.), color_max, (sum - 0.5)*2);
+        gl_FragColor = mix(color2, color3, (sum - 0.5)*2);
 }

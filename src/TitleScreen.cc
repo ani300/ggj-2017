@@ -29,7 +29,8 @@ TitleScreen::TitleScreen(StatesStack& stack, Context& context)
     generators[0]->setSize(sf::Vector2u(90, 90));
     generators[0]->setAnimation("Generator");
 
-    auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators);
+    auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, 
+        sf::Color(0,255,255,255), sf::Color(0,0,0,255), sf::Color(0,255,255,255));
     mSceneLayers[static_cast<int>(Layer::Background)]->attachChild(std::move(wave_pattern));
 
     std::unique_ptr<SpriteNode> logo(new SpriteNode(logoTexture));

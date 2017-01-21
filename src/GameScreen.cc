@@ -7,7 +7,11 @@
 #include "ReceiverAlwaysOff.h"
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
+<<<<<<< HEAD
 #include "sol/sol.h"
+=======
+#include "ScaleNode.h"
+>>>>>>> Added scale
 
 GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	State(stack, context),
@@ -19,12 +23,6 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneGraph.attachChild(std::move(layer));
 	}
 
-	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators);
-	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
-
-	auto grid = std::make_unique<GridNode>(sf::Vector2i(60,60), sf::Color(255,0,0,128));	
-	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
-
 	generator_name_map["StandardGenerator"] = GeneratorTypes::Standard;
 	generator_name_map["FrequencyGenerator"] = GeneratorTypes::Frequency;
 	generator_name_map["WavelengthGenerator"] = GeneratorTypes::Wavelength;
@@ -35,6 +33,18 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	receiver_name_map["Threshold"] = ReceiverTypes::Threshold;
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
 	receiver_name_map["AlwaysOff"] = ReceiverTypes::AlwaysOff;
+
+	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
+	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
+
+	auto grid = std::make_unique<GridNode>(sf::Vector2i(60,60), sf::Color(255,0,0,128));	
+	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
+
+	auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
+	ScaleNode* scale_node = color_scale.get();
+	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
+	scale_node->setPosition(sf::Vector2f(1850, 890));
+
 }
 
 void GameScreen::draw() {

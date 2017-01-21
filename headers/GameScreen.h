@@ -34,6 +34,7 @@ class GameScreen: public State {
             WavePattern,
             Grid,
             Nodes,
+            UI,
             Text,
             Count
         };
