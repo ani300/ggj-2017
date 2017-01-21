@@ -13,19 +13,19 @@ uniform float time;
 
 uniform float amplitude1 = 0.0;
 uniform float frequency1;
-uniform float wavelength1;
+uniform float wavelength1 = 1.0;
 uniform float amplitude2 = 0.0;
 uniform float frequency2;
-uniform float wavelength2;
+uniform float wavelength2 = 1.0;
 uniform float amplitude3 = 0.0;
 uniform float frequency3;
-uniform float wavelength3;
+uniform float wavelength3 = 1.0;
 uniform float amplitude4 = 0.0;
 uniform float frequency4;
-uniform float wavelength4;
+uniform float wavelength4 = 1.0;
 uniform float amplitude5 = 0.0;
 uniform float frequency5;
-uniform float wavelength5;
+uniform float wavelength5 = 1.0;
 
 float sum_of_sources() {
     float dist1 = distance(vec2(gl_FragCoord.x, 1080.0 - gl_FragCoord.y), source_pos1);
