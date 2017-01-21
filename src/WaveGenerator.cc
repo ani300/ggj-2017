@@ -44,7 +44,7 @@ float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
 }
 
 float WaveGenerator::waveFunction(float distance) const {
-	return amplitude*sin(2*M_PI*wavelength*distance + angle);
+	return amplitude*sin(2*M_PI/wavelength*distance + angle);
 }
 
 bool WaveGenerator::isPlaced() const {
