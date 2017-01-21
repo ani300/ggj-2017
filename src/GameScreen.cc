@@ -19,7 +19,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context)
 	int num_generators;
 
 	// HARDCODED DATA FOR NOW
-	num_generators = 3;
+	num_generators = 1;
 	receivers_positions[0] = sf::Vector2f(40, 40);
 	receivers_positions[1] = sf::Vector2f(200, 400);
 	receivers_positions[2] = sf::Vector2f(400, 200);

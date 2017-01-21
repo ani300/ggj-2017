@@ -39,5 +39,5 @@ float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
 }
 
 bool WaveGenerator::isPlaced() const {
-	return placed;
+	return true;
 }
