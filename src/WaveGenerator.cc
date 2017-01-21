@@ -8,7 +8,8 @@ WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file
 	frequency(0.5f),
 	wavelength(90.f),
 	amplitude(1.f),
-	angle(0.f)
+	angle(0.f),
+	placed(false)
 {}
 
 WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file, float amplitude, float frequency, float wavelength) :
@@ -16,7 +17,8 @@ WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file
 	frequency(frequency),
 	wavelength(wavelength),
 	amplitude(amplitude),
-	angle(0.f)
+	angle(0.f),
+	placed(false)
 {}
 
 WaveGenerator::~WaveGenerator() {
