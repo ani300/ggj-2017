@@ -76,6 +76,11 @@ namespace Utils {
         sprite.setOrigin(std::floor(bounds.width / 2.f), std::floor(bounds.height / 2.f));
     }
 
+    inline void centerOrigin(sf::RectangleShape& shape) {
+        sf::FloatRect bounds = shape.getLocalBounds();
+        shape.setOrigin(std::floor(bounds.width / 2.f), std::floor(bounds.height / 2.f));
+    }
+
     inline void centerOrigin(sf::Text& text) {
         sf::FloatRect bounds = text.getLocalBounds();
         text.setOrigin(std::floor(bounds.width / 2.f), std::floor(bounds.height / 2.f));

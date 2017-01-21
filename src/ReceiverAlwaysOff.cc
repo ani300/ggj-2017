@@ -18,6 +18,6 @@ bool ReceiverAlwaysOff::isOnRightNow() {
 	return totalInput < 0;
 }
 
-void ReceiverAlwaysOff::updateCurrent(sf::Time dt) {
+void ReceiverAlwaysOff::updateCurrent(sf::Time /*dt*/) {
 	on = isOn();
 }

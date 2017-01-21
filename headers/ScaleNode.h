@@ -3,21 +3,18 @@
 #include "Utils.h"
 #include "SceneNode.h"
 
-class WaveGenerator;
-
-class WavePatternNode: public SceneNode {
+class ScaleNode: public SceneNode {
     public:
-        explicit WavePatternNode(const std::string& shader_file, const std::vector<WaveGenerator*>& generator_list,
+        explicit ScaleNode(std::string const& vertex_file, std::string const& fragment_file,
             sf::Color color1, sf::Color color2, sf::Color color3);
 
     protected:
-        std::vector<WaveGenerator*> const& mGeneratorList;
-        sf::RectangleShape mRect;
+        sf::RectangleShape mOutRect;
+        sf::RectangleShape mScaleRect;
         sf::Color mColor1;
         sf::Color mColor2;
         sf::Color mColor3;
         sf::Shader mShader;
-        sf::Time mElapsedTime;
 
     private:
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;

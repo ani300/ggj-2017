@@ -8,6 +8,7 @@
 #include "SpriteNode.h"
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
+#include "WaveGenerator.h"
 
 class TitleScreen: public State {
 
@@ -20,7 +21,6 @@ class TitleScreen: public State {
         bool handleEvent(const sf::Event& event);
 
     private:
-        void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
         bool contains(const sf::FloatRect& rect, sf::Vector2i pos);
 
         enum class Layer {
@@ -31,7 +31,8 @@ class TitleScreen: public State {
 
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
-
+        std::vector<WaveGenerator*> generators;
+        SpriteNode* mLogo;
         SpriteNode* mButtonPlay;
         SpriteNode* mButtonHelp;
         SpriteNode* mButtonExit;

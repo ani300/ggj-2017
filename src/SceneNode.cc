@@ -1,8 +1,9 @@
 #include "SceneNode.h"
 
-SceneNode::SceneNode()
-: mChildren()
-, mParent(nullptr) {
+SceneNode::SceneNode() : 
+	mParent(nullptr),
+	mChildren()
+{
 }
 
 void SceneNode::attachChild(Ptr child) {
@@ -30,9 +31,9 @@ void SceneNode::updateCurrent(sf::Time) {
 }
 
 void SceneNode::updateChildren(sf::Time dt) {
-    for(Ptr& child : mChildren) {
-        child->update(dt);
-    }
+	for(Ptr& child : mChildren) {
+		child->update(dt);
+	}
 }
 
 void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -49,9 +50,9 @@ void SceneNode::drawCurrent(sf::RenderTarget&, sf::RenderStates) const {
 }
 
 void SceneNode::drawChildren(sf::RenderTarget& target, sf::RenderStates states) const {
-    for(const Ptr& child : mChildren) {
-        child->draw(target, states);
-    }
+	for(const Ptr& child : mChildren) {
+		child->draw(target, states);
+	}
 }
 
 sf::Vector2f SceneNode::getWorldPosition() const {

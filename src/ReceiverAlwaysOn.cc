@@ -20,6 +20,6 @@ bool ReceiverAlwaysOn::isOnRightNow() {
 }
 
 
-void ReceiverAlwaysOn::updateCurrent(sf::Time dt) {
+void ReceiverAlwaysOn::updateCurrent(sf::Time /*dt*/) {
 	on = isOn();
 }

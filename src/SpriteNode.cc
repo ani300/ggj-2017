@@ -33,7 +33,7 @@ sf::Color SpriteNode::getColor(){
     return mSprite.getColor();
 }
 
-void SpriteNode::updateCurrent(sf::Time dt) {
+void SpriteNode::updateCurrent(sf::Time /*dt*/) {
 }
 
 sf::IntRect SpriteNode::getBounds() {

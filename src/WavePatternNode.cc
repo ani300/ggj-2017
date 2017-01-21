@@ -1,9 +1,13 @@
 #include "WavePatternNode.h"
 #include "WaveGenerator.h"
 
-WavePatternNode::WavePatternNode(const std::string& shader_file, const std::vector<WaveGenerator*>& generator_list) :
+WavePatternNode::WavePatternNode(const std::string& shader_file, const std::vector<WaveGenerator*>& generator_list,
+	sf::Color color1, sf::Color color2, sf::Color color3) :
 	mGeneratorList(generator_list),
-	mRect(sf::Vector2f(1920, 1080))
+	mRect(sf::Vector2f(1920, 1080)),
+	mColor1(color1),
+	mColor2(color2),
+	mColor3(color3)
 {
 	mShader.loadFromFile(shader_file, sf::Shader::Fragment);
 }
@@ -26,10 +30,11 @@ void WavePatternNode::updateCurrent(sf::Time dt) {
 		}
 	}
 
-	mShader.setUniform("color_min", sf::Glsl::Vec4(sf::Color(0,0,128,255)));
-	mShader.setUniform("color_max", sf::Glsl::Vec4(sf::Color(0,190,255,255)));
+	mShader.setUniform("color1", sf::Glsl::Vec4(mColor1));
+	mShader.setUniform("color2", sf::Glsl::Vec4(mColor2));
+	mShader.setUniform("color3", sf::Glsl::Vec4(mColor3));
 
 	mElapsedTime += dt;
-	//mShader.setUniform("time", mElapsedTime.asSeconds());
+	mShader.setUniform("time", mElapsedTime.asSeconds());
 }
 
