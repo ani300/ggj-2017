@@ -1,9 +1,10 @@
 #include "ReceiverAmplitude.h"
 
-ReceiverAmplitude::ReceiverAmplitude(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators, float t) : 
-	Receiver(texture, generators)
+ReceiverAmplitude::ReceiverAmplitude(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators, sol::function f) : 
+	Receiver(texture, generators),
+	threshold_fn(f)
 {
-	target = t;
+	activation_threshold = 2./history_length;
 	activationHistory = std::vector<bool>(history_length, false);	
 }
 
@@ -16,11 +17,15 @@ bool ReceiverAmplitude::isOnRightNow() {
 		}
 	}
 
-	return totalInput > target;
+	std::cout << "TF: " << totalInput << " " << (bool)threshold_fn(totalInput) << std::endl;
+	return threshold_fn(totalInput); 
 }
 
 
 void ReceiverAmplitude::updateCurrent(sf::Time /*dt*/) {
-	// TODO: Animate on/off
 	on = isOn();
+	if(on)
+		this->setScale(sf::Vector2f(1.6,1.6));
+	else	
+		this->setScale(sf::Vector2f(1,1));
 }

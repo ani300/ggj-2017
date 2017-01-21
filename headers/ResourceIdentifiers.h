@@ -21,7 +21,8 @@ namespace Textures
 		Title,
 		Exit,
 		Return,
-		HelpBackground
+		HelpBackground,
+                ToolboxBackground
 	};
 }
 

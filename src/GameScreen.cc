@@ -15,6 +15,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	State(stack, context),
 	mSelectedGenerator(-1)
 {
+
 	for (std::size_t i = 0; i < static_cast<std::size_t>(Layer::Count); ++i) {
 		SceneNode::Ptr layer(new SceneNode());
 		mSceneLayers[i] = layer.get();
@@ -56,11 +57,19 @@ bool GameScreen::update(sf::Time dt) {
 	return true;
 }
 
+
 void GameScreen::handleRealtimeInput() {
 	if (mSelectedGenerator != -1) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
 		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
 		generators[mSelectedGenerator]->setPosition(sf::Vector2f(newPos));
+		if((mToolbox->getBounds()).contains(newPos)) {
+			generators[mSelectedGenerator]->place(false);
+		}
+		else
+		{
+			generators[mSelectedGenerator]->place(true);
+		}
 	}
 }
 
@@ -107,10 +116,16 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 	}
 	if (event.type == sf::Event::MouseButtonReleased) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
+			sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
+			sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
+
 			if (mSelectedGenerator >= 0) {
-				sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
-				sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
-				generators[mSelectedGenerator]->setPosition(snapGrid(sf::Vector2f(newPos), sf::Vector2f(60, 60)));	
+				if((mToolbox->getBounds()).contains(newPos)) {
+					generators[mSelectedGenerator]->setPosition(toolboxOffset.x, toolboxOffset.y - toolboxSize.y/2 + toolboxMargin.y*(mSelectedGenerator+1));
+				}
+				else {
+					generators[mSelectedGenerator]->setPosition(snapGrid(sf::Vector2f(newPos), sf::Vector2f(60, 60)));	
+				}
 			}
 			mSelectedGenerator = -1;
 		}
@@ -121,8 +136,6 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 void GameScreen::setLevel(Levels level) {
 	level = level;
 
-	sol::state lua;	
-
 	lua.script_file("res/levels/level1.lua");
 	rgb = lua["rgb"];
 	time = lua["time"];
@@ -130,7 +143,7 @@ void GameScreen::setLevel(Levels level) {
 	sol::optional<int> grid_size_x = lua["grid"]["size"][1];
 	sol::optional<int> grid_size_y = lua["grid"]["size"][2];
 	sf::Vector2i grid_size = sf::Vector2i(grid_size_x.value_or(60), grid_size_y.value_or(60));
-	
+
 
 	sol::table rec = lua["receivers"];
 	for(auto a: rec) {
@@ -144,17 +157,6 @@ void GameScreen::setLevel(Levels level) {
 		sf::Vector2f position = sf::Vector2f(positionx.value_or(0), positiony.value_or(0));
 		position = snapGrid(position, grid_size);
 
-		sol::optional<int> threshold = table["threshold"];
-		if(threshold)
-			std::cout << threshold.value() << std::endl;
-
-		sol::optional<std::string> comparator = table["comparator"];
-		if(comparator)
-			std::cout << comparator.value() << std::endl;
-
-		sol::optional<bool> absolute = table["absolute"];
-		if(absolute)
-			std::cout << absolute.value() << std::endl;
 
 
 		auto rec_type = receiver_name_map[type];
@@ -162,26 +164,32 @@ void GameScreen::setLevel(Levels level) {
 		switch(rec_type) {
 			case ReceiverTypes::AlwaysOn:
 				{
-				auto receiver = std::make_unique<ReceiverAlwaysOn>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
-				receiver->setPosition(position);
-				receivers.push_back(receiver.get());
-				mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
+					auto receiver = std::make_unique<ReceiverAlwaysOn>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+					receiver->setPosition(position);
+					receivers.push_back(receiver.get());
+					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
 				break;
 			case ReceiverTypes::AlwaysOff:
 				{
-				auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
-				receiver->setPosition(position);
-				receivers.push_back(receiver.get());
-				mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
+					auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+					receiver->setPosition(position);
+					receivers.push_back(receiver.get());
+					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
 				break;
 			case ReceiverTypes::Threshold:
 				{
-				auto receiver = std::make_unique<ReceiverAmplitude>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, threshold.value());
-				receiver->setPosition(position);
-				receivers.push_back(receiver.get());
-				mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
+					sol::optional<sol::function> maybe_threshold_fn = table["threshold_fn"];
+					if(!maybe_threshold_fn) {
+						std::cout << "Your function sucks" << std::endl;	
+					} 
+					sol::function threshold_fn = maybe_threshold_fn.value();
+
+					auto receiver = std::make_unique<ReceiverAmplitude>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, std::move(threshold_fn));
+					receiver->setPosition(position);
+					receivers.push_back(receiver.get());
+					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
 				break;
 			case ReceiverTypes::Count:
@@ -190,6 +198,8 @@ void GameScreen::setLevel(Levels level) {
 	}
 
 	sol::table gen = lua["generators"];
+
+
 	int generator_index = 0;
 	for(auto a: gen) {
 		auto key = a.first.as<std::string>();
@@ -201,12 +211,12 @@ void GameScreen::setLevel(Levels level) {
 			switch(genType) {
 				case GeneratorTypes::Standard:
 					{
-					std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
-					generators.push_back(generator.get());
-					generator->setPosition(sf::Vector2f(100, 200 + 120*generator_index));
-					generator->setSize(sf::Vector2u(90,90));
-					generator->setAnimation("Generator");
-					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
+						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
+						generators.push_back(generator.get());
+
+						generator->setSize(sf::Vector2u(90,90));
+						generator->setAnimation("Generator");
+						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
 					}
 					break;
 				case GeneratorTypes::Wavelength:
@@ -219,6 +229,22 @@ void GameScreen::setLevel(Levels level) {
 			generator_index++;
 		}
 	}
+
+	//Dynamic toolbox dimensions based on generators size
+	sf::Texture& toolboxTexture = getContext().mTextures->get(Textures::ToolboxBackground);
+
+	std::unique_ptr<SpriteNode> toolbox(new SpriteNode(toolboxTexture));
+	mToolbox = toolbox.get();
+	mToolbox->setPosition(toolboxOffset.x, toolboxOffset.y);
+	toolboxSize.y = (generator_index + 1)*toolboxMargin.y;
+	mToolbox->setSize(sf::Vector2u(toolboxSize.x, toolboxSize.y));
+	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(toolbox));
+
+	for(int i = 0; i < generator_index; i++)
+	{
+		generators[i]->setPosition(sf::Vector2f(toolboxOffset.x, toolboxOffset.y - toolboxSize.y/2 + toolboxMargin.y*(i+1)));
+	}
+
 
 	auto pos_color = lua["colors"]["positive_amp"];
 	auto zero = lua["colors"]["zero"];

@@ -33,6 +33,8 @@ protected:
 
 	float waveNumber;
 
+	virtual float waveFunction(float distance) const;
+
 	bool placed;
 };
 

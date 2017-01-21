@@ -31,6 +31,7 @@ void WaveGenerator::setAngle(float angle) {
 
 void WaveGenerator::updateCurrent(sf::Time dt) {
 	AnimationNode::updateCurrent(dt);
+	angle += frequency*2*M_PI*dt.asSeconds();
 }
 
 float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
@@ -38,11 +39,12 @@ float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
 	float dx = abs(genPos.x - pos.x);
 	float dy = abs(genPos.y - pos.y);
 	float distance = sqrt(dx*dx + dy*dy);
-	float ampTarget = 0;
 
-	ampTarget = amplitude * sin(waveNumber*distance - angle);
+	return waveFunction(distance);
+}
 
-	return ampTarget;
+float WaveGenerator::waveFunction(float distance) const {
+	return amplitude*sin(2*M_PI/wavelength*distance + angle);
 }
 
 bool WaveGenerator::isPlaced() const {

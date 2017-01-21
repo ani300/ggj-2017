@@ -11,6 +11,7 @@
 #include "InvisibleNode.h"
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
+#include "sol/sol.h"
 
 class WaveGenerator;
 class Receiver;
@@ -33,8 +34,8 @@ class GameScreen: public State {
             Background,
             WavePattern,
             Grid,
-            Nodes,
             UI,
+            Nodes,
             Text,
             Count
         };
@@ -61,6 +62,12 @@ class GameScreen: public State {
         sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
         sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2i grid_size);
 
+        sf::Vector2f toolboxOffset = sf::Vector2f(100.f, 350.f);
+        sf::Vector2f toolboxMargin = sf::Vector2f(0.f, 120.f);
+        //Height is calculated based on generators number
+        sf::Vector2f toolboxSize = sf::Vector2f(150.f, 600.f);
+        SpriteNode* mToolbox;
+
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
         SpriteNode* mCursor;
@@ -70,6 +77,8 @@ class GameScreen: public State {
 
 	std::unordered_map<std::string, GeneratorTypes> generator_name_map;
 	std::unordered_map<std::string, ReceiverTypes> receiver_name_map;
+
+	sol::state lua;
 
         TextNode* mText;
 
