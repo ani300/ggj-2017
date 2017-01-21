@@ -59,6 +59,7 @@ class GameScreen: public State {
         void handleRealtimeInput();
 
         sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
+        sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2i grid_size);
 
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;

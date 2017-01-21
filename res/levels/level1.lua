@@ -21,7 +21,7 @@ colors = {
 	}
 }
 grid = {
-	size = {60, 60},
+	size = {60, 60}, -- by default it will be 60, 60, there is no need to declare it
 	color = {
 		r = 255,
 		g = 0,

@@ -87,6 +87,10 @@ sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2f grid_size) {
 	}
 }
 
+sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2i grid_size) {
+	return snapGrid(pos, sf::Vector2f(grid_size.x, grid_size.y));
+}
+
 bool GameScreen::handleEvent(const sf::Event& event) {
 	if (event.type == sf::Event::MouseButtonPressed) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
@@ -123,7 +127,9 @@ void GameScreen::setLevel(Levels level) {
 	rgb = lua["rgb"];
 	time = lua["time"];
 
-	sf::Vector2i grid_size = sf::Vector2i(lua["grid"]["size"][1], lua["grid"]["size"][2]);
+	sol::optional<int> grid_size_x = lua["grid"]["size"][1];
+	sol::optional<int> grid_size_y = lua["grid"]["size"][2];
+	sf::Vector2i grid_size = sf::Vector2i(grid_size_x.value_or(60), grid_size_y.value_or(60));
 	
 
 	sol::table rec = lua["receivers"];
@@ -136,7 +142,7 @@ void GameScreen::setLevel(Levels level) {
 		sol::optional<float> positiony = table["position"][2];
 
 		sf::Vector2f position = sf::Vector2f(positionx.value_or(0), positiony.value_or(0));
-		position = snapGrid(position, sf::Vector2f(60, 60));
+		position = snapGrid(position, grid_size);
 
 		sol::optional<int> threshold = table["threshold"];
 		if(threshold)
