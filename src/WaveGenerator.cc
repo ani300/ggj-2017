@@ -48,7 +48,7 @@ float WaveGenerator::waveFunction(float distance) const {
 }
 
 bool WaveGenerator::isPlaced() const {
-	return true;
+	return placed;
 }
 
 void WaveGenerator::place(bool p) {

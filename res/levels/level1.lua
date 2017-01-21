@@ -36,7 +36,7 @@ receivers = {
 	}
 }
 generators = {
-	StandardGenerators = 3,
+	StandardGenerators = 2,
 	OffsetGenerators = 0,
 	WavelengthGenerators = 0,
 	FrequencyGenerators = 0,

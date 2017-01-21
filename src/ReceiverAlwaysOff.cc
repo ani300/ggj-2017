@@ -10,14 +10,20 @@ ReceiverAlwaysOff::ReceiverAlwaysOff(sf::Texture const& texture, std::vector<Wav
 
 bool ReceiverAlwaysOff::isOnRightNow() {
 	float totalInput = 0;
+	bool anyActive = false;
 	for(auto g : generators) {
 		if(g->isPlaced()) {
+			anyActive = true;
 			totalInput += g->amplitudeAt(getWorldPosition());
 		}
 		std::cout << totalInput << std::endl;
 	}
-
-	return around(totalInput, 0);
+	
+	if(anyActive) {
+		return around(totalInput, 0);
+	} else {
+		return false;
+	}
 }
 
 void ReceiverAlwaysOff::updateCurrent(sf::Time /*dt*/) {
