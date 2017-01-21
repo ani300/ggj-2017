@@ -50,15 +50,15 @@ HelpScreen::HelpScreen(StatesStack& stack, Context& context)
 void HelpScreen::draw() {
     getContext().mRTexture->draw(mSceneGraph);
 }
-bool HelpScreen::update(sf::Time dt) {
+bool HelpScreen::update(sf::Time /*dt*/) {
     return true;
 }
 
-bool HelpScreen::handleEvent(const sf::Event& event) {
+bool HelpScreen::handleEvent(sf::Event const& event) {
     if (event.type == sf::Event::EventType::MouseButtonPressed 
         && event.mouseButton.button == sf::Mouse::Button::Left) {
-        sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
-        sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
+        //sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
+        //sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
     }
     return true;
 }

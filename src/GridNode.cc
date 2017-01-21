@@ -13,8 +13,8 @@ GridNode::GridNode(sf::Vector2i grid_size, sf::Color color) :
         mLines[2*i + 1].position = sf::Vector2f(i*mGridSize.x, 1079);
         mLines[2*i + 1].color = color;
     }
-    for (int i = num_hor; i < num_vert + num_hor; ++i) {
-        int i_corr = i - num_hor;
+    for (int i = num_vert; i < num_vert + num_hor; ++i) {
+        int i_corr = i - num_vert;
         mLines[2*i].position = sf::Vector2f(0, i_corr*mGridSize.y);
         mLines[2*i].color = color;
         mLines[2*i + 1].position = sf::Vector2f(1919, i_corr*mGridSize.y);

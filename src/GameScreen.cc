@@ -41,12 +41,12 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	generators[2]->setSize(sf::Vector2u(90, 90));
 	generators[2]->setAnimation("Generator");
 
-	for(auto v: receivers_positions) {
+	/*for(auto v: receivers_positions) {
 		auto receiver = std::make_unique<ReceiverAlwaysOff>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
 		receivers.push_back(receiver.get());
 		receivers.back()->setPosition(v);
 		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
-	}
+	}*/
 
 	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators);
 	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
@@ -65,7 +65,7 @@ bool GameScreen::isLevelCompleted() {
 			return false;
 		}
 	}
-	return true;
+	return /*true;/*/false;
 }
 
 bool GameScreen::update(sf::Time dt) {
@@ -81,7 +81,7 @@ void GameScreen::handleRealtimeInput() {
 	if (mSelectedGenerator != -1) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
 		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
-		generators[mSelectedGenerator]->setPosition(snapGrid(sf::Vector2f(newPos), sf::Vector2f(60, 60)));
+		generators[mSelectedGenerator]->setPosition(sf::Vector2f(newPos));
 	}
 }
 
@@ -124,6 +124,11 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 	}
 	if (event.type == sf::Event::MouseButtonReleased) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
+			if (mSelectedGenerator >= 0) {
+				sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
+				sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
+				generators[mSelectedGenerator]->setPosition(snapGrid(sf::Vector2f(newPos), sf::Vector2f(60, 60)));	
+			}
 			mSelectedGenerator = -1;
 		}
 	}
