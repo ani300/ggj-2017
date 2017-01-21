@@ -5,6 +5,7 @@
 #include "Receiver.h"
 #include "ReceiverAlwaysOn.h"
 #include "ReceiverAlwaysOff.h"
+#include "ReceiverAmplitude.h"
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
 #include "ScaleNode.h"
@@ -146,6 +147,7 @@ void GameScreen::setLevel(Levels level) {
 		sol::optional<float> positiony = table["position"][2];
 
 		sf::Vector2f position = sf::Vector2f(positionx.value_or(0), positiony.value_or(0));
+		position = snapGrid(position, sf::Vector2f(60, 60));
 
 		sol::optional<int> threshold = table["threshold"];
 		if(threshold)
@@ -165,14 +167,28 @@ void GameScreen::setLevel(Levels level) {
 		switch(rec_type) {
 			case ReceiverTypes::AlwaysOn:
 				{
-				auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+				auto receiver = std::make_unique<ReceiverAlwaysOn>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
 				receiver->setPosition(position);
 				receivers.push_back(receiver.get());
 				mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
 				break;
 			case ReceiverTypes::AlwaysOff:
+				{
+				auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+				receiver->setPosition(position);
+				receivers.push_back(receiver.get());
+				mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
+				}
+				break;
 			case ReceiverTypes::Threshold:
+				{
+				auto receiver = std::make_unique<ReceiverAmplitude>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, threshold.value());
+				receiver->setPosition(position);
+				receivers.push_back(receiver.get());
+				mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
+				}
+				break;
 			case ReceiverTypes::Count:
 				break;
 		}
