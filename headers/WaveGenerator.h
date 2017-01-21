@@ -33,3 +33,24 @@ protected:
 
 	bool placed;
 };
+
+
+class StandardGenerator : public WaveGenerator {
+
+};
+
+class OffsetGenerator : public WaveGenerator {
+
+};
+
+class WavelengthGenerator : public WaveGenerator {
+
+};
+
+class FrequencyGenerator : public WaveGenerator {
+
+};
+
+class EditableGenertaor : public WaveGenerator {
+
+};
