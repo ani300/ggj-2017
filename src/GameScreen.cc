@@ -26,10 +26,13 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	generator_name_map["AmplitudeGenerator"] = GeneratorTypes::Amplitude;
 	generator_name_map["EditableGenerator"] = GeneratorTypes::Editable;
 
-
 	receiver_name_map["Threshold"] = ReceiverTypes::Threshold;
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
 	receiver_name_map["AlwaysOff"] = ReceiverTypes::AlwaysOff;
+
+	sf::Color color1(255,0,0,255);
+	sf::Color color2(0,0,0,255);
+	sf::Color color3(0,255,255,255);
 
 	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
 	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
