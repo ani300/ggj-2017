@@ -4,7 +4,7 @@ ReceiverAlwaysOff::ReceiverAlwaysOff(sf::Texture const& texture, std::vector<Wav
 	Receiver(texture, generators)
 {
 	activationHistory = std::vector<bool>(history_length, false);
-	precision = 1e-14;
+	precision = 0.1;
 }
 
 

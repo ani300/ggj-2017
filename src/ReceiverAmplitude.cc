@@ -1,9 +1,9 @@
 #include "ReceiverAmplitude.h"
 
-ReceiverAmplitude::ReceiverAmplitude(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators, float t) : 
-	Receiver(texture, generators)
+ReceiverAmplitude::ReceiverAmplitude(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators, sol::function f) : 
+	Receiver(texture, generators),
+	threshold_fn(f)
 {
-	target = t;
 	activationHistory = std::vector<bool>(history_length, false);	
 }
 
@@ -15,8 +15,9 @@ bool ReceiverAmplitude::isOnRightNow() {
 			totalInput += g->amplitudeAt(getWorldPosition());
 		}
 	}
-
-	return totalInput > target;
+	
+	std::cout << "Lua fun: " << totalInput << " " << (bool)threshold_fn(totalInput) << std::endl;
+	return threshold_fn.call<bool>(totalInput); 
 }
 
 

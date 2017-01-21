@@ -11,6 +11,7 @@
 #include "InvisibleNode.h"
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
+#include "sol/sol.h"
 
 class WaveGenerator;
 class Receiver;
@@ -76,6 +77,8 @@ class GameScreen: public State {
 
 	std::unordered_map<std::string, GeneratorTypes> generator_name_map;
 	std::unordered_map<std::string, ReceiverTypes> receiver_name_map;
+
+	sol::state lua;
 
         TextNode* mText;
 

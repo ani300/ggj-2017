@@ -16,7 +16,7 @@ colors = {
 	negative_amp = {
 		r = 255,
 		g = 0,
-		b = 255,
+		b = 0,
 		a = 255
 	}
 }
@@ -26,17 +26,22 @@ grid = {
 		r = 255,
 		g = 0,
 		b = 0,
-		a =0 
+		a = 255 
 	}
 }
 receivers = {
 	{
 		type = "AlwaysOff",
 		position = {500, 500}
+	},
+	{
+		type = "Threshold",
+		position = {1000, 1000},
+		threshold_fn = function(amplitude) return amplitude > 2 or amplitude < -1 end	
 	}
 }
 generators = {
-	StandardGenerators = 2,
+	StandardGenerators = 5,
 	OffsetGenerators = 0,
 	WavelengthGenerators = 0,
 	FrequencyGenerators = 0,
