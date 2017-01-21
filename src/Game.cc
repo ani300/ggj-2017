@@ -37,7 +37,7 @@ Game::Game() :
     // mFonts.load(Fonts::AlluraRegular, "res/media/AlluraRegular.otf");
     
     mTextures.load(Textures::ReceiverAlwaysOn, "res/pictures/prueba_n1_50.png");
-    mTextures.load(Textures::WaveGenerator, "res/pictures/prueba_gen1_50.png");
+    mTextures.load(Textures::WaveGenerator, "res/pictures/prueba_generador_2_90.png");
 
     // mStatisticsText.setFont(mFonts.get(Fonts::Sansation));
     // mStatisticsText.setPosition(5.f, 5.f);
