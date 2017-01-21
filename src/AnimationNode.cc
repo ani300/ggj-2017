@@ -31,7 +31,16 @@ void AnimationNode::load(const std::string &filename) {
 
     if (line == "" || line[0] == '#') continue;
     std::stringstream stream(line);
-    if (line[0] == 'A') {
+    
+    if (line[0] == 'D') {
+      std::string token;
+      stream >> token;
+      assert(token == "DIM");
+      int width, height;
+      stream >> width >> height;
+      mUnitSize = sf::Vector2i(width, height);
+    }
+    else if (line[0] == 'A') {
       std::string token;
       stream >> token;
       assert(token == "ANIM");
@@ -50,10 +59,7 @@ void AnimationNode::load(const std::string &filename) {
     }
     else {
       AnimFrame frame;
-      stream >> frame.mPos.x 
-             >> frame.mPos.y 
-             >> frame.mSize.x 
-             >> frame.mSize.y 
+      stream >> frame.mIndex 
              >> frame.mTime;
       animation.push_back(frame);
     }
@@ -120,11 +126,14 @@ float AnimationNode::getElapsedTime() const {
 
 void AnimationNode::updateTextureRect() {
   AnimFrame frame = mAnimations[mCurrentAnim][mCurrentFrame];
-  mSprite.setOrigin(std::abs(frame.mSize.x)/2.0f,std::abs(frame.mSize.y)/2.0f);
-  mSprite.setTextureRect(sf::IntRect(frame.mPos, frame.mSize));
+  int num_cols = mSprite.getTexture()->getSize().x/mUnitSize.x;
+  int row = frame.mIndex/num_cols;
+  int col = frame.mIndex%num_cols;
+  mSprite.setOrigin(std::abs(mUnitSize.x)/2.0f,std::abs(mUnitSize.y)/2.0f);
+  mSprite.setTextureRect(sf::IntRect(sf::Vector2i(col*mUnitSize.x, row*mUnitSize.y), mUnitSize));
 
-  float scaleX = mSize.x / float(frame.mSize.x);
-  float scaleY = mSize.y / float(frame.mSize.y);
+  float scaleX = mSize.x / float(mUnitSize.x);
+  float scaleY = mSize.y / float(mUnitSize.y);
   mSprite.setScale(std::abs(scaleX), std::abs(scaleY));
 }
 

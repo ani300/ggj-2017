@@ -5,7 +5,7 @@
 
 class AnimationNode: public SpriteNode {
     struct AnimFrame {
-        sf::Vector2i mPos;
+        int mIndex;
         float mTime;
     };
 
@@ -29,7 +29,7 @@ class AnimationNode: public SpriteNode {
 
         std::map<std::string, std::vector<AnimFrame>> mAnimations;
         std::map<std::string, unsigned int> mAnimationCycles;
-        sf::Vector2i mSize;
+        sf::Vector2i mUnitSize;
         unsigned int mCurrentFrame;
         unsigned int mCurrentCycle;
         std::string mCurrentAnim;
