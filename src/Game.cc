@@ -42,6 +42,7 @@ Game::Game() :
     mTextures.load(Textures::Start, "res/pictures/prueba_startbutton1.png");
     mTextures.load(Textures::Help, "res/pictures/prueba_helpbutton1.png");
     mTextures.load(Textures::Exit, "res/pictures/prueba_exitbutton1.png");
+    mTextures.load(Textures::ToolboxBackground, "res/pictures/toolbox_bg.png");
 
     // mStatisticsText.setFont(mFonts.get(Fonts::Sansation));
     // mStatisticsText.setPosition(5.f, 5.f);

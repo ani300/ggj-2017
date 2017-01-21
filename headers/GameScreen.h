@@ -33,8 +33,8 @@ class GameScreen: public State {
             Background,
             WavePattern,
             Grid,
-            Nodes,
             UI,
+            Nodes,
             Text,
             Count
         };
@@ -60,6 +60,12 @@ class GameScreen: public State {
 
         sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
         sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2i grid_size);
+
+        sf::Vector2f toolboxOffset = sf::Vector2f(100.f, 350.f);
+        sf::Vector2f toolboxMargin = sf::Vector2f(0.f, 120.f);
+        //Height is calculated based on generators number
+        sf::Vector2f toolboxSize = sf::Vector2f(150.f, 600.f);
+        SpriteNode* mToolbox;
 
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;

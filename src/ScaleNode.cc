@@ -27,5 +27,5 @@ void ScaleNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) c
 void ScaleNode::updateCurrent(sf::Time /*dt*/) {
 	mShader.setUniform("min_scale_y", 1080 - (getWorldPosition().y - 290/2));
 	mShader.setUniform("max_scale_y", 1080 - (getWorldPosition().y + 290/2));
-	std::cout << getWorldPosition().y - 290/2 << " " << getWorldPosition().y + 290/2 << std::endl;
+	//std::cout << getWorldPosition().y - 290/2 << " " << getWorldPosition().y + 290/2 << std::endl;
 }

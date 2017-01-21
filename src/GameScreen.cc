@@ -15,6 +15,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	State(stack, context),
 	mSelectedGenerator(-1)
 {
+
 	for (std::size_t i = 0; i < static_cast<std::size_t>(Layer::Count); ++i) {
 		SceneNode::Ptr layer(new SceneNode());
 		mSceneLayers[i] = layer.get();
@@ -56,11 +57,19 @@ bool GameScreen::update(sf::Time dt) {
 	return true;
 }
 
+
 void GameScreen::handleRealtimeInput() {
 	if (mSelectedGenerator != -1) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
 		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
 		generators[mSelectedGenerator]->setPosition(sf::Vector2f(newPos));
+		if((mToolbox->getBounds()).contains(newPos)) {
+			generators[mSelectedGenerator]->place(false);
+		}
+		else
+		{
+			generators[mSelectedGenerator]->place(true);
+		}
 	}
 }
 
@@ -107,10 +116,16 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 	}
 	if (event.type == sf::Event::MouseButtonReleased) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
+			sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
+			sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
+
 			if (mSelectedGenerator >= 0) {
-				sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
-				sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
-				generators[mSelectedGenerator]->setPosition(snapGrid(sf::Vector2f(newPos), sf::Vector2f(60, 60)));	
+				if((mToolbox->getBounds()).contains(newPos)) {
+					generators[mSelectedGenerator]->setPosition(toolboxOffset.x, toolboxOffset.y - toolboxSize.y/2 + toolboxMargin.y*(mSelectedGenerator+1));
+				}
+				else {
+					generators[mSelectedGenerator]->setPosition(snapGrid(sf::Vector2f(newPos), sf::Vector2f(60, 60)));	
+				}
 			}
 			mSelectedGenerator = -1;
 		}
@@ -190,6 +205,10 @@ void GameScreen::setLevel(Levels level) {
 	}
 
 	sol::table gen = lua["generators"];
+
+	
+
+
 	int generator_index = 0;
 	for(auto a: gen) {
 		auto key = a.first.as<std::string>();
@@ -203,7 +222,7 @@ void GameScreen::setLevel(Levels level) {
 					{
 					std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
 					generators.push_back(generator.get());
-					generator->setPosition(sf::Vector2f(100, 200 + 120*generator_index));
+	
 					generator->setSize(sf::Vector2u(90,90));
 					generator->setAnimation("Generator");
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
@@ -219,6 +238,22 @@ void GameScreen::setLevel(Levels level) {
 			generator_index++;
 		}
 	}
+
+	//Dynamic toolbox dimensions based on generators size
+	sf::Texture& toolboxTexture = getContext().mTextures->get(Textures::ToolboxBackground);
+
+	std::unique_ptr<SpriteNode> toolbox(new SpriteNode(toolboxTexture));
+    mToolbox = toolbox.get();
+    mToolbox->setPosition(toolboxOffset.x, toolboxOffset.y);
+    toolboxSize.y = (generator_index + 1)*toolboxMargin.y;
+    mToolbox->setSize(sf::Vector2u(toolboxSize.x, toolboxSize.y));
+    mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(toolbox));
+
+	for(int i = 0; i < generator_index; i++)
+	{
+		generators[i]->setPosition(sf::Vector2f(toolboxOffset.x, toolboxOffset.y - toolboxSize.y/2 + toolboxMargin.y*(i+1)));
+	}
+	
 
 	auto pos_color = lua["colors"]["positive_amp"];
 	auto zero = lua["colors"]["zero"];
