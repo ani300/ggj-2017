@@ -28,4 +28,9 @@ bool ReceiverAlwaysOff::isOnRightNow() {
 
 void ReceiverAlwaysOff::updateCurrent(sf::Time /*dt*/) {
 	on = isOn();
+
+	if(on)
+		this->setScale(sf::Vector2f(1.6,1.6));
+	else	
+		this->setScale(sf::Vector2f(1,1));
 }

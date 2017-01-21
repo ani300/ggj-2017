@@ -20,7 +20,6 @@ protected:
 	
 	bool on = false;
 	int history_length = 60;
-	double activation_threshold = 45./history_length;
 
 	bool around(float value, float target);
 
@@ -29,8 +28,9 @@ protected:
 
 	float precision = 1e-3;
 
-
 	virtual bool isOnRightNow() = 0;
 
 	virtual void updateCurrent(sf::Time dt) = 0;
+
+	double activation_threshold = 45./history_length;
 };

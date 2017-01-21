@@ -26,9 +26,10 @@ bool Receiver::isOn() {
 	
 	currentFrame = (currentFrame + 1) % history_length;
 
-	std::cout << activeFramesCount << std::endl;
+	std::cout << "ActiveFrames: " << activeFramesCount << std::endl;
 
-	return static_cast<double>(activeFramesCount)/history_length > activation_threshold;
+	std::cout << "Ratio: " << static_cast<double>(activeFramesCount)/static_cast<double>(history_length) << " " << activation_threshold << std::endl;
+	return static_cast<double>(activeFramesCount)/static_cast<double>(history_length) > activation_threshold;
 }
 
 bool Receiver::around(float value, float target) {
@@ -36,8 +37,6 @@ bool Receiver::around(float value, float target) {
 
 	max_range = target + precision;
 	min_range = target - precision;
-
-	std::cout << min_range << " " << value << " " << max_range << std::endl;
 
 	return value < max_range && value > min_range;
 }

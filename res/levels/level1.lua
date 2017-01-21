@@ -26,7 +26,7 @@ grid = {
 		r = 255,
 		g = 0,
 		b = 0,
-		a = 255 
+		a = 0
 	}
 }
 receivers = {
@@ -37,11 +37,20 @@ receivers = {
 	{
 		type = "Threshold",
 		position = {1000, 1000},
-		threshold_fn = function(amplitude) return amplitude > 2 or amplitude < -1 end	
+		threshold_fn = function(amplitude)
+			return amplitude < 2 and amplitude > 1
+		end
+	},
+	{
+		type = "Threshold",
+		position = {1000, 100},
+		threshold_fn = function(amplitude)
+			return amplitude < 2 and amplitude > 1
+		end
 	}
 }
 generators = {
-	StandardGenerators = 5,
+	StandardGenerators = 3,
 	OffsetGenerators = 0,
 	WavelengthGenerators = 0,
 	FrequencyGenerators = 0,

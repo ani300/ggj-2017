@@ -13,9 +13,8 @@ public:
 
 private:
 	int history_length = 60;
-	int activation_threshold = 10/history_length;
 
-	float target = 2;
+	double activation_threshold = 2./history_length;
 
 	bool isOnRightNow();
 	void updateCurrent(sf::Time dt) override;
