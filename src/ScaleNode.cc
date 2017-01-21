@@ -10,10 +10,7 @@ ScaleNode::ScaleNode(std::string const& vertex_file, std::string const& fragment
 {
 	Utils::centerOrigin(mOutRect);
 	Utils::centerOrigin(mScaleRect);
-	mShader.loadFromFile(vertex_file, sf::Shader::Vertex);
-	mShader.loadFromFile(fragment_file, sf::Shader::Fragment);
-	mShader.setUniform("min_scale_y", -280/2);
-	mShader.setUniform("max_scale_y", +280/2);
+	mShader.loadFromFile(vertex_file, fragment_file);
 	mShader.setUniform("color1", sf::Glsl::Vec4(mColor1));
 	mShader.setUniform("color2", sf::Glsl::Vec4(mColor2));
 	mShader.setUniform("color3", sf::Glsl::Vec4(mColor3));
@@ -22,10 +19,13 @@ ScaleNode::ScaleNode(std::string const& vertex_file, std::string const& fragment
 
 void ScaleNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(mOutRect, states);
-	target.draw(mScaleRect, &mShader);
+	states.shader = &mShader;
+	target.draw(mScaleRect, states);
 	//target.draw(mScaleRect, states);
 }
 
 void ScaleNode::updateCurrent(sf::Time /*dt*/) {
-	mShader.setUniform("globalCoords", sf::Glsl::Vec2(getWorldPosition()));
+	mShader.setUniform("min_scale_y", 1080 - (getWorldPosition().y - 290/2));
+	mShader.setUniform("max_scale_y", 1080 - (getWorldPosition().y + 290/2));
+	std::cout << getWorldPosition().y - 290/2 << " " << getWorldPosition().y + 290/2 << std::endl;
 }
