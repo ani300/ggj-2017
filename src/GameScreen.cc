@@ -67,7 +67,7 @@ bool GameScreen::isLevelCompleted(){
 bool GameScreen::update(sf::Time dt) {
 	mSceneGraph.update(dt);
 	if(isLevelCompleted()) {
-		//TODO: push 'win' view
+		requestStackPush(StateType::Result);
 	}
 
 	return true;

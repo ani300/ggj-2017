@@ -6,6 +6,7 @@ enum class StateType {
 	Game,
 	Pause,
 	Loading,
+	Result,
 	Help
 };
 
