@@ -8,6 +8,7 @@
 #include "SpriteNode.h"
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
+#include "WaveGenerator.h"
 
 class TitleScreen: public State {
 
@@ -31,7 +32,8 @@ class TitleScreen: public State {
 
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
-
+        std::vector<WaveGenerator*> generators;
+        SpriteNode* mLogo;
         SpriteNode* mButtonPlay;
         SpriteNode* mButtonHelp;
         SpriteNode* mButtonExit;
