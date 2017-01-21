@@ -35,6 +35,8 @@ class GameScreen: public State {
             Count
         };
 
+        bool isLevelCompleted();
+
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
         SpriteNode* mCursor;

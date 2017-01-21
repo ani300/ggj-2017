@@ -54,8 +54,22 @@ void GameScreen::draw() {
 	getContext().mRTexture->draw(mSceneGraph);
 }
 
+bool GameScreen::isLevelCompleted(){
+	for(const auto&  r: receivers){
+		if(not r->getState()) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 bool GameScreen::update(sf::Time dt) {
 	mSceneGraph.update(dt);
+	if(isLevelCompleted()) {
+		//TODO: push 'win' view
+	}
+
 	return true;
 }
 
