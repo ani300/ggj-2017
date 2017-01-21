@@ -22,8 +22,12 @@ protected:
 	int history_length = 60;
 	double activation_threshold = 45./history_length;
 
+	bool around(float value, float target);
+
 	//Has been on in average during some time
 	bool isOn();
+
+	float precision = 1e-3;
 
 
 	virtual bool isOnRightNow() = 0;

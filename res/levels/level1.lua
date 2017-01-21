@@ -32,7 +32,7 @@ grid = {
 receivers = {
 	{
 		type = "AlwaysOff",
-		position = {200, 300}
+		position = {500, 500}
 	}
 }
 generators = {
