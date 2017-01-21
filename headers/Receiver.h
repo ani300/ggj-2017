@@ -13,14 +13,18 @@ public:
 
 protected:
 	std::vector<bool> activationHistory;
-	int currentFrame;
+	int currentFrame = 0;
+	int activeFramesCount = 0;
 	
 	std::vector<WaveGenerator*> const& generators;
 	
 	bool on = false;
+	int history_length = 60;
+	int activation_threshold = 45/history_length;
 
 	//Has been on in average during some time
-	virtual bool isOn() = 0;
+	bool isOn();
+
 
 	virtual bool isOnRightNow() = 0;
 

@@ -11,14 +11,11 @@ public:
 	ReceiverAmplitude(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators, float t);
 
 private:
-	const int HISTORY_LENGTH = 60;
+	int history_length = 60;
+	int activation_threshold = 10/history_length;
 
-	//Successive frames needed to consider activated
-    const float ACTIVATION_THRESHOLD = 10./HISTORY_LENGTH;
+	float target = 2;
 
-	float target;
-
-	bool isOn();
 	bool isOnRightNow();
 	void updateCurrent(sf::Time dt) override;
 };

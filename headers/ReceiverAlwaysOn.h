@@ -8,14 +8,13 @@
 class ReceiverAlwaysOn : public Receiver {
 public:
 	ReceiverAlwaysOn(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators);
-	//Check if the received value reached the target
+	
 	
 private:
-	const int HISTORY_LENGTH = 60;
-	const float ACTIVATION_THRESHOLD = 45/HISTORY_LENGTH;
+	int history_length = 60;
+	int activation_threshold = 45/history_length;
 
 	void updateCurrent(sf::Time dt) override;
 
-	virtual bool isOn() override;
 	virtual bool isOnRightNow() override;
 };

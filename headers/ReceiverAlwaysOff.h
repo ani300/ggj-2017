@@ -11,11 +11,9 @@ public:
 	
 private:
 	
-	const int HISTORY_LENGTH = 60;
-	//Frames needed to consider activated
-	const float ACTIVATION_THRESHOLD = 45/HISTORY_LENGTH;
+	int history_length = 60;
+	int activation_threshold = 45/history_length;
 
-	bool isOn();
 	bool isOnRightNow();
     void updateCurrent(sf::Time dt) override;
 };
