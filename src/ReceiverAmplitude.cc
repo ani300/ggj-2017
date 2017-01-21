@@ -20,7 +20,7 @@ bool ReceiverAmplitude::isOnRightNow() {
 }
 
 
-void ReceiverAmplitude::updateCurrent(sf::Time dt) {
+void ReceiverAmplitude::updateCurrent(sf::Time /*dt*/) {
 	// TODO: Animate on/off
 	on = isOn();
 }

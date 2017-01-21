@@ -114,7 +114,7 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 			// Check if clicking on a generator
 			sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
 			sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
-			for (int i = 0; i < generators.size(); ++i) {
+			for (std::size_t i = 0; i < generators.size(); ++i) {
 				sf::IntRect generator_bounds = generators[i]->getBounds();
 				if (generator_bounds.contains(newPos)) {
 					mSelectedGenerator = i;
