@@ -123,7 +123,7 @@ void GameScreen::setLevel(Levels level) {
 	rgb = lua["rgb"];
 	time = lua["time"];
 
-	sf::Vector2i grid_size = sf::Vector2i(lua["grid_size"][1], lua["grid_size"][2]);
+	sf::Vector2i grid_size = sf::Vector2i(lua["grid"]["size"][1], lua["grid"]["size"][2]);
 	
 
 	sol::table rec = lua["receivers"];
@@ -217,15 +217,17 @@ void GameScreen::setLevel(Levels level) {
 	auto pos_color = lua["colors"]["positive_amp"];
 	auto zero = lua["colors"]["zero"];
 	auto neg_color = lua["colors"]["negative_amp"];
+	auto g_color = lua["grid"]["color"];
 
 	sf::Color color1(neg_color["r"],neg_color["g"],neg_color["b"],neg_color["a"]);
 	sf::Color color2(zero["r"],zero["g"],zero["b"],zero["a"]);
 	sf::Color color3(pos_color["r"],pos_color["g"],pos_color["b"],pos_color["a"]);
+	sf::Color grid_color(g_color["r"],g_color["g"],g_color["b"],g_color["a"]);
 
 	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
 	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
 
-	auto grid = std::make_unique<GridNode>(grid_size, sf::Color(255,0,0,128));	
+	auto grid = std::make_unique<GridNode>(grid_size, grid_color);	
 	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
 
 	auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);

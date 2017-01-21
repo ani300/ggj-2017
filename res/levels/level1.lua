@@ -20,7 +20,15 @@ colors = {
 		a = 255
 	}
 }
-grid_size = {60, 60}
+grid = {
+	size = {60, 60},
+	color = {
+		r = 255,
+		g = 0,
+		b = 0,
+		a = 255
+	}
+}
 receivers = {
 	{
 		type = "AlwaysOn",
