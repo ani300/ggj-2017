@@ -28,6 +28,7 @@ TitleScreen::TitleScreen(StatesStack& stack, Context& context)
     generators[0]->setPosition(640.f, 360.f);
     generators[0]->setSize(sf::Vector2u(90, 90));
     generators[0]->setAnimation("Generator");
+    generators[0]->place(true);
 
     auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, 
         sf::Color(0,255,255,255), sf::Color(0,0,0,255), sf::Color(0,255,255,255));

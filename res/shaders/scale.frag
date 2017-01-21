@@ -14,4 +14,5 @@ void main()
     else {
         gl_FragColor = mix(color2, color3, (scale_point - 0.5)*2); 
     }
+    gl_FragColor = vec4(0.0,0.0,0.0,1.0);
 }
