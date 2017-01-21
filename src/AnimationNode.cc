@@ -30,8 +30,8 @@ void AnimationNode::load(const std::string &filename) {
     else line = line.substr(begin, begin-end);
 
     if (line == "" || line[0] == '#') continue;
+
     std::stringstream stream(line);
-    
     if (line[0] == 'D') {
       std::string token;
       stream >> token;
@@ -65,8 +65,8 @@ void AnimationNode::load(const std::string &filename) {
     }
   }
   if (animation.size() > 0) {
-   mAnimations[current] = animation;
-   mAnimationCycles[current] = cycles;
+    mAnimations[current] = animation;
+    mAnimationCycles[current] = cycles;
   }
 }
 
@@ -75,7 +75,6 @@ void AnimationNode::updateCurrent(sf::Time dt) {
     mCurrentTime += deltaTime;
     mTotalTime += deltaTime;
     const std::vector<AnimFrame> CurrentFrames = mAnimations[mCurrentAnim];
-
     bool needUpdate = true;
     while (mCurrentTime > CurrentFrames[mCurrentFrame].mTime) {
         mCurrentTime -= CurrentFrames[mCurrentFrame].mTime;

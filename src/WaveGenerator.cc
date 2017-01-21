@@ -28,7 +28,7 @@ void WaveGenerator::setAngle(float angle) {
 }
 
 void WaveGenerator::updateCurrent(sf::Time dt) {
-	this->move(sf::Vector2f(rand() % 3 - 1, rand() % 3 - 1));
+	AnimationNode::updateCurrent(dt);
 }
 
 float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {

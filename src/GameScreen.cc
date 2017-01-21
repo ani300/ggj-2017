@@ -26,13 +26,19 @@ GameScreen::GameScreen(StatesStack& stack, Context& context)
 
 	for(int i = 0; i < num_generators; ++i) {
 		auto generator = std::make_unique<WaveGenerator>(context.mTextures->get(Textures::WaveGenerator), 
-					"res/animations/wave_generator.anim");
+					"res/anim/generator.anim");
 		generators.push_back(generator.get());
 		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
 	}
-	generators[0]->setPosition(sf::Vector2f(300,300));
-	generators[1]->setPosition(sf::Vector2f(1200,800));
-	generators[2]->setPosition(sf::Vector2f(1200,300));
+	generators[0]->setPosition(sf::Vector2f(200,200));
+	generators[0]->setSize(sf::Vector2u(90, 90));
+	generators[0]->setAnimation("Generator");
+	generators[1]->setPosition(sf::Vector2f(750,979));
+	generators[1]->setSize(sf::Vector2u(90, 90));
+	generators[1]->setAnimation("Generator");
+	generators[2]->setPosition(sf::Vector2f(1200,200));
+	generators[2]->setSize(sf::Vector2u(90, 90));
+	generators[2]->setAnimation("Generator");
 
 	for(auto v: receivers_positions) {
 		auto receiver = std::make_unique<ReceiverAlwaysOn>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);

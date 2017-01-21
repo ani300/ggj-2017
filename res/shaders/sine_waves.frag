@@ -48,7 +48,7 @@ float sum_of_sources() {
     float w5 = 2.0*3.141592*frequency5;
     float k5 = 2.0*3.141592/wavelength5;
     float val5 = 0.5 + amplitude5*0.5*sin(w5*time - k5*dist5);
-    return (val1 + val2 + val3 + val4 + val5)/5.0;
+    return (val1 + val2 + val3 + val4 + val5)/3.0;
 }
 
 void main() {
