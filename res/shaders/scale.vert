@@ -8,7 +8,8 @@ varying float scale_point;
 void main()
 {
     // transform the vertex position
-    gl_Position = gl_ModelViewProjectionMatrix * (gl_Vertex + vec4(globalCoords, 0, 1));
+    gl_Position = gl_ModelViewProjectionMatrix * (gl_Vertex + vec4(globalCoords.x/1920., globalCoords.y/1080., 0, 1));
+    gl_Position = vec4(1.0, 1.0, 0.0, 1.0);
 
     // transform the texture coordinates
     gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
