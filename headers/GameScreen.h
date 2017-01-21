@@ -30,6 +30,7 @@ class GameScreen: public State {
         enum class Layer {
             Background,
             WavePattern,
+            Grid,
             Nodes,
             Text,
             Count
@@ -38,6 +39,8 @@ class GameScreen: public State {
         bool isLevelCompleted();
 
         void handleRealtimeInput();
+
+        sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
 
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;

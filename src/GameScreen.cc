@@ -1,8 +1,10 @@
 /*********************************GameScreen.cc***********************************/
 #include "GameScreen.h"
 #include "AnimationNode.h"
+#include "GridNode.h"
 #include "Receiver.h"
 #include "ReceiverAlwaysOn.h"
+#include "ReceiverAlwaysOff.h"
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
 
@@ -40,14 +42,17 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	generators[2]->setAnimation("Generator");
 
 	for(auto v: receivers_positions) {
-		auto receiver = std::make_unique<ReceiverAlwaysOn>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+		auto receiver = std::make_unique<ReceiverAlwaysOff>(context.mTextures->get(Textures::ReceiverAlwaysOn), generators);
 		receivers.push_back(receiver.get());
 		receivers.back()->setPosition(v);
 		mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 	}
 
 	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators);
-	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));	
+	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
+
+	auto grid = std::make_unique<GridNode>(sf::Vector2i(60,60), sf::Color(255,0,0,128));	
+	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
 }
 
 void GameScreen::draw() {
@@ -76,7 +81,30 @@ void GameScreen::handleRealtimeInput() {
 	if (mSelectedGenerator != -1) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
 		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
-		generators[mSelectedGenerator]->setPosition(sf::Vector2f(newPos));
+		generators[mSelectedGenerator]->setPosition(snapGrid(sf::Vector2f(newPos), sf::Vector2f(60, 60)));
+	}
+}
+
+sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2f grid_size) {
+	int x_free = int(pos.x)%int(grid_size.x);
+	int y_free = int(pos.y)%int(grid_size.y);
+	int x_base = pos.x - x_free;
+	int y_base = pos.y - y_free;
+	if (x_free < grid_size.x/2) {
+		if (y_free < grid_size.y/2) {
+			return sf::Vector2f(x_base, y_base);
+		}
+		else {
+			return sf::Vector2f(x_base, y_base + grid_size.y);
+		}
+	}
+	else {
+		if (y_free < grid_size.y/2) {
+			return sf::Vector2f(x_base + grid_size.x, y_base);
+		}
+		else {
+			return sf::Vector2f(x_base + grid_size.x, y_base + grid_size.y);
+		}
 	}
 }
 

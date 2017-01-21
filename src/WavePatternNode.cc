@@ -26,10 +26,10 @@ void WavePatternNode::updateCurrent(sf::Time dt) {
 		}
 	}
 
-	mShader.setUniform("color_min", sf::Glsl::Vec4(sf::Color(0,0,128,255)));
-	mShader.setUniform("color_max", sf::Glsl::Vec4(sf::Color(0,190,255,255)));
+	mShader.setUniform("color_min", sf::Glsl::Vec4(sf::Color(0,255,255,255)));
+	mShader.setUniform("color_max", sf::Glsl::Vec4(sf::Color(0,255,255,255)));
 
 	mElapsedTime += dt;
-	//mShader.setUniform("time", mElapsedTime.asSeconds());
+	mShader.setUniform("time", mElapsedTime.asSeconds());
 }
 

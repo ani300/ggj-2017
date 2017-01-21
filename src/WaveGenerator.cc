@@ -6,7 +6,7 @@
 WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file) :
 	AnimationNode(texture, file),
 	frequency(0.5f),
-	wavelength(60.f),
+	wavelength(90.f),
 	amplitude(1.f),
 	angle(0.f)
 {}
