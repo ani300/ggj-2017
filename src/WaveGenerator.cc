@@ -1,6 +1,6 @@
 #include "WaveGenerator.h"
 #include <cmath>
-
+#include <stdlib.h>
 
 
 WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file) :
@@ -28,11 +28,14 @@ void WaveGenerator::setAngle(float angle) {
 }
 
 void WaveGenerator::updateCurrent(sf::Time dt) {
-	
+	AnimationNode::updateCurrent(dt);
 }
 
 float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
-	float distance = sqrt(pos.x*pos.x + pos.y*pos.y);
+	sf::Vector2f genPos = getWorldPosition();
+	float dx = abs(genPos.x - pos.x);
+	float dy = abs(genPos.y - pos.y);
+	float distance = sqrt(dx*dx + dy*dy);
 	float ampTarget = 0;
 
 	ampTarget = amplitude * sin(waveNumber*distance - angle);

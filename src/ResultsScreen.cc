@@ -8,6 +8,10 @@ ResultsScreen::ResultsScreen(StatesStack& stack, Context& context) :
         mSceneLayers[i] = layer.get();
         mSceneGraph.attachChild(std::move(layer));
     }
+    //PROVISIONAL
+    auto winningNode = std::make_unique<SpriteNode>(context.mTextures->get(Textures::WaveGenerator));
+    winningNode->setPosition(sf::Vector2f(1920.0/2.f, 1080.0f/2.0f));
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(winningNode));
     // Prepara el fons de pantalla i la font
     // sf::Font& font = getContext().mFonts->get(Fonts::Gomo);
 
@@ -100,6 +104,10 @@ bool ResultsScreen::update(sf::Time dt) {
 }
 
 bool ResultsScreen::handleEvent(const sf::Event& event) {
+    if (event.type == sf::Event::KeyPressed) {
+    
+        requestStackPop();
+    }
     // if (event.type == sf::Event::KeyPressed) {
     //     if (event.key.code == sf::Keyboard::Return) {
     //         getContext().mMusic->stop();

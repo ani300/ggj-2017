@@ -4,22 +4,7 @@
 ReceiverAlwaysOn::ReceiverAlwaysOn(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators) : 
 	Receiver(texture, generators)
 {
-	activationHistory = std::vector<bool>(HISTORY_LENGTH, false);
-	currentFrame = 0;
-}
-
-bool ReceiverAlwaysOn::isOn() {
-	int count = 0;
-	//Set current frame
-	activationHistory[currentFrame] = isOnRightNow();
-	//Check last 60 frames
-	for(int i = (currentFrame+1)%60; i != currentFrame; i = (i + 1)%60)	{
-		count += activationHistory[i];
-	}
-
-	currentFrame = (currentFrame + 1) % 60;
-
-	return count/HISTORY_LENGTH < ACTIVATION_THRESHOLD;
+	activationHistory = std::vector<bool>(history_length, false);
 }
 
 bool ReceiverAlwaysOn::isOnRightNow() {
