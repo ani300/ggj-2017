@@ -12,6 +12,13 @@ ResultsScreen::ResultsScreen(StatesStack& stack, Context& context) :
     auto winningNode = std::make_unique<SpriteNode>(context.mTextures->get(Textures::WaveGenerator));
     winningNode->setPosition(sf::Vector2f(1920.0/2.f, 1080.0f/2.0f));
     mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(winningNode));
+
+    Levels currentLevel = context.mGameData->currentLevel;
+    int level = static_cast<int>(currentLevel);
+    int nextLvl = level + 1;
+    nextLevel = static_cast<Levels>(nextLvl);
+
+
     // Prepara el fons de pantalla i la font
     // sf::Font& font = getContext().mFonts->get(Fonts::Gomo);
 
@@ -98,6 +105,7 @@ ResultsScreen::ResultsScreen(StatesStack& stack, Context& context) :
 void ResultsScreen::draw() {
     getContext().mRTexture->draw(mSceneGraph);
 }
+
 bool ResultsScreen::update(sf::Time dt) {
     mSceneGraph.update(dt);
     return false;
@@ -105,29 +113,10 @@ bool ResultsScreen::update(sf::Time dt) {
 
 bool ResultsScreen::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
-    
         requestStackPop();
+	requestStackSetLevel(nextLevel);
     }
-    // if (event.type == sf::Event::KeyPressed) {
-    //     if (event.key.code == sf::Keyboard::Return) {
-    //         getContext().mMusic->stop();
-            
-    //         requestStackPop();
-    //         requestStackPop();
 
-    //         GameData* gd = getContext().mGameData;
-    //         assert(gd != NULL);
-    //         // Finished game, reset number of rounds, score and return to title
-    //         if (gd->mRoundsPassed >= gd->mNumRounds) {
-    //             gd->mRoundsPassed = 0;
-    //             gd->mPointsP1 = gd->mPointsP2 = 0;
-    //             requestStackPush(StateType::Title);
-    //         }
-    //         else {
-    //             requestStackPush(Statetype::Game);
-    //         }
-    //     }
-    // }
     return false;
 }
 

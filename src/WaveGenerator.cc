@@ -1,4 +1,5 @@
 #include "WaveGenerator.h"
+#include "Utils.h"
 #include <cmath>
 #include <stdlib.h>
 
@@ -36,9 +37,7 @@ void WaveGenerator::updateCurrent(sf::Time dt) {
 
 float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
 	sf::Vector2f genPos = getWorldPosition();
-	float dx = abs(genPos.x - pos.x);
-	float dy = abs(genPos.y - pos.y);
-	float distance = sqrt(dx*dx + dy*dy);
+	float distance = Utils::distance(genPos, pos);
 
 	return waveFunction(distance);
 }
@@ -54,3 +53,12 @@ bool WaveGenerator::isPlaced() const {
 void WaveGenerator::place(bool p) {
 	placed = p;
 }
+
+float StandardGenerator::waveFunction(float distance) const {
+	return amplitude*sin(2*M_PI/wavelength*distance + angle);
+}
+
+float OffsetGenerator::waveFunction(float distance) const {
+	return amplitude*sin(2*M_PI/wavelength*distance + angle) + offset;
+}
+

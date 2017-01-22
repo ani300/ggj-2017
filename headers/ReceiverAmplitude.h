@@ -12,10 +12,6 @@ public:
 	ReceiverAmplitude(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators, sol::function f);
 
 private:
-	int history_length = 60;
-
-	double activation_threshold = 2./history_length;
-
 	bool isOnRightNow();
 	void updateCurrent(sf::Time dt) override;
 

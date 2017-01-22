@@ -17,72 +17,97 @@ class WaveGenerator;
 class Receiver;
 class GameScreen: public State {
 
-    public:
-        //Constructor with name of the image it wants to display
-        GameScreen(StatesStack& stack, Context& context);
+public:
+	//Constructor with name of the image it wants to display
+	GameScreen(StatesStack& stack, Context& context);
 
 
-        void draw();
-        bool update(sf::Time dt);
-        bool handleEvent(const sf::Event& event);
-	void setLevel(Levels level);
+	void draw();
+	bool update(sf::Time dt);
+	bool handleEvent(const sf::Event& event);
+void setLevel(Levels level);
 
-    private:
-        void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
+private:
+	void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
 
-        enum class Layer {
-            Background,
-            WavePattern,
-            Grid,
-            UI,
-            Nodes,
-            Text,
-            Count
-        };
-        
+	enum class Layer {
+		Background,
+		WavePattern,
+		Grid,
+		UI,
+		Nodes,
+		Text,
+		Count
+	};
+	
 	enum class GeneratorTypes {
-            Standard,
-	    Wavelength,
-	    Frequency,
-	    Amplitude,
-	    Editable,
-            Count
-        };
+		Standard,
+		Wavelength,
+		Frequency,
+		Amplitude,
+		Editable,
+		Count
+	};
 
 	enum class ReceiverTypes {
-            Threshold,
-            AlwaysOn,
-            AlwaysOff,
-            Count
-        };
-        bool isLevelCompleted();
+		Threshold,
+		AlwaysOn,
+		AlwaysOff,
+		Count
+	};
 
-        void handleRealtimeInput();
+	enum class MusicState {
+		Off,
+		Base3,
+		Base4,
+		T1On,
+		T2Harm,
+		T2On,
+		T4Harm1,
+		T4Harm2,
+		T4Mel1,
+		T4On,
+		T3Mel1,
+		T3Mel2,
+		T3On
+	};
 
-        sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
-        sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2i grid_size);
+	bool isLevelCompleted();
 
-        sf::Vector2f toolboxOffset = sf::Vector2f(100.f, 350.f);
-        sf::Vector2f toolboxMargin = sf::Vector2f(0.f, 120.f);
-        //Height is calculated based on generators number
-        sf::Vector2f toolboxSize = sf::Vector2f(150.f, 600.f);
-        SpriteNode* mToolbox;
+	void handleRealtimeInput();
 
-        SceneNode mSceneGraph;
-        std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
-        SpriteNode* mCursor;
+	void updateMusicState();
 
-        std::vector<WaveGenerator*> generators;
-        std::vector<Receiver*> receivers;
+	void changePlayingMusic();
+
+	sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
+	sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2i grid_size);
+
+	sf::Vector2f toolboxOffset = sf::Vector2f(100.f, 350.f);
+	sf::Vector2f toolboxMargin = sf::Vector2f(0.f, 120.f);
+	//Height is calculated based on generators number
+	sf::Vector2f toolboxSize = sf::Vector2f(150.f, 600.f);
+	SpriteNode* mToolbox;
+
+	MusicState mMusicState = MusicState::Off;
+	std::unordered_map<MusicState, std::vector<bool>> mMusicConfigs;
+
+	SceneNode mSceneGraph;
+	std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
+	SpriteNode* mCursor;
+
+	std::vector<WaveGenerator*> generators;
+	std::vector<Receiver*> receivers;
 
 	std::unordered_map<std::string, GeneratorTypes> generator_name_map;
 	std::unordered_map<std::string, ReceiverTypes> receiver_name_map;
+	std::unordered_map<Levels, std::string> level_files_map;
 
 	sol::state lua;
 
-        TextNode* mText;
+	TextNode* mText;
 
-        int mSelectedGenerator;
+	int mSelectedGenerator;
 
 	Levels level;
 
