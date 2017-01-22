@@ -75,14 +75,12 @@ ColorGenerator::ColorGenerator(sf::Texture const& texture, std::string const& fi
 	: WaveGenerator(texture, file),
 	color_emit(EmitterColor::Red)
 {
-	std::cout << "H1 " << static_cast<int>(color_emit) << std::endl;
 }
 
 ColorGenerator::ColorGenerator(sf::Texture const& texture, std::string const& file, EmitterColor color)
 	: WaveGenerator(texture, file),
 	color_emit(color)
 {
-	std::cout << "H2 " << static_cast<int>(color_emit) << std::endl;
 }
 
 sf::Color ColorGenerator::colorAt(sf::Vector2f pos) const {
@@ -90,6 +88,7 @@ sf::Color ColorGenerator::colorAt(sf::Vector2f pos) const {
 	float distance = Utils::distance(genPos, pos);
 
 	float colorValue = waveFunction(distance);
+	colorValue = colorValue*255;
 
 	sf::Color color_val = sf::Color::Black;
 
@@ -117,7 +116,6 @@ void ColorGenerator::setGeneratorColor(EmitterColor color) {
 }
 
 sf::Color ColorGenerator::getGeneratorColor() {
-	//std::cout << static_cast<int>(color_emit) << std::endl;
 	switch(color_emit) {
 	case EmitterColor::Red:
 		return sf::Color::Red;

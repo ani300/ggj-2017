@@ -20,7 +20,10 @@ bool ReceiverRGB::isOnRightNow() {
 		}
 	}
 	
+	std::cout << int(totalInput.r) << " " << int(totalInput.g) << " " << int(totalInput.b) << std::endl;
+	std::cout << int(mObjective.r) << " " << int(mObjective.g) << " " << int(mObjective.b) << std::endl;
 	int sub = (totalInput.r + totalInput.g + totalInput.b) - (mObjective.r + mObjective.g + mObjective.b);
+	std::cout << sub << std::endl;
 	return abs(sub) < 15;
 }
 
