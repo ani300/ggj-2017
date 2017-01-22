@@ -88,7 +88,7 @@ private:
 
 
 	void tutorialFirstMessage();
-	void tutorialFirstMessageOff();
+	void tutorialMessageOff();
 	void showMessage1(std::string title, std::string msg);
 	void showMessage2(std::string title, std::string msg);
 	void showMessage3(std::string title, std::string msg);
@@ -104,7 +104,7 @@ private:
 	//Index is scenegraph children
 	void handleOnHover(int index);
 	void handleHoverOut(int index);
-
+	
 	//ANIMATIONS
 	Animator animator;
 	TextNode* tutorialTitle1;

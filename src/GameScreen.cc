@@ -73,7 +73,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	if(getContext().mGameData->currentLevel == Levels::Level2)
 	{
 		showMessage1("1", "To win activate all receivers");
-		showMessage2("2", "These two receivers need amplitude bigger than one");
+		showMessage2("2", "These two receivers need amplitudes bigger than one");
 		//Show text
 		GInterpolation* step2a_1 = new Interpolation<float>(textOpacity1, 255.f, 1.f);
 		GInterpolation* step2b_1 = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(500.f,320.f), 3.f);
@@ -90,10 +90,10 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	}
 	if(getContext().mGameData->currentLevel == Levels::Level3)
 	{
-		showMessage1("", "This receiver always wants to be at darkness");
+		showMessage1("", "This receiver always wants to be at amplitude 0 (black)");
 		//Show text
 		GInterpolation* step2a_1 = new Interpolation<float>(textOpacity1, 255.f, 1.f);
-		GInterpolation* step2b_1 = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(420.f,540.f), 3.f);
+		GInterpolation* step2b_1 = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(400.f,500.f), 3.f);
 		GInterpolation* step2a_2 = new Interpolation<float>(textOpacity2, 255.f, 1.f);
 		GInterpolation* step2b_2 = new Interpolation<sf::Vector2f>(textPos2, sf::Vector2f(470.f,650.f), 3.f);
 		//Just wait
@@ -141,7 +141,7 @@ bool GameScreen::isLevelCompleted() {
 void GameScreen::tutorialFirstMessage(){
 
 	showMessage1("1", "This is a wave generator");
-	showMessage2("2", "This is a threshold receiver. \n If in the last 2 seconds it sense a wave with a \n certain amplitude it will trigger");
+	showMessage2("2", "This is a threshold receiver. \n If in the last 2 seconds it senses a wave with a \n certain amplitude it will trigger");
 	//Show text
 	GInterpolation* step2a_1 = new Interpolation<float>(textOpacity1, 255.f, 1.f);
 	GInterpolation* step2b_1 = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(30.f,65.f), 3.f);
@@ -159,19 +159,26 @@ void GameScreen::tutorialFirstMessage(){
 }
 
 
-void GameScreen::tutorialFirstMessageOff(){
-	/*if(getContext().mGameData->currentLevel == Levels::Level1 && firstMove)
+void GameScreen::tutorialMessageOff(){
+	if(firstMove)
 	{
 		firstMove = false;
 	    GInterpolation* step4a = new Interpolation<float>(textOpacity1, 1.f, 1.f, [this](){
-    		tutorialTitle->setPosition(1920.f, 1080.f);
-    		tutorialBody->setPosition(1920.f, 1080.f);
+    		tutorialTitle1->setPosition(1920.f, 1080.f);
+    		tutorialBody1->setPosition(1920.f, 1080.f);
     	});
-    	GInterpolation* step4b = new Interpolation<float>(textPos, 130.f, 1.f);
+    	GInterpolation* step4b = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(1000.f,1000.f), 1.f);
+
+    	GInterpolation* step4a_2 = new Interpolation<float>(textOpacity2, 1.f, 1.f, [this](){
+    		tutorialTitle2->setPosition(1920.f, 1080.f);
+    		tutorialBody2->setPosition(1920.f, 1080.f);
+    	});
+    	GInterpolation* step4b_2 = new Interpolation<sf::Vector2f>(textPos2, sf::Vector2f(1000.f,1000.f), 1.f);
     	animator.interpolate(*step4a);
     	animator.interpolate(*step4b);
-		
-	}*/
+		animator.interpolate(*step4a_2);
+    	animator.interpolate(*step4b_2);
+	}
 }
 
 bool GameScreen::update(sf::Time dt) {
@@ -374,7 +381,7 @@ void GameScreen::handleRealtimeInput(sf::Time dt) {
 		}
 		else
 		{
-			tutorialFirstMessageOff();
+			tutorialMessageOff();
 			generators[mSelectedGenerator]->place(true);
 		}
 	}
