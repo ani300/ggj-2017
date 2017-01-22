@@ -9,6 +9,8 @@ class WavePatternNode: public SceneNode {
     public:
         explicit WavePatternNode(const std::string& shader_file, const std::vector<WaveGenerator*>& generator_list,
             sf::Color color1, sf::Color color2, sf::Color color3);
+        explicit WavePatternNode(const std::string& shader_file, const std::vector<WaveGenerator*>& generator_list);
+
 
     protected:
         std::vector<WaveGenerator*> const& mGeneratorList;
@@ -18,6 +20,7 @@ class WavePatternNode: public SceneNode {
         sf::Color mColor3;
         sf::Shader mShader;
         sf::Time mElapsedTime;
+        bool mRGB;
 
     private:
         virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;

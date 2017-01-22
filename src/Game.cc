@@ -25,6 +25,7 @@ Game::Game() :
 , mStatisticsNumFrames(0)
 {
     bool renderCreated = mRenderTexture.create(1920, 1080);
+    (void)renderCreated;
     assert(renderCreated);
     mRenderTexture.setSmooth(true);
 

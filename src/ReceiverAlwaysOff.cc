@@ -16,7 +16,7 @@ bool ReceiverAlwaysOff::isOnRightNow() {
 			anyActive = true;
 			totalInput += g->amplitudeAt(getWorldPosition());
 		}
-		std::cout << totalInput << std::endl;
+//		std::cout << totalInput << std::endl;
 	}
 	
 	if(anyActive) {

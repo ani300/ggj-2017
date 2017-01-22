@@ -12,6 +12,28 @@ ResultsScreen::ResultsScreen(StatesStack& stack, Context& context) :
     auto winningNode = std::make_unique<SpriteNode>(context.mTextures->get(Textures::WaveGenerator));
     winningNode->setPosition(sf::Vector2f(1920.0/2.f, 1080.0f/2.0f));
     mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(winningNode));
+
+    Levels currentLevel = context.mGameData->currentLevel;
+    int level = static_cast<int>(currentLevel);
+    int nextLvl = level + 1;
+    nextLevel = static_cast<Levels>(nextLvl);
+
+    // Play the MUSIC
+    if (getContext().mGameData->numReceivers == 3) {
+        getContext().mMusic->play(0, Music::Game3TBase, false);
+        getContext().mMusic->play(1, Music::Game3TMel1, false);
+        getContext().mMusic->play(2, Music::Game3TMel2, false);
+        getContext().mMusic->play(3, Music::Game3TMel3, false);
+    }
+    else {
+        hasMusicFinale = true;
+        getContext().mMusic->play(0, Music::Game4TBase, false);
+        getContext().mMusic->play(1, Music::Game4THarm1, false);
+        getContext().mMusic->play(2, Music::Game4THarm2, false);
+        getContext().mMusic->play(3, Music::Game4TMel1, false);
+        getContext().mMusic->play(4, Music::Game4TMel2, false);
+    }
+
     // Prepara el fons de pantalla i la font
     // sf::Font& font = getContext().mFonts->get(Fonts::Gomo);
 
@@ -98,36 +120,27 @@ ResultsScreen::ResultsScreen(StatesStack& stack, Context& context) :
 void ResultsScreen::draw() {
     getContext().mRTexture->draw(mSceneGraph);
 }
+
 bool ResultsScreen::update(sf::Time dt) {
+    if (hasMusicFinale) {
+        mMusicTimer += dt;
+    }
+    if (mMusicTimer.asSeconds() > 16) {
+        getContext().mMusic->play(0, Music::Game4TOutro, false);
+    }
+    
     mSceneGraph.update(dt);
     return false;
 }
 
 bool ResultsScreen::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
-    
         requestStackPop();
+        requestStackPop();
+	requestStackPush(StateType::Game);
+	requestStackSetLevel(nextLevel);
     }
-    // if (event.type == sf::Event::KeyPressed) {
-    //     if (event.key.code == sf::Keyboard::Return) {
-    //         getContext().mMusic->stop();
-            
-    //         requestStackPop();
-    //         requestStackPop();
 
-    //         GameData* gd = getContext().mGameData;
-    //         assert(gd != NULL);
-    //         // Finished game, reset number of rounds, score and return to title
-    //         if (gd->mRoundsPassed >= gd->mNumRounds) {
-    //             gd->mRoundsPassed = 0;
-    //             gd->mPointsP1 = gd->mPointsP2 = 0;
-    //             requestStackPush(StateType::Title);
-    //         }
-    //         else {
-    //             requestStackPush(Statetype::Game);
-    //         }
-    //     }
-    // }
     return false;
 }
 

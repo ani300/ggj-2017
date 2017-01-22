@@ -11,6 +11,7 @@
 #include "InvisibleNode.h"
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
+#include "WaveGenerator.h"
 #include "sol/sol.h"
 
 class WaveGenerator;
@@ -28,6 +29,8 @@ public:
 void setLevel(Levels level);
 
 private:
+	sol::state lua;
+
 	void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
 
 	enum class Layer {
@@ -46,6 +49,7 @@ private:
 		Frequency,
 		Amplitude,
 		Editable,
+		Color,
 		Count
 	};
 
@@ -53,6 +57,7 @@ private:
 		Threshold,
 		AlwaysOn,
 		AlwaysOff,
+		RGB,
 		Count
 	};
 
@@ -60,22 +65,22 @@ private:
 		Off,
 		Base3,
 		Base4,
-		T1On,
+		T4On,
 		T2Harm,
-		T2On,
 		T4Harm1,
 		T4Harm2,
 		T4Mel1,
-		T4On,
 		T3Mel1,
 		T3Mel2,
 		T3On
 	};
+
 	bool isLevelCompleted();
 
 	void handleRealtimeInput(sf::Time dt);
 
 	void updateMusicState();
+	void updateMusicPlayback();
 
 	void changePlayingMusic();
 
@@ -102,6 +107,8 @@ private:
 
 	MusicState mMusicState = MusicState::Off;
 	std::unordered_map<MusicState, std::vector<bool>> mMusicConfigs;
+	std::array<Music::ID, 5> mMusicToPlay;
+	sf::Time mMusicTimer;
 
 	SceneNode mSceneGraph;
 	std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;
@@ -112,8 +119,10 @@ private:
 
 	std::unordered_map<std::string, GeneratorTypes> generator_name_map;
 	std::unordered_map<std::string, ReceiverTypes> receiver_name_map;
+	std::unordered_map<Levels, std::string> level_files_map;
+	std::unordered_map<std::string, ColorGenerator::EmitterColor> color_name_map;
 
-	sol::state lua;
+	sf::Time mLevelCompletedSecond;
 
 	TextNode* mText;
 

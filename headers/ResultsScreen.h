@@ -9,6 +9,7 @@
 #include "SpriteNode.h"
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
+#include "StateIdentifiers.h"
 
 class ResultsScreen: public State {
 
@@ -33,5 +34,8 @@ class ResultsScreen: public State {
         std::array<AnimatedTextNode*, 2> mTextNodes;
         AnimatedTextNode* mText;
 
-	Levels nextLeve;
+        sf::Time mMusicTimer;
+        bool hasMusicFinale = false;
+
+	Levels nextLevel;
 };

@@ -19,7 +19,7 @@ bool ReceiverAmplitude::isOnRightNow() {
 		}
 	}
 
-	std::cout << "TF: " << totalInput << " " << (bool)threshold_fn(totalInput) << std::endl;
+//	std::cout << "TF: " << totalInput << " " << (bool)threshold_fn(totalInput) << std::endl;
 	return threshold_fn(totalInput); 
 }
 

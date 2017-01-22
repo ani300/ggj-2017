@@ -6,6 +6,7 @@
 #include "ReceiverAlwaysOn.h"
 #include "ReceiverAlwaysOff.h"
 #include "ReceiverAmplitude.h"
+#include "ReceiverRGB.h"
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
 #include "ScaleNode.h"
@@ -23,29 +24,40 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneGraph.attachChild(std::move(layer));
 	}
 
-	generator_name_map["StandardGenerator"] = GeneratorTypes::Standard;
-	generator_name_map["FrequencyGenerator"] = GeneratorTypes::Frequency;
-	generator_name_map["WavelengthGenerator"] = GeneratorTypes::Wavelength;
-	generator_name_map["AmplitudeGenerator"] = GeneratorTypes::Amplitude;
-	generator_name_map["EditableGenerator"] = GeneratorTypes::Editable;
+	generator_name_map["StandardGenerators"] = GeneratorTypes::Standard;
+	generator_name_map["FrequencyGenerators"] = GeneratorTypes::Frequency;
+	generator_name_map["WavelengthGenerators"] = GeneratorTypes::Wavelength;
+	generator_name_map["AmplitudeGenerators"] = GeneratorTypes::Amplitude;
+	generator_name_map["EditableGenerators"] = GeneratorTypes::Editable;
+	generator_name_map["ColorGenerators"] = GeneratorTypes::Color;
 
 	receiver_name_map["Threshold"] = ReceiverTypes::Threshold;
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
 	receiver_name_map["AlwaysOff"] = ReceiverTypes::AlwaysOff;
+	receiver_name_map["RGB"] = ReceiverTypes::RGB;
+
+	color_name_map["Red"] = ColorGenerator::EmitterColor::Red;
+	color_name_map["Blue"] = ColorGenerator::EmitterColor::Blue;
+	color_name_map["Green"] = ColorGenerator::EmitterColor::Green;
+
+	level_files_map[Levels::Level1] = "res/levels/level1.lua";
+	level_files_map[Levels::Level2] = "res/levels/level2.lua";
 
 	mMusicConfigs[MusicState::Off]     = {0,0,0,0,0,0,0,0,0};
 	mMusicConfigs[MusicState::Base3]   = {1,0,0,0,0,0,0,0,0}; 
 	mMusicConfigs[MusicState::Base4]   = {0,1,0,0,0,0,0,0,0};
-	mMusicConfigs[MusicState::T1On]    = {0,1,1,1,1,1,0,0,0};
+	mMusicConfigs[MusicState::T4On]    = {0,1,1,1,1,1,0,0,0};
 	mMusicConfigs[MusicState::T2Harm]  = {0,1,1,1,0,0,0,0,0};
-	mMusicConfigs[MusicState::T2On]    = {0,1,1,1,1,1,0,0,0};
 	mMusicConfigs[MusicState::T4Harm1] = {0,1,1,0,0,0,0,0,0}; 
 	mMusicConfigs[MusicState::T4Harm2] = {0,1,1,1,0,0,0,0,0};
 	mMusicConfigs[MusicState::T4Mel1]  = {0,1,1,1,1,0,0,0,0};
-	mMusicConfigs[MusicState::T4On]    = {0,1,1,1,1,1,0,0,0};
 	mMusicConfigs[MusicState::T3Mel1]  = {1,0,0,0,0,0,1,0,0};
 	mMusicConfigs[MusicState::T3Mel2]  = {1,0,0,0,0,0,1,1,0};
 	mMusicConfigs[MusicState::T3On]    = {1,0,0,0,0,0,1,1,1};
+
+	for (std::size_t i = 0; i < mMusicToPlay.size(); ++i) {
+		mMusicToPlay[i] = Music::None;
+	}
 }
 
 void GameScreen::draw() {
@@ -65,97 +77,34 @@ bool GameScreen::update(sf::Time dt) {
 	handleRealtimeInput(dt);
 
 	if(isLevelCompleted()) {
+		for (std::size_t i = 1; i < 5; ++i) {
+			getContext().mMusic->getMusicPlayer(i).stop();
+		}
+		mLevelCompletedSecond += dt;
+	}
+
+	if (mLevelCompletedSecond.asSeconds() >= 4) {
 		requestStackPush(StateType::Result);
 	}
 
 	MusicState old_state = mMusicState;
 	updateMusicState();
+	mMusicTimer += dt;
+	if (receivers.size() == 3) {
+		if (mMusicTimer.asSeconds() > 9) {
+			mMusicTimer -= sf::seconds(9);
+		}
+	}
+	else {
+		if (mMusicTimer.asSeconds() > 16) {
+			mMusicTimer -= sf::seconds(16);
+		}
+	}
 
 	if (old_state != mMusicState) {
-		// Update playing music accordingly
-		auto is_playing = [this](int player) -> bool {
-			return getContext().mMusic->getMusicPlayer(player).getStatus() == sf::SoundSource::Playing;
-		};
-		// Base3T
-		if (mMusicConfigs[mMusicState][0] && !is_playing(0)) {
-			getContext().mMusic->play(0, Music::Game3TBase);
-		}
-		else if (!mMusicConfigs[mMusicState][0] && is_playing(0)) {
-			getContext().mMusic->stop();
-		}
-		
-		// Base4T
-		if (mMusicConfigs[mMusicState][1] && !is_playing(0)) {
-			getContext().mMusic->play(0, Music::Game4TBase);
-		}
-		else if (!mMusicConfigs[mMusicState][1] && is_playing(0)) {
-			getContext().mMusic->stop();
-		}
-
-		// Harm1-4T
-		if (mMusicConfigs[mMusicState][2] && !is_playing(1)) {
-			getContext().mMusic->play(1, Music::Game4THarm1);
-			getContext().mMusic->getMusicPlayer(1).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
-		}
-		else if (!mMusicConfigs[mMusicState][2] && is_playing(1)) {
-			getContext().mMusic->getMusicPlayer(1).stop();
-		}
-
-		// Harm2-4T
-		if (mMusicConfigs[mMusicState][3] && !is_playing(2)) {
-			getContext().mMusic->play(2, Music::Game4THarm2);
-			getContext().mMusic->getMusicPlayer(2).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
-		}
-		else if (!mMusicConfigs[mMusicState][3] && is_playing(2)) {
-			getContext().mMusic->getMusicPlayer(2).stop();
-		}
-
-		// Mel1-4T
-		if (mMusicConfigs[mMusicState][4] && !is_playing(3)) {
-			getContext().mMusic->play(3, Music::Game4TMel1);
-			getContext().mMusic->getMusicPlayer(3).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
-		}
-		else if (!mMusicConfigs[mMusicState][4] && is_playing(3)) {
-			getContext().mMusic->getMusicPlayer(3).stop();
-		}
-
-		// Mel2-4T
-		if (mMusicConfigs[mMusicState][5] && !is_playing(4)) {
-			getContext().mMusic->play(4, Music::Game4TMel2);
-			getContext().mMusic->getMusicPlayer(4).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
-		}
-		else if (!mMusicConfigs[mMusicState][5] && is_playing(4)) {
-			getContext().mMusic->getMusicPlayer(4).stop();
-		}
-		
-		// Mel1-3T
-		if (mMusicConfigs[mMusicState][6] && !is_playing(1)) {
-			getContext().mMusic->play(1, Music::Game3TMel1);
-			getContext().mMusic->getMusicPlayer(1).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
-		}
-		else if (!mMusicConfigs[mMusicState][6] && is_playing(1)) {
-			getContext().mMusic->getMusicPlayer(1).stop();
-		}
-
-		// Mel2-3T
-		if (mMusicConfigs[mMusicState][7] && !is_playing(2)) {
-			getContext().mMusic->play(2, Music::Game3TMel2);
-			getContext().mMusic->getMusicPlayer(2).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
-		}
-		else if (!mMusicConfigs[mMusicState][7] && is_playing(2)) {
-			getContext().mMusic->getMusicPlayer(2).stop();
-		}
-
-		// Mel3-3T
-		if (mMusicConfigs[mMusicState][8] && !is_playing(3)) {
-			getContext().mMusic->play(3, Music::Game3TMel3);
-			getContext().mMusic->getMusicPlayer(3).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
-		}
-		else if (!mMusicConfigs[mMusicState][8] && is_playing(3)) {
-			getContext().mMusic->getMusicPlayer(3).stop();
-		}
-
+		updateMusicPlayback();
 	}
+
 
 	mSceneGraph.update(dt);
 	return true;
@@ -264,7 +213,7 @@ void GameScreen::updateMusicState() {
 
 		if (receivers.size() == 1) {
 			if (num_working_receivers == 1) {
-				mMusicState = MusicState::T1On;
+				mMusicState = MusicState::T4On;
 			}
 			else {
 				mMusicState = MusicState::Base4;
@@ -275,7 +224,7 @@ void GameScreen::updateMusicState() {
 				mMusicState = MusicState::T2Harm;
 			}
 			else if (num_working_receivers == 2) {
-				mMusicState = MusicState::T2On;
+				mMusicState = MusicState::T4On;
 			}
 			else {
 				mMusicState = MusicState::Base4;
@@ -311,6 +260,97 @@ void GameScreen::updateMusicState() {
 			else {
 				mMusicState = MusicState::Base4;
 			}
+		}
+	}
+}
+
+void GameScreen::updateMusicPlayback() {
+	// Update playing music accordingly
+	auto is_playing = [this](int player) -> bool {
+		return getContext().mMusic->getMusicPlayer(player).getStatus() == sf::SoundSource::Playing;
+	};
+
+	// Base3T
+	if (mMusicConfigs[mMusicState][0] && !is_playing(0)) {
+		mMusicToPlay[0] = Music::Game3TBase;
+	}
+	else if (!mMusicConfigs[mMusicState][0] && !mMusicConfigs[mMusicState][1] && is_playing(0)) {
+		mMusicToPlay[0] = Music::None;
+	}
+
+	// Base4T
+	if (mMusicConfigs[mMusicState][1] && !is_playing(0)) {
+		mMusicToPlay[0] = Music::Game4TBase;
+	}
+	else if (!mMusicConfigs[mMusicState][1] && !mMusicConfigs[mMusicState][0] && is_playing(0)) {
+		mMusicToPlay[0] = Music::None;
+	}
+
+	// Harm1-4T
+	if (mMusicConfigs[mMusicState][2] && !is_playing(1)) {
+		mMusicToPlay[1] = Music::Game4THarm1;
+	}
+	else if (!mMusicConfigs[mMusicState][2] && !mMusicConfigs[mMusicState][6] && is_playing(1)) {
+		mMusicToPlay[1] = Music::None;
+	}
+
+	// Harm2-4T
+	if (mMusicConfigs[mMusicState][3] && !is_playing(2)) {
+		mMusicToPlay[2] = Music::Game4THarm2;
+	}
+	else if (!mMusicConfigs[mMusicState][3] && !mMusicConfigs[mMusicState][7] && is_playing(2)) {
+		mMusicToPlay[2] = Music::None;
+	}
+
+	// Mel1-4T
+	if (mMusicConfigs[mMusicState][4] && !is_playing(3)) {
+		mMusicToPlay[3] = Music::Game4TMel1;
+	}
+	else if (!mMusicConfigs[mMusicState][4] && !mMusicConfigs[mMusicState][8] && is_playing(3)) {
+		mMusicToPlay[3] = Music::None;
+	}
+
+	// Mel2-4T
+	if (mMusicConfigs[mMusicState][5] && !is_playing(4)) {
+		mMusicToPlay[4] = Music::Game4TMel2;
+	}
+	else if (!mMusicConfigs[mMusicState][5] && is_playing(4)) {
+		mMusicToPlay[4] = Music::None;
+	}
+
+	// Mel1-3T
+	if (mMusicConfigs[mMusicState][6] && !is_playing(1)) {
+		mMusicToPlay[1] = Music::Game3TMel1;
+	}
+	else if (!mMusicConfigs[mMusicState][6] && !mMusicConfigs[mMusicState][2] && is_playing(1)) {
+		mMusicToPlay[1] = Music::None;
+	}
+
+	// Mel2-3T
+	if (mMusicConfigs[mMusicState][7] && !is_playing(2)) {
+		mMusicToPlay[2] = Music::Game3TMel2;
+	}
+	else if (!mMusicConfigs[mMusicState][7] && !mMusicConfigs[mMusicState][3] && is_playing(2)) {
+		mMusicToPlay[2] = Music::None;
+	}
+
+	// Mel3-3T
+	if (mMusicConfigs[mMusicState][8] && !is_playing(3)) {
+		mMusicToPlay[3] = Music::Game3TMel3;
+
+	}
+	else if (!mMusicConfigs[mMusicState][8] && !mMusicConfigs[mMusicState][4] && is_playing(3)) {
+		mMusicToPlay[3] = Music::None;
+	}
+	// Play teh musik
+	getContext().mMusic->setPaused(true);
+	for (std::size_t i = 0; i < mMusicToPlay.size(); ++i) {
+		if (mMusicToPlay[i] != Music::None) {
+			getContext().mMusic->play(i, mMusicToPlay[i]);
+			getContext().mMusic->getMusicPlayer(i).setPlayingOffset(mMusicTimer);
+		}
+		else {
+			getContext().mMusic->getMusicPlayer(i).stop();
 		}
 	}
 }
@@ -386,7 +426,9 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 void GameScreen::setLevel(Levels level) {
 	level = level;
 
-	lua.script_file("res/levels/level1.lua");
+	getContext().mGameData->currentLevel = level;
+
+	lua.script_file(level_files_map[level]);
 	rgb = lua["rgb"];
 	time = lua["time"];
 
@@ -406,8 +448,6 @@ void GameScreen::setLevel(Levels level) {
 
 		sf::Vector2f position = sf::Vector2f(positionx.value_or(0), positiony.value_or(0));
 		position = snapGrid(position, grid_size);
-
-
 
 		auto rec_type = receiver_name_map[type];
 
@@ -442,6 +482,21 @@ void GameScreen::setLevel(Levels level) {
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
 				break;
+			case ReceiverTypes::RGB:
+				{
+					sf::Color receiver_color;
+
+					receiver_color.r = table["color"]["r"];
+					receiver_color.g = table["color"]["g"];
+					receiver_color.b = table["color"]["b"];
+					receiver_color.a = table["color"]["a"];
+
+					auto receiver = std::make_unique<ReceiverRGB>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, receiver_color);
+					receiver->setPosition(position);
+					receivers.push_back(receiver.get());
+					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
+				}
+				break;
 			case ReceiverTypes::Count:
 				break;
 		}
@@ -455,7 +510,7 @@ void GameScreen::setLevel(Levels level) {
 		auto key = a.first.as<std::string>();
 		auto value = a.second.as<int>();
 
-		auto genType = generator_name_map[key];	
+		auto genType = generator_name_map[key];
 
 		for(int i = 0; i < value; ++i) {
 			switch(genType) {
@@ -464,6 +519,17 @@ void GameScreen::setLevel(Levels level) {
 						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
 						generators.push_back(generator.get());
 
+						generator->setSize(sf::Vector2u(90,90));
+						generator->setAnimation("Generator");
+						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
+					}
+					break;
+				case GeneratorTypes::Color:
+					{
+						auto gc = lua["generator_colors"][i+1];
+						ColorGenerator::EmitterColor c = color_name_map[gc];
+						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim", c);
+						generators.push_back(generator.get());
 						generator->setSize(sf::Vector2u(90,90));
 						generator->setAnimation("Generator");
 						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
@@ -496,24 +562,32 @@ void GameScreen::setLevel(Levels level) {
 	}
 
 
-	auto pos_color = lua["colors"]["positive_amp"];
-	auto zero = lua["colors"]["zero"];
-	auto neg_color = lua["colors"]["negative_amp"];
-	auto g_color = lua["grid"]["color"];
+	if(!rgb) {
+		auto pos_color = lua["colors"]["positive_amp"];
+		auto zero = lua["colors"]["zero"];
+		auto neg_color = lua["colors"]["negative_amp"];
+		auto g_color = lua["grid"]["color"];
 
-	sf::Color color1(neg_color["r"],neg_color["g"],neg_color["b"],neg_color["a"]);
-	sf::Color color2(zero["r"],zero["g"],zero["b"],zero["a"]);
-	sf::Color color3(pos_color["r"],pos_color["g"],pos_color["b"],pos_color["a"]);
-	sf::Color grid_color(g_color["r"],g_color["g"],g_color["b"],g_color["a"]);
+		sf::Color color1(neg_color["r"],neg_color["g"],neg_color["b"],neg_color["a"]);
+		sf::Color color2(zero["r"],zero["g"],zero["b"],zero["a"]);
+		sf::Color color3(pos_color["r"],pos_color["g"],pos_color["b"],pos_color["a"]);
+		sf::Color grid_color(g_color["r"],g_color["g"],g_color["b"],g_color["a"]);
 
-	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
-	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
+		auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
+		mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
 
-	auto grid = std::make_unique<GridNode>(grid_size, grid_color);	
-	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
+		auto grid = std::make_unique<GridNode>(grid_size, grid_color);	
+		mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
 
-	auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
-	ScaleNode* scale_node = color_scale.get();
-	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
-	scale_node->setPosition(sf::Vector2f(1850, 890));
+		auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
+		ScaleNode* scale_node = color_scale.get();
+		mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
+		scale_node->setPosition(sf::Vector2f(1850, 890));
+	}
+	else {
+		auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/rgb_waves.frag", generators);
+		mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
+	}
+
+	getContext().mGameData->numReceivers = receivers.size();
 }
