@@ -62,3 +62,41 @@ float OffsetGenerator::waveFunction(float distance) const {
 	return amplitude*sin(2*M_PI/wavelength*distance + angle) + offset;
 }
 
+
+ColorGenerator::ColorGenerator(sf::Texture const& texture, std::string const& file) 
+	: WaveGenerator(texture, file)
+{
+}
+
+ColorGenerator::ColorGenerator(sf::Texture const& texture, std::string const& file, EmitterColor color)
+	: WaveGenerator(texture, file),
+	color_emitted(color)
+{
+}
+
+sf::Color ColorGenerator::colorAt(sf::Vector2f pos) const {
+	sf::Vector2f genPos = getWorldPosition();
+	float distance = Utils::distance(genPos, pos);
+
+	float colorValue = waveFunction(distance);
+
+	sf::Color color_val = sf::Color::Black;
+
+	switch(color_emitted) {
+	case EmitterColor::Red:
+		color_val.r = colorValue;
+		break;
+	case EmitterColor::Green:
+		color_val.g = colorValue;
+		break;
+	case EmitterColor::Blue:
+		color_val.b = colorValue;
+		break;
+	}
+
+	return color_val;
+}
+
+float ColorGenerator::waveFunction(float distance) const {
+	return 1.f/2.f*sin(2*M_PI/1*distance + angle) + 0.5f;
+}

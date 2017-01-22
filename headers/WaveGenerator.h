@@ -80,3 +80,24 @@ class FrequencyGenerator : public WaveGenerator {
 class EditableGenertaor : public WaveGenerator {
 
 };
+
+class ColorGenerator : public WaveGenerator {
+public:
+	enum class EmitterColor {
+		Red,
+		Green,
+		Blue
+	};
+
+	ColorGenerator(sf::Texture const& texture, std::string const& file);
+	ColorGenerator(sf::Texture const& texture, std::string const& file, EmitterColor);
+	~ColorGenerator() {};
+
+	sf::Color colorAt(sf::Vector2f pos) const;
+
+
+protected:
+	virtual float waveFunction(float distance) const override;
+
+	EmitterColor color_emitted;
+};
