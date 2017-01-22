@@ -16,6 +16,9 @@ class SceneNode: public sf::Transformable, public sf::Drawable, private sf::NonC
 		sf::Vector2f getWorldPosition() const;
 		sf::Transform getWorldTransform() const;
 		void getAllChildren(std::vector<SceneNode*>& v);
+
+		virtual std::string getDescription() { return std::string(); };
+
 		//Hover is over but without moving the mouse some time
 		virtual void onHover();
 		virtual void onHoverOut();

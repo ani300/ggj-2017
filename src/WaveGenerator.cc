@@ -11,7 +11,13 @@ WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file
 	amplitude(1.f),
 	angle(0.f),
 	placed(false)
-{}
+{
+	tp.title = "Standard Wave Generator";
+	tp.position = this->getPosition();
+	tp.shown = true;
+	TooltipSystem::addTooltip("StandardGenerator", &tp);
+}
+
 
 WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file, float amplitude, float frequency, float wavelength) :
 	AnimationNode(texture, file),
@@ -20,7 +26,13 @@ WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file
 	amplitude(amplitude),
 	angle(0.f),
 	placed(false)
-{}
+{ 
+	tp.title = "Standard Wave Generator";
+	tp.position = this->getPosition();
+	tp.shown = true;
+	TooltipSystem::addTooltip("StandardGenerator", &tp);
+}
+
 
 WaveGenerator::~WaveGenerator() {
 
@@ -60,6 +72,19 @@ bool WaveGenerator::isPlaced() const {
 
 void WaveGenerator::place(bool p) {
 	placed = p;
+}
+
+std::string WaveGenerator::getDescription() {
+	std::ostringstream desc;
+	desc << "Standard Wave Generator" << std::endl;
+	desc << "Creates a sine wave with the following wave characteristics" << std::endl;
+	desc << "Wavelength: " << wavelength << std::endl;
+	desc << "Amplitude: " << amplitude << std::endl;
+	desc << "Frequency: " << frequency << std::endl;
+
+	std::string description;
+	description = desc.str();
+	return description;
 }
 
 float StandardGenerator::waveFunction(float distance) const {
@@ -128,4 +153,18 @@ sf::Color ColorGenerator::getGeneratorColor() {
 	}
 
 	return sf::Color::White;
+}
+
+
+std::string ColorGenerator::getDescription() {
+	std::ostringstream desc;
+	desc << "Standard Wave Generator" << std::endl;
+	desc << "Creates a sine wave with the following wave characteristics" << std::endl;
+	desc << "Wavelength: " << wavelength << std::endl;
+	desc << "Amplitude: " << amplitude << std::endl;
+	desc << "Frequency: " << frequency << std::endl;
+
+	std::string description;
+	description = desc.str();
+	return description;
 }

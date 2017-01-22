@@ -2,6 +2,7 @@
 
 #include "AnimationNode.h"
 #include <SFML/Graphics.hpp>
+#include "TooltipSystem.h"
 
 
 class WaveGenerator : public AnimationNode {
@@ -28,6 +29,8 @@ public:
 	virtual void onHover() override;
 	virtual void onHoverOut() override;
 
+	virtual std::string getDescription() override;
+
 protected:
 	float frequency;
 	float wavelength;
@@ -39,6 +42,8 @@ protected:
 	virtual float waveFunction(float distance) const;
 
 	bool placed;
+
+	Tooltip tp;
 };
 
 
@@ -100,6 +105,8 @@ public:
 
 	void setGeneratorColor(EmitterColor color);
 	sf::Color getGeneratorColor();
+
+	virtual std::string getDescription() override;
 
 protected:
 	virtual float waveFunction(float distance) const override;
