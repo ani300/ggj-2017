@@ -86,6 +86,9 @@ private:
 
 	void changePlayingMusic();
 
+
+	void tutorialFirstMessage();
+	void tutorialFirstMessageOff();
 	void showMessage(std::string title, std::string msg, sf::Vector2f pos, sf::Vector2f size);
 	
 	float secondsToHover = HOVER_TIME;
@@ -106,8 +109,8 @@ private:
 	TextNode* tutorialBody;
 	float textOpacity = 1.f;
 	float textLeft = -10.f;
-	bool firstMove = false;
 	float timer = 5.f;
+	bool firstMove = true;
 
 	sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
 	sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2i grid_size);

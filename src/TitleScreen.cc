@@ -103,6 +103,7 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 				getContext().mMusic->stop();
 				requestStackPop();
 				requestStackPush(StateType::Game);
+				getContext().mGameData->currentLevel = Levels::Level1;
 				requestStackSetLevel(Levels::Level1);
 				
 			});
@@ -127,6 +128,7 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 		if (event.key.code == sf::Keyboard::Return) {
 			requestStackPop();
 			requestStackPush(StateType::Game);
+			getContext().mGameData->currentLevel = Levels::Level1;
 			requestStackSetLevel(Levels::Level1);
 		}
 	}

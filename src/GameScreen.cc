@@ -24,20 +24,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneGraph.attachChild(std::move(layer));
 	}
 	animator = Animator();
-	//Show text
-	GInterpolation* step2a = new Interpolation<float>(textOpacity, 255.f, 1.f);
-	GInterpolation* step2b = new Interpolation<float>(textLeft, 80.f, 1.f);
-	//Just wait
-	GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a, step2b](){
-		animator.interpolate(*step2a);
-		animator.interpolate(*step2b);
-	});
-    animator.interpolate(*step1);
-
-
-	showMessage("How to play", "Drag the wave generators from your left to the void", 
-		sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
-
+	showMessage("", "", sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
 	generator_name_map["StandardGenerators"] = GeneratorTypes::Standard;
 	generator_name_map["FrequencyGenerators"] = GeneratorTypes::Frequency;
 	generator_name_map["WavelengthGenerators"] = GeneratorTypes::Wavelength;
@@ -72,6 +59,11 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	for (std::size_t i = 0; i < mMusicToPlay.size(); ++i) {
 		mMusicToPlay[i] = Music::None;
 	}
+
+	if(getContext().mGameData->currentLevel == Levels::Level1)
+	{
+		tutorialFirstMessage();
+	}
 }
 
 void GameScreen::draw() {
@@ -87,6 +79,37 @@ bool GameScreen::isLevelCompleted() {
 	return true;
 }
 
+void GameScreen::tutorialFirstMessage(){
+
+	showMessage("How to play", "Drag the wave generators from your left to the void", 
+		sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
+	//Show text
+	GInterpolation* step2a = new Interpolation<float>(textOpacity, 255.f, 1.f);
+	GInterpolation* step2b = new Interpolation<float>(textLeft, 80.f, 1.f);
+	//Just wait
+	GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a, step2b](){
+		animator.interpolate(*step2a);
+		animator.interpolate(*step2b);
+	});
+	animator.interpolate(*step1);
+
+}
+
+void GameScreen::tutorialFirstMessageOff(){
+	if(getContext().mGameData->currentLevel == Levels::Level1 && firstMove)
+	{
+		firstMove = false;
+	    GInterpolation* step4a = new Interpolation<float>(textOpacity, 1.f, 1.f, [this](){
+    		tutorialTitle->setPosition(1920.f, 1080.f);
+    		tutorialBody->setPosition(1920.f, 1080.f);
+    	});
+    	GInterpolation* step4b = new Interpolation<float>(textLeft, 130.f, 1.f);
+    	animator.interpolate(*step4a);
+    	animator.interpolate(*step4b);
+		
+	}
+}
+
 bool GameScreen::update(sf::Time dt) {
 	animator.update(dt);
 	//Update text tutorial
@@ -97,15 +120,6 @@ bool GameScreen::update(sf::Time dt) {
     sf::Vector2f pos2 = tutorialBody->getPosition();
     tutorialBody->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
     tutorialBody->setPosition(textLeft, pos2.y);
-    if(firstMove){
-    	GInterpolation* step4a = new Interpolation<float>(textOpacity, 1.f, 1.f, [this](){
-    		tutorialTitle->setPosition(1920.f, 1080.f);
-    		tutorialBody->setPosition(1920.f, 1080.f);
-    	});
-    	GInterpolation* step4b = new Interpolation<float>(textLeft, 130.f, 1.f);
-    	animator.interpolate(*step4a);
-    	animator.interpolate(*step4b);
-    }
     ///----tutorial
 
 	handleRealtimeInput(dt);
@@ -229,7 +243,7 @@ void GameScreen::handleRealtimeInput(sf::Time dt) {
 		}
 		else
 		{
-			firstMove = true;
+			tutorialFirstMessageOff();
 			generators[mSelectedGenerator]->place(true);
 		}
 	}
