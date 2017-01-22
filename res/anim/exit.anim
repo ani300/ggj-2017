@@ -1,0 +1,12 @@
+# DIM cell_width cell_height
+
+# ANIM animation_name num_of_repetitions (0 for infinite)
+  # Index FrameTime
+
+DIM 110 70
+
+ANIM Off 0
+  0 1
+
+ANIM On 0
+  1 1
