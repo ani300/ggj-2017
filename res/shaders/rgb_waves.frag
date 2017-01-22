@@ -25,8 +25,7 @@ vec4 sum_of_sources() {
         float dist1 = distance(vec2(gl_FragCoord.x, 1080.0 - gl_FragCoord.y), source_pos1);
         float w1 = 2.0*3.141592*frequency1;
         float k1 = 2.0*3.141592/wavelength1;
-        //color.rgb += 0.5*sin(w1*time - k1*dist1)*color1.rgb; 
-        color.rgb += 0.5*sin(w1*time - k1*dist1); 
+        color.rgb += 0.5*sin(w1*time - k1*dist1)*color1.rgb;
     }
     if (color2.a > 0.) {
         float dist2 = distance(vec2(gl_FragCoord.x, 1080.0 - gl_FragCoord.y), source_pos2);
