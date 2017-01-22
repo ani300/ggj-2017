@@ -23,12 +23,12 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneGraph.attachChild(std::move(layer));
 	}
 
-	generator_name_map["StandardGenerator"] = GeneratorTypes::Standard;
-	generator_name_map["FrequencyGenerator"] = GeneratorTypes::Frequency;
-	generator_name_map["WavelengthGenerator"] = GeneratorTypes::Wavelength;
-	generator_name_map["AmplitudeGenerator"] = GeneratorTypes::Amplitude;
-	generator_name_map["EditableGenerator"] = GeneratorTypes::Editable;
-	generator_name_map["ColorGenerator"] = GeneratorTypes::Color;
+	generator_name_map["StandardGenerators"] = GeneratorTypes::Standard;
+	generator_name_map["FrequencyGenerators"] = GeneratorTypes::Frequency;
+	generator_name_map["WavelengthGenerators"] = GeneratorTypes::Wavelength;
+	generator_name_map["AmplitudeGenerators"] = GeneratorTypes::Amplitude;
+	generator_name_map["EditableGenerators"] = GeneratorTypes::Editable;
+	generator_name_map["ColorGenerators"] = GeneratorTypes::Color;
 
 	receiver_name_map["Threshold"] = ReceiverTypes::Threshold;
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
@@ -434,7 +434,7 @@ void GameScreen::setLevel(Levels level) {
 		auto key = a.first.as<std::string>();
 		auto value = a.second.as<int>();
 
-		auto genType = generator_name_map[key];	
+		auto genType = generator_name_map[key];
 
 		for(int i = 0; i < value; ++i) {
 			switch(genType) {
@@ -450,7 +450,7 @@ void GameScreen::setLevel(Levels level) {
 					break;
 				case GeneratorTypes::Color:
 					{
-						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim"/*, ColorGenerator::EmitterColor::Red*/);
+						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim", ColorGenerator::EmitterColor::Red);
 						generators.push_back(generator.get());
 						generator->setSize(sf::Vector2u(90,90));
 						generator->setAnimation("Generator");
