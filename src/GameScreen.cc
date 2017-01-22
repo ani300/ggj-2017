@@ -62,6 +62,7 @@ bool GameScreen::isLevelCompleted() {
 
 bool GameScreen::update(sf::Time dt) {
 	handleRealtimeInput();
+
 	if(isLevelCompleted()) {
 		requestStackPush(StateType::Result);
 	}
@@ -154,7 +155,7 @@ bool GameScreen::update(sf::Time dt) {
 		}
 
 	}
-	
+
 	mSceneGraph.update(dt);
 	return true;
 }

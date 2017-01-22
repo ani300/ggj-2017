@@ -4,7 +4,9 @@ ReceiverAmplitude::ReceiverAmplitude(sf::Texture const& texture, std::vector<Wav
 	Receiver(texture, generators),
 	threshold_fn(f)
 {
-	activation_threshold = 2./history_length;
+	history_length = 120;
+	activation_threshold = 1./history_length;
+
 	activationHistory = std::vector<bool>(history_length, false);	
 }
 

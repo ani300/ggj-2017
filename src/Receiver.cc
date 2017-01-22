@@ -5,6 +5,8 @@ Receiver::Receiver(sf::Texture const& texture, std::vector<WaveGenerator*> const
 	AnimationNode(texture, "res/animations/Receiver.anim"),
 	generators(generators)
 {
+	history_length = 60;
+	activation_threshold = 45./history_length;
 }
 
 bool Receiver::getState(){

@@ -54,3 +54,15 @@ bool WaveGenerator::isPlaced() const {
 void WaveGenerator::place(bool p) {
 	placed = p;
 }
+
+
+
+
+float StandardGenerator::waveFunction(float distance) const {
+	return amplitude*sin(2*M_PI/wavelength*distance + angle);
+}
+
+float OffsetGenerator::waveFunction(float distance) const {
+	return amplitude*sin(2*M_PI/wavelength*distance + angle) + offset;
+}
+

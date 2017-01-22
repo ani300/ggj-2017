@@ -89,7 +89,6 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
             requestStackPop();
             requestStackPush(StateType::Game);
 	    requestStackSetLevel(Levels::Level1);
-
         }
         else if (helpBounds.contains(newPos)) {
             requestStackPop();
@@ -106,6 +105,7 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
         if (event.key.code == sf::Keyboard::Return) {
             requestStackPop();
             requestStackPush(StateType::Game);
+	    requestStackSetLevel(Levels::Level1);
         }
     }
     return true;

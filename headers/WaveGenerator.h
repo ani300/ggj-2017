@@ -40,11 +40,33 @@ protected:
 
 
 class StandardGenerator : public WaveGenerator {
-
+public:
+	StandardGenerator(sf::Texture const& texture, std::string const& file);
+	StandardGenerator(sf::Texture const& texture, std::string const& file, float amplitude, float frequency, float wavelength);
+	~StandardGenerator();
+	
+protected:
+	virtual float waveFunction(float distance) const override;
+	
 };
 
 class OffsetGenerator : public WaveGenerator {
+public:
+	OffsetGenerator(sf::Texture const& texture, std::string const& file);
+	OffsetGenerator(sf::Texture const& texture, std::string const& file, float ampliture, float frequency, float wavelength);
+	~OffsetGenerator();
 
+	void setOffset(float offset);
+
+	bool allowOffsetEditor() { return true; }
+	bool allowFrequencyEditor() { return false; }
+	bool allowWavelengthEditor() { return false; }
+	bool allowAmplitudeEditor() { return false; }
+
+protected:
+	virtual float waveFunction(float distance) const override;
+
+	float offset;
 };
 
 class WavelengthGenerator : public WaveGenerator {

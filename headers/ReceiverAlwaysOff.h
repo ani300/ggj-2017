@@ -15,5 +15,5 @@ private:
 	int activation_threshold = 45/history_length;
 
 	bool isOnRightNow();
-    void updateCurrent(sf::Time dt) override;
+    	void updateCurrent(sf::Time dt) override;
 };
