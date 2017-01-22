@@ -72,7 +72,6 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 
 void GameScreen::draw() {
 	getContext().mRTexture->draw(mSceneGraph);
-	TooltipSystem::draw(getContext().mRTexture);
 }
 
 bool GameScreen::isLevelCompleted() {
