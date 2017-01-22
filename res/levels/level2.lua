@@ -2,14 +2,14 @@ rgb = true
 time = true
 colors = {
 	positive_amp = {
-		r = 0,
+		r = 100,
 		g = 0,
 		b = 255,
 		a = 255
 	},
 	zero = {
 		r = 0,
-		g = 0,
+		g = 200,
 		b = 0,
 		a = 255
 	},
