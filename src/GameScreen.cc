@@ -148,44 +148,46 @@ void GameScreen::handleRealtimeInput(sf::Time dt) {
 
 	std::vector<SceneNode*> children;
 	mSceneGraph.getAllChildren(children);
-	//Quieto
-	if(Utils::distance(oldPos, newfpos) < 0.01) {
-		for (std::size_t i = 0; i < children.size(); ++i) {
-			if(SpriteNode *child = dynamic_cast<SpriteNode*>(children[i])) {
-				sf::IntRect bounds = child->getBounds();
-				if (bounds.contains(newPos)) {
-					mouseOver = i;
+	if(mSelectedGenerator == -1)
+	{
+		//Quieto
+		if(Utils::distance(oldPos, newfpos) < 0.01) {
+			for (std::size_t i = 0; i < children.size(); ++i) {
+				if(SpriteNode *child = dynamic_cast<SpriteNode*>(children[i])) {
+					sf::IntRect bounds = child->getBounds();
+					if (bounds.contains(newPos)) {
+						mouseOver = i;
+					}
+				  
 				}
-			  
 			}
 		}
-	}
-	//Movimiento
-	else {
-		if(hovering)
-		{
-			children[mouseOver]->onHoverOut();
-			mouseOver = -1;
+		//Movimiento
+		else {
+			if(hovering)
+			{
+				children[mouseOver]->onHoverOut();
+				mouseOver = -1;
+			}
+			if(mouseOver != -1)
+				children[mouseOver]->onMouseOut();
+			
+			hovering = false;
+			secondsToHover = HOVER_TIME;
 		}
-		if(mouseOver != -1)
-			children[mouseOver]->onMouseOut();
-		
-		hovering = false;
-		secondsToHover = HOVER_TIME;
-	}
+		if(mouseOver != -1) {
+			secondsToHover -= dt.asSeconds();
+			children[mouseOver]->onMouseOver();
+			if(secondsToHover <= 0 and not hovering)
+			{
+				hovering = true;
+				children[mouseOver]->onHover();
+			}
 
-
-	if(mouseOver != -1) {
-		secondsToHover -= dt.asSeconds();
-		children[mouseOver]->onMouseOver();
-		if(secondsToHover <= 0 and not hovering)
-		{
-			hovering = true;
-			children[mouseOver]->onHover();
 		}
-
 	}
-	if (mSelectedGenerator != -1) {
+	else
+	{
 		generators[mSelectedGenerator]->setPosition(sf::Vector2f(newPos));
 		if((mToolbox->getBounds()).contains(newPos)) {
 			generators[mSelectedGenerator]->place(false);
@@ -195,6 +197,7 @@ void GameScreen::handleRealtimeInput(sf::Time dt) {
 			generators[mSelectedGenerator]->place(true);
 		}
 	}
+
 }
 
 sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2f grid_size) {
@@ -393,6 +396,18 @@ sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2i grid_size) {
 bool GameScreen::handleEvent(const sf::Event& event) {
 	
 	if (event.type == sf::Event::MouseButtonPressed) {
+		std::vector<SceneNode*> children;
+		mSceneGraph.getAllChildren(children);
+		if(hovering)
+		{
+			children[mouseOver]->onHoverOut();
+			mouseOver = -1;
+		}
+		if(mouseOver != -1)
+			children[mouseOver]->onMouseOut();
+		
+		hovering = false;
+		secondsToHover = HOVER_TIME;
 		if (event.mouseButton.button == sf::Mouse::Left) {
 			for (std::size_t i = 0; i < generators.size(); ++i) {
 				sf::IntRect generator_bounds = generators[i]->getBounds();

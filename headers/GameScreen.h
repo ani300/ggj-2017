@@ -19,7 +19,7 @@ class Receiver;
 class GameScreen: public State {
 
 public:
-	const float HOVER_TIME = 0.5f;
+	const float HOVER_TIME = 1f;
 	//Constructor with name of the image it wants to display
 	GameScreen(StatesStack& stack, Context& context);
 
