@@ -11,7 +11,7 @@ The game has been tested on Linux only (tested in Arch and Ubunutu).
 It needs lua 5.3+ and SFML 2.4+.
 
 To build
-```
+```shell
 $ make -j 8 release
 $ ./wave-sim
 ```
