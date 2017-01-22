@@ -62,7 +62,7 @@ TitleScreen::TitleScreen(StatesStack& stack, Context& context)
     mButtonExit->setSize(sf::Vector2u(140.f, 60.f));
     mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(button3));
 
-    //context.mMusic->play(Music::MenuTheme);
+    context.mMusic->play(0, Music::MenuTheme);
 
 }
 
@@ -85,12 +85,10 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
         sf::IntRect helpBounds = mButtonHelp->getBounds();
         sf::IntRect exitBounds = mButtonExit->getBounds();
         if (newGameBounds.contains(newPos)) {
-            //getContext().mMusic->stop();
-            //getContext().mSound->play(SoundEffect::Gong);
+            getContext().mMusic->stop();
             requestStackPop();
             requestStackPush(StateType::Game);
 	    requestStackSetLevel(Levels::Level1);
-
         }
         else if (helpBounds.contains(newPos)) {
             requestStackPop();
@@ -107,6 +105,7 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
         if (event.key.code == sf::Keyboard::Return) {
             requestStackPop();
             requestStackPush(StateType::Game);
+	    requestStackSetLevel(Levels::Level1);
         }
     }
     return true;

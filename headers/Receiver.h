@@ -10,6 +10,9 @@ public:
 	virtual ~Receiver() {}
 	//Get the current state of the receiver (on/off)
 	bool getState();
+	
+	double activation_threshold;
+	int history_length;
 
 protected:
 	std::vector<bool> activationHistory;
@@ -19,14 +22,16 @@ protected:
 	std::vector<WaveGenerator*> const& generators;
 	
 	bool on = false;
-	int history_length = 60;
-	double activation_threshold = 45./history_length;
+
+	bool around(float value, float target);
 
 	//Has been on in average during some time
 	bool isOn();
 
+	float precision = 1e-3;
 
 	virtual bool isOnRightNow() = 0;
 
 	virtual void updateCurrent(sf::Time dt) = 0;
+
 };

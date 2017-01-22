@@ -9,13 +9,14 @@
 class MusicPlayer : private sf::NonCopyable {
     public:
         MusicPlayer();
-        void play(Music::ID theme);
+        void play(int player, Music::ID theme);
         void stop();
         void setPaused(bool paused);
         void setVolume(float volume);
+        sf::Music& getMusicPlayer(int player);
 
     private:
-        sf::Music mMusic;
+        std::vector<sf::Music> mMusicPlayers;
         std::map<Music::ID, std::string> mFilenames;
         float mVolume;
 };

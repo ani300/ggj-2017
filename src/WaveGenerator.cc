@@ -32,22 +32,36 @@ void WaveGenerator::setAngle(float angle) {
 
 void WaveGenerator::updateCurrent(sf::Time dt) {
 	AnimationNode::updateCurrent(dt);
+	angle += frequency*2*M_PI*dt.asSeconds();
 }
 
 float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
 	sf::Vector2f genPos = getWorldPosition();
 	float distance = Utils::distance(genPos, pos);
-	float ampTarget = 0;
 
-	ampTarget = amplitude * sin(waveNumber*distance - angle);
+	return waveFunction(distance);
+}
 
-	return ampTarget;
+float WaveGenerator::waveFunction(float distance) const {
+	return amplitude*sin(2*M_PI/wavelength*distance + angle);
 }
 
 bool WaveGenerator::isPlaced() const {
-	return true;
+	return placed;
 }
 
 void WaveGenerator::place(bool p) {
 	placed = p;
 }
+
+
+
+
+float StandardGenerator::waveFunction(float distance) const {
+	return amplitude*sin(2*M_PI/wavelength*distance + angle);
+}
+
+float OffsetGenerator::waveFunction(float distance) const {
+	return amplitude*sin(2*M_PI/wavelength*distance + angle) + offset;
+}
+

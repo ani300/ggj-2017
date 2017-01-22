@@ -32,4 +32,6 @@ class ResultsScreen: public State {
         
         std::array<AnimatedTextNode*, 2> mTextNodes;
         AnimatedTextNode* mText;
+
+	Levels nextLeve;
 };
