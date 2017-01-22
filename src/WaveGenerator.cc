@@ -11,7 +11,9 @@ WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file
 	amplitude(1.f),
 	angle(0.f),
 	placed(false)
-{}
+{
+}
+
 
 WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file, float amplitude, float frequency, float wavelength) :
 	AnimationNode(texture, file),
@@ -20,7 +22,9 @@ WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file
 	amplitude(amplitude),
 	angle(0.f),
 	placed(false)
-{}
+{ 
+}
+
 
 WaveGenerator::~WaveGenerator() {
 
@@ -62,6 +66,19 @@ void WaveGenerator::place(bool p) {
 	placed = p;
 }
 
+std::string WaveGenerator::getDescription() {
+	std::ostringstream desc;
+	desc << "Standard Wave Generator" << std::endl;
+	desc << "Creates a sine wave with the following wave characteristics" << std::endl;
+	desc << "Wavelength: " << wavelength << std::endl;
+	desc << "Amplitude: " << amplitude << std::endl;
+	desc << "Frequency: " << frequency << std::endl;
+
+	std::string description;
+	description = desc.str();
+	return description;
+}
+
 float StandardGenerator::waveFunction(float distance) const {
 	return amplitude*sin(2*M_PI/wavelength*distance + angle);
 }
@@ -75,33 +92,32 @@ ColorGenerator::ColorGenerator(sf::Texture const& texture, std::string const& fi
 	: WaveGenerator(texture, file),
 	color_emit(EmitterColor::Red)
 {
-	std::cout << "H1 " << static_cast<int>(color_emit) << std::endl;
 }
 
 ColorGenerator::ColorGenerator(sf::Texture const& texture, std::string const& file, EmitterColor color)
 	: WaveGenerator(texture, file),
 	color_emit(color)
 {
-	std::cout << "H2 " << static_cast<int>(color_emit) << std::endl;
 }
 
-sf::Color ColorGenerator::colorAt(sf::Vector2f pos) const {
+std::array<int, 4> ColorGenerator::colorAt(sf::Vector2f pos) const {
 	sf::Vector2f genPos = getWorldPosition();
 	float distance = Utils::distance(genPos, pos);
 
 	float colorValue = waveFunction(distance);
+	colorValue = colorValue*255;
 
-	sf::Color color_val = sf::Color::Black;
+	std::array<int, 4> color_val = {0,0,0,255};
 
 	switch(color_emit) {
 	case EmitterColor::Red:
-		color_val.r = colorValue;
+		color_val[0] = colorValue;
 		break;
 	case EmitterColor::Green:
-		color_val.g = colorValue;
+		color_val[1] = colorValue;
 		break;
 	case EmitterColor::Blue:
-		color_val.b = colorValue;
+		color_val[2] = colorValue;
 		break;
 	}
 
@@ -109,7 +125,7 @@ sf::Color ColorGenerator::colorAt(sf::Vector2f pos) const {
 }
 
 float ColorGenerator::waveFunction(float distance) const {
-	return 1.f/2.f*sin(2*M_PI/1*distance + angle) + 0.5f;
+	return 1.f/2.f*sin(2*M_PI/wavelength*distance + angle);
 }
 
 void ColorGenerator::setGeneratorColor(EmitterColor color) {
@@ -117,7 +133,6 @@ void ColorGenerator::setGeneratorColor(EmitterColor color) {
 }
 
 sf::Color ColorGenerator::getGeneratorColor() {
-	//std::cout << static_cast<int>(color_emit) << std::endl;
 	switch(color_emit) {
 	case EmitterColor::Red:
 		return sf::Color::Red;
@@ -130,4 +145,18 @@ sf::Color ColorGenerator::getGeneratorColor() {
 	}
 
 	return sf::Color::White;
+}
+
+
+std::string ColorGenerator::getDescription() {
+	std::ostringstream desc;
+	desc << "Standard Wave Generator" << std::endl;
+	desc << "Creates a sine wave with the following wave characteristics" << std::endl;
+	desc << "Wavelength: " << wavelength << std::endl;
+	desc << "Amplitude: " << amplitude << std::endl;
+	desc << "Frequency: " << frequency << std::endl;
+
+	std::string description;
+	description = desc.str();
+	return description;
 }

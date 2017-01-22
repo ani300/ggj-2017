@@ -1,8 +1,8 @@
 #include "ScaleNode.h"
 
-ScaleNode::ScaleNode(std::string const& vertex_file, std::string const& fragment_file, 
+ScaleNode::ScaleNode(std::string const& vertex_file, std::string const& fragment_file, const sf::Texture& texture,
 	sf::Color color1, sf::Color color2, sf::Color color3) :
-	mOutRect(sf::Vector2f(70, 300)),
+	mOutRect(texture),
 	mScaleRect(sf::Vector2f(50, 280)),
 	mColor1(color1),
 	mColor2(color2),
@@ -14,7 +14,6 @@ ScaleNode::ScaleNode(std::string const& vertex_file, std::string const& fragment
 	mShader.setUniform("color1", sf::Glsl::Vec4(mColor1));
 	mShader.setUniform("color2", sf::Glsl::Vec4(mColor2));
 	mShader.setUniform("color3", sf::Glsl::Vec4(mColor3));
-	mOutRect.setFillColor(sf::Color(255,255,255,255)); // Change to a nice drawing!!!
 }
 
 void ScaleNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {

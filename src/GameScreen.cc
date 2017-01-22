@@ -24,20 +24,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneGraph.attachChild(std::move(layer));
 	}
 	animator = Animator();
-	//Show text
-	GInterpolation* step2a = new Interpolation<float>(textOpacity, 255.f, 1.f);
-	GInterpolation* step2b = new Interpolation<float>(textLeft, 80.f, 1.f);
-	//Just wait
-	GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a, step2b](){
-		animator.interpolate(*step2a);
-		animator.interpolate(*step2b);
-	});
-    animator.interpolate(*step1);
-
-
-	showMessage("How to play", "Drag the wave generators from your left to the void", 
-		sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
-
+	showMessage("", "", sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
 	generator_name_map["StandardGenerators"] = GeneratorTypes::Standard;
 	generator_name_map["FrequencyGenerators"] = GeneratorTypes::Frequency;
 	generator_name_map["WavelengthGenerators"] = GeneratorTypes::Wavelength;
@@ -56,6 +43,9 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 
 	level_files_map[Levels::Level1] = "res/levels/level1.lua";
 	level_files_map[Levels::Level2] = "res/levels/level2.lua";
+	level_files_map[Levels::Level3] = "res/levels/level3.lua";
+	level_files_map[Levels::Level4] = "res/levels/level4.lua";
+	level_files_map[Levels::Level5] = "res/levels/level5.lua";
 
 	mMusicConfigs[MusicState::Off]     = {0,0,0,0,0,0,0,0,0};
 	mMusicConfigs[MusicState::Base3]   = {1,0,0,0,0,0,0,0,0}; 
@@ -72,6 +62,11 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	for (std::size_t i = 0; i < mMusicToPlay.size(); ++i) {
 		mMusicToPlay[i] = Music::None;
 	}
+
+	if(getContext().mGameData->currentLevel == Levels::Level1)
+	{
+		tutorialFirstMessage();
+	}
 }
 
 void GameScreen::draw() {
@@ -87,6 +82,37 @@ bool GameScreen::isLevelCompleted() {
 	return true;
 }
 
+void GameScreen::tutorialFirstMessage(){
+
+	showMessage("How to play", "Drag the wave generators from your left to the void", 
+		sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
+	//Show text
+	GInterpolation* step2a = new Interpolation<float>(textOpacity, 255.f, 1.f);
+	GInterpolation* step2b = new Interpolation<float>(textLeft, 80.f, 1.f);
+	//Just wait
+	GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a, step2b](){
+		animator.interpolate(*step2a);
+		animator.interpolate(*step2b);
+	});
+	animator.interpolate(*step1);
+
+}
+
+void GameScreen::tutorialFirstMessageOff(){
+	if(getContext().mGameData->currentLevel == Levels::Level1 && firstMove)
+	{
+		firstMove = false;
+	    GInterpolation* step4a = new Interpolation<float>(textOpacity, 1.f, 1.f, [this](){
+    		tutorialTitle->setPosition(1920.f, 1080.f);
+    		tutorialBody->setPosition(1920.f, 1080.f);
+    	});
+    	GInterpolation* step4b = new Interpolation<float>(textLeft, 130.f, 1.f);
+    	animator.interpolate(*step4a);
+    	animator.interpolate(*step4b);
+		
+	}
+}
+
 bool GameScreen::update(sf::Time dt) {
 	animator.update(dt);
 	//Update text tutorial
@@ -97,15 +123,6 @@ bool GameScreen::update(sf::Time dt) {
     sf::Vector2f pos2 = tutorialBody->getPosition();
     tutorialBody->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
     tutorialBody->setPosition(textLeft, pos2.y);
-    if(firstMove){
-    	GInterpolation* step4a = new Interpolation<float>(textOpacity, 1.f, 1.f, [this](){
-    		tutorialTitle->setPosition(1920.f, 1080.f);
-    		tutorialBody->setPosition(1920.f, 1080.f);
-    	});
-    	GInterpolation* step4b = new Interpolation<float>(textLeft, 130.f, 1.f);
-    	animator.interpolate(*step4a);
-    	animator.interpolate(*step4b);
-    }
     ///----tutorial
 
 	handleRealtimeInput(dt);
@@ -138,7 +155,6 @@ bool GameScreen::update(sf::Time dt) {
 	if (old_state != mMusicState) {
 		updateMusicPlayback();
 	}
-
 
 	mSceneGraph.update(dt);
 	return true;
@@ -230,7 +246,7 @@ void GameScreen::handleRealtimeInput(sf::Time dt) {
 		}
 		else
 		{
-			firstMove = true;
+			tutorialFirstMessageOff();
 			generators[mSelectedGenerator]->place(true);
 		}
 	}
@@ -504,14 +520,18 @@ void GameScreen::setLevel(Levels level) {
 				{
 					auto receiver = std::make_unique<ReceiverAlwaysOn>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
 					receiver->setPosition(position);
+					receiver->setSize(sf::Vector2u(60,60));
+					receiver->setAnimation("Off");
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
 				break;
 			case ReceiverTypes::AlwaysOff:
 				{
-					auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+					auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOff), generators);
 					receiver->setPosition(position);
+					receiver->setSize(sf::Vector2u(60,60));
+					receiver->setAnimation("Off");
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
@@ -526,6 +546,8 @@ void GameScreen::setLevel(Levels level) {
 
 					auto receiver = std::make_unique<ReceiverAmplitude>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, std::move(threshold_fn));
 					receiver->setPosition(position);
+					receiver->setSize(sf::Vector2u(60,60));
+					receiver->setAnimation("Off");
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
@@ -539,8 +561,10 @@ void GameScreen::setLevel(Levels level) {
 					receiver_color.b = table["color"]["b"];
 					receiver_color.a = table["color"]["a"];
 
-					auto receiver = std::make_unique<ReceiverRGB>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, receiver_color);
+					auto receiver = std::make_unique<ReceiverRGB>(mContext.mTextures->get(Textures::ReceiverAlwaysOff), generators, receiver_color);
 					receiver->setPosition(position);
+					receiver->setSize(sf::Vector2u(60,60));
+					receiver->setAnimation("Off");
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
@@ -566,8 +590,7 @@ void GameScreen::setLevel(Levels level) {
 					{
 						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
 						generators.push_back(generator.get());
-
-						generator->setSize(sf::Vector2u(90,90));
+						generator->setSize(sf::Vector2u(100,100));
 						generator->setAnimation("Generator");
 						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
 					}
@@ -576,9 +599,9 @@ void GameScreen::setLevel(Levels level) {
 					{
 						auto gc = lua["generator_colors"][i+1];
 						ColorGenerator::EmitterColor c = color_name_map[gc];
-						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim", c);
+						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::ColorGenerator), "res/anim/generator.anim", c);
 						generators.push_back(generator.get());
-						generator->setSize(sf::Vector2u(90,90));
+						generator->setSize(sf::Vector2u(100,100));
 						generator->setAnimation("Generator");
 						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
 					}
@@ -627,7 +650,7 @@ void GameScreen::setLevel(Levels level) {
 		auto grid = std::make_unique<GridNode>(grid_size, grid_color);	
 		mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
 
-		auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
+		auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", mContext.mTextures->get(Textures::ScaleBorder), color1, color2, color3);
 		ScaleNode* scale_node = color_scale.get();
 		mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
 		scale_node->setPosition(sf::Vector2f(1850, 890));

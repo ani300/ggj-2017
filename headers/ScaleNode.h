@@ -5,11 +5,11 @@
 
 class ScaleNode: public SceneNode {
     public:
-        explicit ScaleNode(std::string const& vertex_file, std::string const& fragment_file,
+        explicit ScaleNode(std::string const& vertex_file, std::string const& fragment_file, const sf::Texture& texture,
             sf::Color color1, sf::Color color2, sf::Color color3);
 
     protected:
-        sf::RectangleShape mOutRect;
+        sf::Sprite mOutRect;
         sf::RectangleShape mScaleRect;
         sf::Color mColor1;
         sf::Color mColor2;

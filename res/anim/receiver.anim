@@ -3,9 +3,12 @@
 # ANIM animation_name num_of_repetitions (0 for infinite)
   # Index FrameTime
 
-DIM 100 100
+DIM 60 60
 
-ANIM Generator 0
+ANIM Off 0
+  0 1
+
+ANIM On 0
   0 0.033
   1 0.033
   2 0.033

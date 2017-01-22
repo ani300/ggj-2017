@@ -32,7 +32,7 @@ class ResultsScreen: public State {
         std::array<SceneNode*, LayerCount> mSceneLayers;
         
         std::array<AnimatedTextNode*, 2> mTextNodes;
-        AnimatedTextNode* mText;
+        TextNode* mText;
 
         sf::Time mMusicTimer;
         bool hasMusicFinale = false;

@@ -103,8 +103,8 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 				getContext().mMusic->stop();
 				requestStackPop();
 				requestStackPush(StateType::Game);
-				requestStackSetLevel(Levels::Level2);
-				
+				getContext().mGameData->currentLevel = Levels::Level1;
+				requestStackSetLevel(Levels::Level1);
 			});
 			animator.interpolate(*inter);
 		}
@@ -115,7 +115,6 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 		else if (exitBounds.contains(newPos)) {
 			GInterpolation* inter = new Interpolation<float>(fader, 255.f, 2.f, [this](){
 				requestStackPop();
-				
 			});
 			animator.interpolate(*inter);
 		}
@@ -127,6 +126,7 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 		if (event.key.code == sf::Keyboard::Return) {
 			requestStackPop();
 			requestStackPush(StateType::Game);
+			getContext().mGameData->currentLevel = Levels::Level1;
 			requestStackSetLevel(Levels::Level1);
 		}
 	}
