@@ -13,4 +13,5 @@ It needs lua 5.3+ and SFML 2.4+.
 To build
 ```
 $ make -j 8 release
+$ ./wave-sim
 ```
