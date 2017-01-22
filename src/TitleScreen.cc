@@ -46,24 +46,21 @@ TitleScreen::TitleScreen(StatesStack& stack, Context& context)
 	mLogo->setSize(sf::Vector2u(551.f, 260.f));
 	mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(logo));
 
-	std::unique_ptr<SpriteNode> button1(new SpriteNode(startTexture));
+	std::unique_ptr<AnimationNode> button1(new AnimationNode(startTexture, "res/anim/start.anim"));
 	mButtonPlay = button1.get();
 	mButtonPlay->setPosition(850.f, 550.f);
-	mButtonPlay->setRotation(-45);
 	mButtonPlay->setSize(sf::Vector2u(200.f, 60.f));
 	mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(button1));
 
-	std::unique_ptr<SpriteNode> button2(new SpriteNode(helpTexture));
+	std::unique_ptr<AnimationNode> button2(new AnimationNode(helpTexture, "res/anim/help.anim"));
 	mButtonHelp = button2.get();
 	mButtonHelp->setPosition(950.f, 650.f);
-	mButtonHelp->setRotation(-45);
 	mButtonHelp->setSize(sf::Vector2u(150.f, 60.f));
 	mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(button2));
 
-	std::unique_ptr<SpriteNode> button3(new SpriteNode(exitTexture));
+	std::unique_ptr<AnimationNode> button3(new AnimationNode(exitTexture, "res/anim/help.anim"));
 	mButtonExit = button3.get();
 	mButtonExit->setPosition(1050.f, 750.f);
-	mButtonExit->setRotation(-45);
 	mButtonExit->setSize(sf::Vector2u(140.f, 60.f));
 	mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(button3));
 
