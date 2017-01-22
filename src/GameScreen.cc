@@ -546,6 +546,8 @@ void GameScreen::setLevel(Levels level) {
 
 					auto receiver = std::make_unique<ReceiverRGB>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, receiver_color);
 					receiver->setPosition(position);
+					receiver->setSize(sf::Vector2u(60,60));
+					receiver->setAnimation("Off");
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
