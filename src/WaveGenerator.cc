@@ -105,7 +105,7 @@ void ColorGenerator::setGeneratorColor(EmitterColor color) {
 	color = color;
 }
 
-sf::Color ColorGenerator::getColor() {
+sf::Color ColorGenerator::getGeneratorColor() {
 	switch(color_emitted) {
 	case EmitterColor::Red:
 		return sf::Color::Red;

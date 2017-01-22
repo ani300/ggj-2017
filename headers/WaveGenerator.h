@@ -96,7 +96,7 @@ public:
 	sf::Color colorAt(sf::Vector2f pos) const;
 
 	void setGeneratorColor(EmitterColor color);
-	sf::Color getColor();
+	sf::Color getGeneratorColor();
 
 protected:
 	virtual float waveFunction(float distance) const override;
