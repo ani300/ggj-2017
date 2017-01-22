@@ -139,7 +139,6 @@ bool GameScreen::update(sf::Time dt) {
 		updateMusicPlayback();
 	}
 
-
 	mSceneGraph.update(dt);
 	return true;
 }
@@ -504,14 +503,18 @@ void GameScreen::setLevel(Levels level) {
 				{
 					auto receiver = std::make_unique<ReceiverAlwaysOn>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
 					receiver->setPosition(position);
+					receiver->setSize(sf::Vector2u(60,60));
+					receiver->setAnimation("Off");
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
 				break;
 			case ReceiverTypes::AlwaysOff:
 				{
-					auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+					auto receiver = std::make_unique<ReceiverAlwaysOff>(mContext.mTextures->get(Textures::ReceiverAlwaysOff), generators);
 					receiver->setPosition(position);
+					receiver->setSize(sf::Vector2u(60,60));
+					receiver->setAnimation("Off");
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
@@ -526,6 +529,8 @@ void GameScreen::setLevel(Levels level) {
 
 					auto receiver = std::make_unique<ReceiverAmplitude>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, std::move(threshold_fn));
 					receiver->setPosition(position);
+					receiver->setSize(sf::Vector2u(60,60));
+					receiver->setAnimation("Off");
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
@@ -566,8 +571,7 @@ void GameScreen::setLevel(Levels level) {
 					{
 						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
 						generators.push_back(generator.get());
-
-						generator->setSize(sf::Vector2u(90,90));
+						generator->setSize(sf::Vector2u(100,100));
 						generator->setAnimation("Generator");
 						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
 					}
@@ -578,7 +582,7 @@ void GameScreen::setLevel(Levels level) {
 						ColorGenerator::EmitterColor c = color_name_map[gc];
 						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim", c);
 						generators.push_back(generator.get());
-						generator->setSize(sf::Vector2u(90,90));
+						generator->setSize(sf::Vector2u(100,100));
 						generator->setAnimation("Generator");
 						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
 					}
@@ -627,7 +631,7 @@ void GameScreen::setLevel(Levels level) {
 		auto grid = std::make_unique<GridNode>(grid_size, grid_color);	
 		mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
 
-		auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
+		auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", mContext.mTextures->get(Textures::ScaleBorder), color1, color2, color3);
 		ScaleNode* scale_node = color_scale.get();
 		mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
 		scale_node->setPosition(sf::Vector2f(1850, 890));

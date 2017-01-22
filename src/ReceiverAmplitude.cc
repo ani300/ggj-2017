@@ -24,10 +24,11 @@ bool ReceiverAmplitude::isOnRightNow() {
 }
 
 
-void ReceiverAmplitude::updateCurrent(sf::Time /*dt*/) {
+void ReceiverAmplitude::updateCurrent(sf::Time dt) {
 	on = isOn();
 	if(on)
-		this->setScale(sf::Vector2f(1.6,1.6));
+		setAnimation("On");
 	else	
-		this->setScale(sf::Vector2f(1,1));
+		setAnimation("Off");
+	AnimationNode::updateCurrent(dt);
 }

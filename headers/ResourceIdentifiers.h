@@ -13,7 +13,8 @@ namespace Textures
 {
 	enum ID
 	{
-		ReceiverAlwaysOn,
+		ReceiverAlwaysOff,
+                ReceiverAlwaysOn,
 		WaveGenerator,
                 Logo,
 		Start,
@@ -22,7 +23,8 @@ namespace Textures
 		Exit,
 		Return,
 		HelpBackground,
-                ToolboxBackground
+                ToolboxBackground,
+                ScaleBorder
 	};
 }
 
