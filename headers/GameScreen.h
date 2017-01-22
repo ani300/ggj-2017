@@ -48,6 +48,7 @@ private:
 		Frequency,
 		Amplitude,
 		Editable,
+		Color,
 		Count
 	};
 
@@ -55,6 +56,7 @@ private:
 		Threshold,
 		AlwaysOn,
 		AlwaysOff,
+		RGB,
 		Count
 	};
 

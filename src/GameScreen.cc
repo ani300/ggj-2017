@@ -6,6 +6,7 @@
 #include "ReceiverAlwaysOn.h"
 #include "ReceiverAlwaysOff.h"
 #include "ReceiverAmplitude.h"
+#include "ReceiverRGB.h"
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
 #include "ScaleNode.h"
@@ -27,6 +28,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	generator_name_map["WavelengthGenerator"] = GeneratorTypes::Wavelength;
 	generator_name_map["AmplitudeGenerator"] = GeneratorTypes::Amplitude;
 	generator_name_map["EditableGenerator"] = GeneratorTypes::Editable;
+	generator_name_map["ColorGenerator"] = GeneratorTypes::Color;
 
 	receiver_name_map["Threshold"] = ReceiverTypes::Threshold;
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
@@ -370,8 +372,6 @@ void GameScreen::setLevel(Levels level) {
 		sf::Vector2f position = sf::Vector2f(positionx.value_or(0), positiony.value_or(0));
 		position = snapGrid(position, grid_size);
 
-
-
 		auto rec_type = receiver_name_map[type];
 
 		switch(rec_type) {
@@ -405,6 +405,14 @@ void GameScreen::setLevel(Levels level) {
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
 				}
 				break;
+			case ReceiverTypes::RGB:
+				{
+					auto receiver = std::make_unique<RGBReceiver>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+					receiver->setPosition(position);
+					receivers.push_back(receiver.get());
+					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
+				}
+				break;
 			case ReceiverTypes::Count:
 				break;
 		}
@@ -427,6 +435,15 @@ void GameScreen::setLevel(Levels level) {
 						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
 						generators.push_back(generator.get());
 
+						generator->setSize(sf::Vector2u(90,90));
+						generator->setAnimation("Generator");
+						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
+					}
+					break;
+				case GeneratorTypes::Color:
+					{
+						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
+						generators.push_back(generator.get());
 						generator->setSize(sf::Vector2u(90,90));
 						generator->setAnimation("Generator");
 						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
