@@ -22,7 +22,7 @@ $ ./wave-sim
 
 
 ## Authors
-Antoni Viros (ani300)
-Gerard del Castillo (AsloGd)
-Omar Gonzalez Lopez (tamaldecanela)
-Marcelino Coll Rovira (MarceColl)
+* Antoni Viros (ani300)
+* Gerard del Castillo (AsloGd)
+* Omar Gonzalez Lopez (tamaldecanela)
+* Marcelino Coll Rovira (MarceColl)
