@@ -56,6 +56,10 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 
 	level_files_map[Levels::Level1] = "res/levels/level1.lua";
 	level_files_map[Levels::Level2] = "res/levels/level2.lua";
+	level_files_map[Levels::Level3] = "res/levels/level3.lua";
+	level_files_map[Levels::Level4] = "res/levels/level4.lua";
+	level_files_map[Levels::Level5] = "res/levels/level5.lua";
+	level_files_map[Levels::Level6] = "res/levels/level6.lua";
 
 	mMusicConfigs[MusicState::Off]     = {0,0,0,0,0,0,0,0,0};
 	mMusicConfigs[MusicState::Base3]   = {1,0,0,0,0,0,0,0,0}; 

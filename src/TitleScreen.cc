@@ -103,7 +103,7 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 				getContext().mMusic->stop();
 				requestStackPop();
 				requestStackPush(StateType::Game);
-				requestStackSetLevel(Levels::Level1);
+				requestStackSetLevel(Levels::Level5);
 				
 			});
 			animator.interpolate(*inter);

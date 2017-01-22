@@ -27,7 +27,7 @@ bool ReceiverRGB::isOnRightNow() {
 	int subg = int(totalInput.g) - int(mObjective.g);
 	int subb = int(totalInput.b) - int(mObjective.b);
 	std::cout << subr << " " << subg << " " << subb << std::endl;
-	return abs(subr) < 15 && abs(subg) < 15 && abs(subb) < 15;
+	return abs(subr) < 30 && abs(subg) < 30 && abs(subb) < 30;
 }
 
 
