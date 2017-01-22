@@ -54,9 +54,6 @@ void WaveGenerator::place(bool p) {
 	placed = p;
 }
 
-
-
-
 float StandardGenerator::waveFunction(float distance) const {
 	return amplitude*sin(2*M_PI/wavelength*distance + angle);
 }

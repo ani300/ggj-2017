@@ -55,8 +55,5 @@ class Game {
         sf::Time mStatisticsUpdateTime;
         std::size_t mStatisticsNumFrames;
 
-
-        //float test = 0;
-        sf::Vector2f test = sf::Vector2f(0.f,0.f);
 };
 
