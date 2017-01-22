@@ -19,3 +19,10 @@ $ ./wave-sim
 ## Screenshots
 ![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/featured.png?raw=true "KEEP IT SINE!")
 ![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/menu.png?raw=true "KEEP IT SINE!")
+
+
+## Authors
+Antoni Viros (ani300)
+Gerard del Castillo (AsloGd)
+Omar Gonzalez Lopez (tamaldecanela)
+Marcelino Coll Rovira (MarceColl)
