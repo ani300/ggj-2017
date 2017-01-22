@@ -13,6 +13,7 @@ class MusicPlayer : private sf::NonCopyable {
         void stop();
         void setPaused(bool paused);
         void setVolume(float volume);
+        sf::Music& getMusicPlayer(int player);
 
     private:
         std::vector<sf::Music> mMusicPlayers;

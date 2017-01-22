@@ -44,3 +44,7 @@ void MusicPlayer::setPaused(bool paused) {
         else player.play();
     }
 }
+
+sf::Music& MusicPlayer::getMusicPlayer(int player) {
+    return mMusicPlayers[player];
+}
