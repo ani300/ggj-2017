@@ -69,6 +69,13 @@ bool GameScreen::update(sf::Time dt) {
 	handleRealtimeInput();
 
 	if(isLevelCompleted()) {
+		for (std::size_t i = 1; i < 5; ++i) {
+			getContext().mMusic->getMusicPlayer(i).stop();
+		}
+		mLevelCompletedSecond += dt;
+	}
+
+	if (mLevelCompletedSecond.asSeconds() >= 4) {
 		requestStackPush(StateType::Result);
 	}
 
@@ -87,95 +94,7 @@ bool GameScreen::update(sf::Time dt) {
 	}
 
 	if (old_state != mMusicState) {
-		std::cout << "Music changed! " << static_cast<int>(mMusicState) << std::endl;
-		// Update playing music accordingly
-		auto is_playing = [this](int player) -> bool {
-			return getContext().mMusic->getMusicPlayer(player).getStatus() == sf::SoundSource::Playing;
-		};
-
-		// Base3T
-		if (mMusicConfigs[mMusicState][0] && !is_playing(0)) {
-			mMusicToPlay[0] = Music::Game3TBase;
-		}
-		else if (!mMusicConfigs[mMusicState][0] && !mMusicConfigs[mMusicState][1] && is_playing(0)) {
-			mMusicToPlay[0] = Music::None;
-		}
-		
-		// Base4T
-		if (mMusicConfigs[mMusicState][1] && !is_playing(0)) {
-			mMusicToPlay[0] = Music::Game4TBase;
-		}
-		else if (!mMusicConfigs[mMusicState][1] && !mMusicConfigs[mMusicState][0] && is_playing(0)) {
-			mMusicToPlay[0] = Music::None;
-		}
-
-		// Harm1-4T
-		if (mMusicConfigs[mMusicState][2] && !is_playing(1)) {
-			mMusicToPlay[1] = Music::Game4THarm1;
-		}
-		else if (!mMusicConfigs[mMusicState][2] && !mMusicConfigs[mMusicState][6] && is_playing(1)) {
-			mMusicToPlay[1] = Music::None;
-		}
-
-		// Harm2-4T
-		if (mMusicConfigs[mMusicState][3] && !is_playing(2)) {
-			mMusicToPlay[2] = Music::Game4THarm2;
-		}
-		else if (!mMusicConfigs[mMusicState][3] && !mMusicConfigs[mMusicState][7] && is_playing(2)) {
-			mMusicToPlay[2] = Music::None;
-		}
-
-		// Mel1-4T
-		if (mMusicConfigs[mMusicState][4] && !is_playing(3)) {
-			mMusicToPlay[3] = Music::Game4TMel1;
-		}
-		else if (!mMusicConfigs[mMusicState][4] && !mMusicConfigs[mMusicState][8] && is_playing(3)) {
-			mMusicToPlay[3] = Music::None;
-		}
-
-		// Mel2-4T
-		if (mMusicConfigs[mMusicState][5] && !is_playing(4)) {
-			mMusicToPlay[4] = Music::Game4TMel2;
-		}
-		else if (!mMusicConfigs[mMusicState][5] && is_playing(4)) {
-			mMusicToPlay[4] = Music::None;
-		}
-		
-		// Mel1-3T
-		if (mMusicConfigs[mMusicState][6] && !is_playing(1)) {
-			mMusicToPlay[1] = Music::Game3TMel1;
-		}
-		else if (!mMusicConfigs[mMusicState][6] && !mMusicConfigs[mMusicState][2] && is_playing(1)) {
-			mMusicToPlay[1] = Music::None;
-		}
-
-		// Mel2-3T
-		if (mMusicConfigs[mMusicState][7] && !is_playing(2)) {
-			mMusicToPlay[2] = Music::Game3TMel2;
-		}
-		else if (!mMusicConfigs[mMusicState][7] && !mMusicConfigs[mMusicState][3] && is_playing(2)) {
-			mMusicToPlay[2] = Music::None;
-		}
-
-		// Mel3-3T
-		if (mMusicConfigs[mMusicState][8] && !is_playing(3)) {
-			mMusicToPlay[3] = Music::Game3TMel3;
-			
-		}
-		else if (!mMusicConfigs[mMusicState][8] && !mMusicConfigs[mMusicState][4] && is_playing(3)) {
-			mMusicToPlay[3] = Music::None;
-		}
-		// Play teh musik
-		getContext().mMusic->setPaused(true);
-		for (std::size_t i = 0; i < mMusicToPlay.size(); ++i) {
-			if (mMusicToPlay[i] != Music::None) {
-				getContext().mMusic->play(i, mMusicToPlay[i]);
-				getContext().mMusic->getMusicPlayer(i).setPlayingOffset(mMusicTimer);
-			}
-			else {
-				getContext().mMusic->getMusicPlayer(i).stop();
-			}
-		}
+		updateMusicPlayback();
 	}
 
 
@@ -293,6 +212,97 @@ void GameScreen::updateMusicState() {
 			else {
 				mMusicState = MusicState::Base4;
 			}
+		}
+	}
+}
+
+void GameScreen::updateMusicPlayback() {
+	// Update playing music accordingly
+	auto is_playing = [this](int player) -> bool {
+		return getContext().mMusic->getMusicPlayer(player).getStatus() == sf::SoundSource::Playing;
+	};
+
+	// Base3T
+	if (mMusicConfigs[mMusicState][0] && !is_playing(0)) {
+		mMusicToPlay[0] = Music::Game3TBase;
+	}
+	else if (!mMusicConfigs[mMusicState][0] && !mMusicConfigs[mMusicState][1] && is_playing(0)) {
+		mMusicToPlay[0] = Music::None;
+	}
+	
+	// Base4T
+	if (mMusicConfigs[mMusicState][1] && !is_playing(0)) {
+		mMusicToPlay[0] = Music::Game4TBase;
+	}
+	else if (!mMusicConfigs[mMusicState][1] && !mMusicConfigs[mMusicState][0] && is_playing(0)) {
+		mMusicToPlay[0] = Music::None;
+	}
+
+	// Harm1-4T
+	if (mMusicConfigs[mMusicState][2] && !is_playing(1)) {
+		mMusicToPlay[1] = Music::Game4THarm1;
+	}
+	else if (!mMusicConfigs[mMusicState][2] && !mMusicConfigs[mMusicState][6] && is_playing(1)) {
+		mMusicToPlay[1] = Music::None;
+	}
+
+	// Harm2-4T
+	if (mMusicConfigs[mMusicState][3] && !is_playing(2)) {
+		mMusicToPlay[2] = Music::Game4THarm2;
+	}
+	else if (!mMusicConfigs[mMusicState][3] && !mMusicConfigs[mMusicState][7] && is_playing(2)) {
+		mMusicToPlay[2] = Music::None;
+	}
+
+	// Mel1-4T
+	if (mMusicConfigs[mMusicState][4] && !is_playing(3)) {
+		mMusicToPlay[3] = Music::Game4TMel1;
+	}
+	else if (!mMusicConfigs[mMusicState][4] && !mMusicConfigs[mMusicState][8] && is_playing(3)) {
+		mMusicToPlay[3] = Music::None;
+	}
+
+	// Mel2-4T
+	if (mMusicConfigs[mMusicState][5] && !is_playing(4)) {
+		mMusicToPlay[4] = Music::Game4TMel2;
+	}
+	else if (!mMusicConfigs[mMusicState][5] && is_playing(4)) {
+		mMusicToPlay[4] = Music::None;
+	}
+	
+	// Mel1-3T
+	if (mMusicConfigs[mMusicState][6] && !is_playing(1)) {
+		mMusicToPlay[1] = Music::Game3TMel1;
+	}
+	else if (!mMusicConfigs[mMusicState][6] && !mMusicConfigs[mMusicState][2] && is_playing(1)) {
+		mMusicToPlay[1] = Music::None;
+	}
+
+	// Mel2-3T
+	if (mMusicConfigs[mMusicState][7] && !is_playing(2)) {
+		mMusicToPlay[2] = Music::Game3TMel2;
+	}
+	else if (!mMusicConfigs[mMusicState][7] && !mMusicConfigs[mMusicState][3] && is_playing(2)) {
+		mMusicToPlay[2] = Music::None;
+	}
+
+	// Mel3-3T
+	if (mMusicConfigs[mMusicState][8] && !is_playing(3)) {
+		mMusicToPlay[3] = Music::Game3TMel3;
+		
+	}
+	else if (!mMusicConfigs[mMusicState][8] && !mMusicConfigs[mMusicState][4] && is_playing(3)) {
+		mMusicToPlay[3] = Music::None;
+	}
+	// Play teh musik
+	getContext().mMusic->setPaused(true);
+	for (std::size_t i = 0; i < mMusicToPlay.size(); ++i) {
+		if (mMusicToPlay[i] != Music::None) {
+			getContext().mMusic->play(i, mMusicToPlay[i]);
+			getContext().mMusic->getMusicPlayer(i).setPlayingOffset(mMusicTimer);
+		}
+		else {
+			getContext().mMusic->getMusicPlayer(i).stop();
 		}
 	}
 }
@@ -469,4 +479,6 @@ void GameScreen::setLevel(Levels level) {
 	ScaleNode* scale_node = color_scale.get();
 	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
 	scale_node->setPosition(sf::Vector2f(1850, 890));
+
+	getContext().mGameData->numReceivers = receivers.size();
 }

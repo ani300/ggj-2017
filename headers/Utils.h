@@ -26,6 +26,7 @@ struct GameData {
     GameData();
 
     Levels currentLevel;
+    std::size_t numReceivers;
 };
 
 inline GameData::GameData() {}  

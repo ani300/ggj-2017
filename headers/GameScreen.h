@@ -77,6 +77,7 @@ private:
 	void handleRealtimeInput();
 
 	void updateMusicState();
+	void updateMusicPlayback();
 
 	void changePlayingMusic();
 
@@ -105,6 +106,7 @@ private:
 	std::unordered_map<std::string, ReceiverTypes> receiver_name_map;
 	std::unordered_map<Levels, std::string> level_files_map;
 
+	sf::Time mLevelCompletedSecond;
 
 	TextNode* mText;
 
