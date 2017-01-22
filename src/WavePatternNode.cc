@@ -18,6 +18,7 @@ WavePatternNode::WavePatternNode(const std::string& shader_file, const std::vect
 	mRect(sf::Vector2f(1920, 1080))
 {
 	mRGB = true;
+	mShader.loadFromFile(shader_file, sf::Shader::Fragment);
 }
 
 void WavePatternNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates /*states*/) const {
