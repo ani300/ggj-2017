@@ -9,6 +9,7 @@ class TextNode: public SceneNode {
         void setString(const std::string& text);
         void setCharacterSize(unsigned int size);
         void setColor(const sf::Color& color);
+        void setStyle(const sf::Text::Style);
         void centerText();
 
     protected:

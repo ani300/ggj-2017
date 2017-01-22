@@ -25,6 +25,9 @@ public:
 
 	void place(bool p);
 
+	virtual void onHover() override;
+	virtual void onHoverOut() override;
+
 protected:
 	float frequency;
 	float wavelength;

@@ -9,6 +9,7 @@
 #include "WaveGenerator.h"
 #include "WavePatternNode.h"
 #include "ScaleNode.h"
+#include "Utils.h"
 #include "sol/sol.h"
 
 GameScreen::GameScreen(StatesStack& stack, Context& context) :
@@ -61,7 +62,7 @@ bool GameScreen::isLevelCompleted() {
 }
 
 bool GameScreen::update(sf::Time dt) {
-	handleRealtimeInput();
+	handleRealtimeInput(dt);
 
 	if(isLevelCompleted()) {
 		requestStackPush(StateType::Result);
@@ -160,8 +161,48 @@ bool GameScreen::update(sf::Time dt) {
 	return true;
 }
 
+void GameScreen::showMessage(std::string title, std::string msg, sf::Vector2f pos, sf::Vector2f size) {
+	sf::Texture& messageBg = getContext().mTextures->get(Textures::ToolboxBackground);
+	std::unique_ptr<SpriteNode> message(new SpriteNode(messageBg));
+    SpriteNode* mMsgbg = message.get();
+    mMsgbg->setPosition(pos.x, pos.y);
+    mMsgbg->setSize(sf::Vector2u(size.x, size.y));
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(message));
 
-void GameScreen::handleRealtimeInput() {
+
+    sf::Font& font = getContext().mFonts->get(Fonts::Sansation);
+    std::unique_ptr<TextNode> titlem(new TextNode(font, title));
+    TextNode* mTitle = titlem.get();
+    mTitle->setCharacterSize(30);
+    mTitle->setStyle(sf::Text::Bold);
+    mTitle->setColor(sf::Color::White);
+    mTitle->setPosition(pos.x, pos.y - size.y/1.5 );
+    //mTitle->setSize(sf::Vector2u(size.x, 80));
+    mTitle->centerText();
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(titlem));
+
+    std::unique_ptr<TextNode> msgm(new TextNode(font, msg));
+    TextNode* mMsg = msgm.get();
+    mMsg->setCharacterSize(20);
+    mTitle->setColor(sf::Color::White);
+    mMsg->setPosition(pos.x, pos.y - size.y/1.5 );
+    //mMsg->setSize(sf::Vector2u(size.x, 80));
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(msgm));
+}
+
+
+void GameScreen::handleRealtimeInput(sf::Time dt) {
+	std::vector<SceneNode::Ptr> const& children = mSceneGraph.getChildren();
+	if(mouseOver != -1) {
+		secondsToHover -= dt.asSeconds();
+		children[mouseOver]->onMouseOver();
+		if(secondsToHover <= 0 and not hovering)
+		{
+			hovering = true;
+			children[mouseOver]->onHover();
+		}
+
+	}
 	if (mSelectedGenerator != -1) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
 		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
@@ -279,6 +320,37 @@ sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2i grid_size) {
 }
 
 bool GameScreen::handleEvent(const sf::Event& event) {
+	if (event.type == sf::Event::MouseMoved) {
+		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
+		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
+		sf::Vector2f newfpos = sf::Vector2f(newPos.x, newPos.y);
+		std::vector<SceneNode::Ptr> const& children = mSceneGraph.getChildren();
+		if(Utils::distance(oldPos, newfpos) < 0.01) {
+			for (std::size_t i = 0; i < children.size(); ++i) {
+				if(SpriteNode *child = dynamic_cast<SpriteNode*>(children[i].get())) {
+					sf::IntRect bounds = child->getBounds();
+					if (bounds.contains(newPos)) {
+						mouseOver = i;
+					}
+				  
+				}
+			}
+		}
+		else {
+			if(hovering)
+			{
+				children[mouseOver]->onHoverOut();
+				mouseOver = -1;
+			}
+			if(mouseOver != -1)
+				children[mouseOver]->onMouseOut();
+			
+			hovering = false;
+			secondsToHover = 2.f;
+		}
+
+		oldPos = newfpos;
+	}
 	if (event.type == sf::Event::MouseButtonPressed) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
 			// Check if clicking on a generator

@@ -26,6 +26,15 @@ void SceneNode::update(sf::Time dt) {
 	updateChildren(dt);
 }
 
+void SceneNode::onHover(){}
+void SceneNode::onHoverOut(){}
+void SceneNode::onMouseOver(){}
+void SceneNode::onMouseOut(){}
+
+std::vector<SceneNode::Ptr>& SceneNode::getChildren() {
+	return mChildren;
+}
+
 void SceneNode::updateCurrent(sf::Time) {
 	// Do nothing by default
 }

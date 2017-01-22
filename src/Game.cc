@@ -34,7 +34,7 @@ Game::Game() :
 
     mWindow.setKeyRepeatEnabled(false);
     // Carrega recursos comuns
-    // mFonts.load(Fonts::AlluraRegular, "res/media/AlluraRegular.otf");
+    mFonts.load(Fonts::Sansation, "res/media/Sansation.ttf");
     
     mTextures.load(Textures::ReceiverAlwaysOn, "res/pictures/prueba_n1_50.png");
     mTextures.load(Textures::WaveGenerator, "res/pictures/spritesheet_recep2_anim.png");

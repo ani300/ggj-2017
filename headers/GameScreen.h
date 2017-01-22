@@ -73,11 +73,23 @@ private:
 	};
 	bool isLevelCompleted();
 
-	void handleRealtimeInput();
+	void handleRealtimeInput(sf::Time dt);
 
 	void updateMusicState();
 
 	void changePlayingMusic();
+
+	void showMessage(std::string title, std::string msg, sf::Vector2f pos, sf::Vector2f size);
+	
+	float secondsToHover = 2.f;
+	//Scene child below the mouse
+	int mouseOver = -1;
+	bool hovering = false;
+	sf::Vector2f oldPos = sf::Vector2f(0.f, 0.f);
+	//Index is scenegraph children
+	void handleOnHover(int index);
+	void handleHoverOut(int index);
+
 
 	sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
 	sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2i grid_size);

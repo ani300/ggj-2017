@@ -10,9 +10,15 @@ void TextNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) co
 	target.draw(mText, states);
 }
 
+
+
 void TextNode::setString(const std::string& text) {
 	mText.setString(sf::String(Utils::utf8_to_utf16(text)));
     //Utils::centerOrigin(mText);
+}
+
+void TextNode::setStyle(const sf::Text::Style s) {
+	mText.setStyle(s);
 }
 
 void TextNode::setCharacterSize(unsigned int size) {

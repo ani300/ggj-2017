@@ -26,6 +26,14 @@ WaveGenerator::~WaveGenerator() {
 
 }
 
+void WaveGenerator::onHover(){
+	std::cout << "On hover" << std::endl;
+}
+
+void WaveGenerator::onHoverOut(){
+	std::cout << "On hover out" << std::endl;
+}
+
 void WaveGenerator::setAngle(float angle) {
 	angle = angle;
 }
