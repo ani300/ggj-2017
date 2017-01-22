@@ -15,3 +15,7 @@ To build
 $ make -j 8 release
 $ ./wave-sim
 ```
+
+## Screenshots
+![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/pictures/features.png?raw=true "KEEP IT SINE!")
+![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/pictures/menu.png?raw=true "KEEP IT SINE!")
