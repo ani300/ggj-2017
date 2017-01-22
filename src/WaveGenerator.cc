@@ -83,24 +83,24 @@ ColorGenerator::ColorGenerator(sf::Texture const& texture, std::string const& fi
 {
 }
 
-sf::Color ColorGenerator::colorAt(sf::Vector2f pos) const {
+std::array<int, 4> ColorGenerator::colorAt(sf::Vector2f pos) const {
 	sf::Vector2f genPos = getWorldPosition();
 	float distance = Utils::distance(genPos, pos);
 
 	float colorValue = waveFunction(distance);
 	colorValue = colorValue*255;
 
-	sf::Color color_val = sf::Color::Black;
+	std::array<int, 4> color_val = {0,0,0,255};
 
 	switch(color_emit) {
 	case EmitterColor::Red:
-		color_val.r = colorValue;
+		color_val[0] = colorValue;
 		break;
 	case EmitterColor::Green:
-		color_val.g = colorValue;
+		color_val[1] = colorValue;
 		break;
 	case EmitterColor::Blue:
-		color_val.b = colorValue;
+		color_val[2] = colorValue;
 		break;
 	}
 
@@ -108,7 +108,7 @@ sf::Color ColorGenerator::colorAt(sf::Vector2f pos) const {
 }
 
 float ColorGenerator::waveFunction(float distance) const {
-	return 1.f/2.f*sin(2*M_PI/1*distance + angle) + 0.5f;
+	return 1.f/2.f*sin(2*M_PI/wavelength*distance + angle);
 }
 
 void ColorGenerator::setGeneratorColor(EmitterColor color) {

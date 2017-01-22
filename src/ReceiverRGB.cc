@@ -13,18 +13,21 @@ ReceiverRGB::ReceiverRGB(sf::Texture const& texture, std::vector<WaveGenerator*>
 
 
 bool ReceiverRGB::isOnRightNow() {
-	sf::Color totalInput;
+	sf::Color totalInput(255/2,255/2,255/2,255);
 	for(WaveGenerator* g : generators) {
 		if(g->isPlaced()) {
-			totalInput += static_cast<ColorGenerator*>(g)->colorAt(getWorldPosition());
+			std::array<int, 4> genColor = static_cast<ColorGenerator*>(g)->colorAt(getWorldPosition());
+			totalInput.r += genColor[0];
+			totalInput.g += genColor[1];
+			totalInput.b += genColor[2];
 		}
 	}
 	
-	std::cout << int(totalInput.r) << " " << int(totalInput.g) << " " << int(totalInput.b) << std::endl;
-	std::cout << int(mObjective.r) << " " << int(mObjective.g) << " " << int(mObjective.b) << std::endl;
-	int sub = (totalInput.r + totalInput.g + totalInput.b) - (mObjective.r + mObjective.g + mObjective.b);
-	std::cout << sub << std::endl;
-	return abs(sub) < 15;
+	int subr = int(totalInput.r) - int(mObjective.r);
+	int subg = int(totalInput.g) - int(mObjective.g);
+	int subb = int(totalInput.b) - int(mObjective.b);
+	std::cout << subr << " " << subg << " " << subb << std::endl;
+	return abs(subr) < 15 && abs(subg) < 15 && abs(subb) < 15;
 }
 
 
