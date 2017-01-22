@@ -17,5 +17,5 @@ $ ./wave-sim
 ```
 
 ## Screenshots
-![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/features.png?raw=true "KEEP IT SINE!")
+![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/featured.png?raw=true "KEEP IT SINE!")
 ![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/menu.png?raw=true "KEEP IT SINE!")
