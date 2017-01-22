@@ -32,6 +32,9 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
 	receiver_name_map["AlwaysOff"] = ReceiverTypes::AlwaysOff;
 
+	level_files_map[Levels::Level1] = "res/levels/level1.lua";
+	level_files_map[Levels::Level2] = "res/levels/level2.lua";
+
 	mMusicConfigs[MusicState::Off]     = {0,0,0,0,0,0,0,0,0};
 	mMusicConfigs[MusicState::Base3]   = {1,0,0,0,0,0,0,0,0}; 
 	mMusicConfigs[MusicState::Base4]   = {0,1,0,0,0,0,0,0,0};
@@ -314,7 +317,9 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 void GameScreen::setLevel(Levels level) {
 	level = level;
 
-	lua.script_file("res/levels/level1.lua");
+	getContext().mGameData->currentLevel = level;
+
+	lua.script_file(level_files_map[level]);
 	rgb = lua["rgb"];
 	time = lua["time"];
 

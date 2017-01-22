@@ -20,8 +20,12 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+#include "StateIdentifiers.h"
+
 struct GameData {
     GameData();
+
+    Levels currentLevel;
 };
 
 inline GameData::GameData() {}  

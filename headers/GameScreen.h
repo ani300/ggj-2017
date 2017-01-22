@@ -71,6 +71,7 @@ private:
 		T3Mel2,
 		T3On
 	};
+
 	bool isLevelCompleted();
 
 	void handleRealtimeInput();
@@ -100,6 +101,7 @@ private:
 
 	std::unordered_map<std::string, GeneratorTypes> generator_name_map;
 	std::unordered_map<std::string, ReceiverTypes> receiver_name_map;
+	std::unordered_map<Levels, std::string> level_files_map;
 
 	sol::state lua;
 
