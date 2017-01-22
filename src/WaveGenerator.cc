@@ -12,10 +12,6 @@ WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file
 	angle(0.f),
 	placed(false)
 {
-	tp.title = "Standard Wave Generator";
-	tp.position = this->getPosition();
-	tp.shown = true;
-	TooltipSystem::addTooltip("StandardGenerator", &tp);
 }
 
 
@@ -27,10 +23,6 @@ WaveGenerator::WaveGenerator(sf::Texture const& texture, std::string const& file
 	angle(0.f),
 	placed(false)
 { 
-	tp.title = "Standard Wave Generator";
-	tp.position = this->getPosition();
-	tp.shown = true;
-	TooltipSystem::addTooltip("StandardGenerator", &tp);
 }
 
 

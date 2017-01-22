@@ -2,7 +2,6 @@
 
 #include "AnimationNode.h"
 #include <SFML/Graphics.hpp>
-#include "TooltipSystem.h"
 
 
 class WaveGenerator : public AnimationNode {
@@ -42,8 +41,6 @@ protected:
 	virtual float waveFunction(float distance) const;
 
 	bool placed;
-
-	Tooltip tp;
 };
 
 
