@@ -450,10 +450,8 @@ void GameScreen::setLevel(Levels level) {
 					break;
 				case GeneratorTypes::Color:
 					{
-						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
+						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim", ColorGenerator::EmitterColor::Red);
 						generators.push_back(generator.get());
-						ColorGenerator* gen_ptr = static_cast<ColorGenerator*>(generator.get());	
-						gen_ptr->setGeneratorColor(ColorGenerator::EmitterColor::Red);
 						generator->setSize(sf::Vector2u(90,90));
 						generator->setAnimation("Generator");
 						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));
