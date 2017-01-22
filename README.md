@@ -1,7 +1,8 @@
 # Wave Simulator 2017: Contemplative Edition
 ## Keep it SINE!
 
-![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/pictures/logo.png?raw=true "Logo Title Text 1")
+![alt text]( https://github.com/ani300/ggj-2017/blob/master/res/pictures/logo.png?raw=true "KEEP IT SINE!")
+
 Puzzle game in which you juggle wave generators in order to satisfy all constrains.
 
 
