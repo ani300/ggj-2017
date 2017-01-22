@@ -8,7 +8,9 @@ ReceiverRGB::ReceiverRGB(sf::Texture const& texture, std::vector<WaveGenerator*>
 	history_length = 120;
 	activation_threshold = 1./history_length;
 
-	activationHistory = std::vector<bool>(history_length, false);	
+	activationHistory = std::vector<bool>(history_length, false);
+
+	mSprite.setColor(objective);	
 }
 
 
@@ -31,10 +33,11 @@ bool ReceiverRGB::isOnRightNow() {
 }
 
 
-void ReceiverRGB::updateCurrent(sf::Time /*dt*/) {
+void ReceiverRGB::updateCurrent(sf::Time dt) {
 	on = isOn();
 	if(on)
-		this->setScale(sf::Vector2f(1.6,1.6));
+		setAnimation("On");
 	else	
-		this->setScale(sf::Vector2f(1,1));
+		setAnimation("Off");
+	AnimationNode::updateCurrent(dt);
 }

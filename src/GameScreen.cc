@@ -46,7 +46,6 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	level_files_map[Levels::Level3] = "res/levels/level3.lua";
 	level_files_map[Levels::Level4] = "res/levels/level4.lua";
 	level_files_map[Levels::Level5] = "res/levels/level5.lua";
-	level_files_map[Levels::Level6] = "res/levels/level6.lua";
 
 	mMusicConfigs[MusicState::Off]     = {0,0,0,0,0,0,0,0,0};
 	mMusicConfigs[MusicState::Base3]   = {1,0,0,0,0,0,0,0,0}; 
@@ -562,7 +561,7 @@ void GameScreen::setLevel(Levels level) {
 					receiver_color.b = table["color"]["b"];
 					receiver_color.a = table["color"]["a"];
 
-					auto receiver = std::make_unique<ReceiverRGB>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, receiver_color);
+					auto receiver = std::make_unique<ReceiverRGB>(mContext.mTextures->get(Textures::ReceiverAlwaysOff), generators, receiver_color);
 					receiver->setPosition(position);
 					receiver->setSize(sf::Vector2u(60,60));
 					receiver->setAnimation("Off");
@@ -600,7 +599,7 @@ void GameScreen::setLevel(Levels level) {
 					{
 						auto gc = lua["generator_colors"][i+1];
 						ColorGenerator::EmitterColor c = color_name_map[gc];
-						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim", c);
+						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::ColorGenerator), "res/anim/generator.anim", c);
 						generators.push_back(generator.get());
 						generator->setSize(sf::Vector2u(100,100));
 						generator->setAnimation("Generator");

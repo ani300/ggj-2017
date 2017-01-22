@@ -40,6 +40,7 @@ Game::Game() :
     mTextures.load(Textures::ReceiverAlwaysOff, "res/pictures/spritesheet_recep1_anim.png");
     mTextures.load(Textures::ReceiverAlwaysOn, "res/pictures/spritesheet_recep2_anim.png");
     mTextures.load(Textures::WaveGenerator, "res/pictures/otglow_gen_anim.png");
+    mTextures.load(Textures::ColorGenerator, "res/pictures/spritesheet_genx_anim.png");
     mTextures.load(Textures::Logo, "res/pictures/logo.png");
     mTextures.load(Textures::Start, "res/pictures/prueba_startbutton1.png");
     mTextures.load(Textures::Help, "res/pictures/prueba_helpbutton1.png");

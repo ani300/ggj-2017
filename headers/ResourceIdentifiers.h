@@ -16,6 +16,7 @@ namespace Textures
 		ReceiverAlwaysOff,
                 ReceiverAlwaysOn,
 		WaveGenerator,
+                ColorGenerator,
                 Logo,
 		Start,
 		Help,
