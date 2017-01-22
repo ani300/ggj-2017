@@ -34,5 +34,8 @@ class ResultsScreen: public State {
         std::array<AnimatedTextNode*, 2> mTextNodes;
         AnimatedTextNode* mText;
 
+        sf::Time mMusicTimer;
+        bool hasMusicFinale = false;
+
 	Levels nextLevel;
 };

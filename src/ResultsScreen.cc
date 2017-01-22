@@ -18,6 +18,21 @@ ResultsScreen::ResultsScreen(StatesStack& stack, Context& context) :
     int nextLvl = level + 1;
     nextLevel = static_cast<Levels>(nextLvl);
 
+    // Play the MUSIC
+    if (getContext().mGameData->numReceivers == 3) {
+        getContext().mMusic->play(0, Music::Game3TBase, false);
+        getContext().mMusic->play(1, Music::Game3TMel1, false);
+        getContext().mMusic->play(2, Music::Game3TMel2, false);
+        getContext().mMusic->play(3, Music::Game3TMel3, false);
+    }
+    else {
+        hasMusicFinale = true;
+        getContext().mMusic->play(0, Music::Game4TBase, false);
+        getContext().mMusic->play(1, Music::Game4THarm1, false);
+        getContext().mMusic->play(2, Music::Game4THarm2, false);
+        getContext().mMusic->play(3, Music::Game4TMel1, false);
+        getContext().mMusic->play(4, Music::Game4TMel2, false);
+    }
 
     // Prepara el fons de pantalla i la font
     // sf::Font& font = getContext().mFonts->get(Fonts::Gomo);
@@ -107,6 +122,13 @@ void ResultsScreen::draw() {
 }
 
 bool ResultsScreen::update(sf::Time dt) {
+    if (hasMusicFinale) {
+        mMusicTimer += dt;
+    }
+    if (mMusicTimer.asSeconds() > 16) {
+        getContext().mMusic->play(0, Music::Game4TOutro, false);
+    }
+    
     mSceneGraph.update(dt);
     return false;
 }
@@ -114,6 +136,8 @@ bool ResultsScreen::update(sf::Time dt) {
 bool ResultsScreen::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
         requestStackPop();
+        requestStackPop();
+	requestStackPush(StateType::Game);
 	requestStackSetLevel(nextLevel);
     }
 
