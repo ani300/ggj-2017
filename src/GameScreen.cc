@@ -231,7 +231,7 @@ void GameScreen::updateMusicPlayback() {
 	else if (!mMusicConfigs[mMusicState][0] && !mMusicConfigs[mMusicState][1] && is_playing(0)) {
 		mMusicToPlay[0] = Music::None;
 	}
-	
+
 	// Base4T
 	if (mMusicConfigs[mMusicState][1] && !is_playing(0)) {
 		mMusicToPlay[0] = Music::Game4TBase;
@@ -271,7 +271,7 @@ void GameScreen::updateMusicPlayback() {
 	else if (!mMusicConfigs[mMusicState][5] && is_playing(4)) {
 		mMusicToPlay[4] = Music::None;
 	}
-	
+
 	// Mel1-3T
 	if (mMusicConfigs[mMusicState][6] && !is_playing(1)) {
 		mMusicToPlay[1] = Music::Game3TMel1;
@@ -291,7 +291,7 @@ void GameScreen::updateMusicPlayback() {
 	// Mel3-3T
 	if (mMusicConfigs[mMusicState][8] && !is_playing(3)) {
 		mMusicToPlay[3] = Music::Game3TMel3;
-		
+
 	}
 	else if (!mMusicConfigs[mMusicState][8] && !mMusicConfigs[mMusicState][4] && is_playing(3)) {
 		mMusicToPlay[3] = Music::None;
@@ -407,7 +407,14 @@ void GameScreen::setLevel(Levels level) {
 				break;
 			case ReceiverTypes::RGB:
 				{
-					auto receiver = std::make_unique<RGBReceiver>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators);
+					sf::Color receiver_color;
+
+					receiver_color.r = table["color"]["r"];
+					receiver_color.g = table["color"]["g"];
+					receiver_color.b = table["color"]["b"];
+					receiver_color.a = table["color"]["a"];
+
+					auto receiver = std::make_unique<ReceiverRGB>(mContext.mTextures->get(Textures::ReceiverAlwaysOn), generators, receiver_color);
 					receiver->setPosition(position);
 					receivers.push_back(receiver.get());
 					mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(receiver));
@@ -443,6 +450,7 @@ void GameScreen::setLevel(Levels level) {
 				case GeneratorTypes::Color:
 					{
 						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
+						generator->setColor(ColorGenerator::EmitterColor::Red);
 						generators.push_back(generator.get());
 						generator->setSize(sf::Vector2u(90,90));
 						generator->setAnimation("Generator");
@@ -476,26 +484,32 @@ void GameScreen::setLevel(Levels level) {
 	}
 
 
-	auto pos_color = lua["colors"]["positive_amp"];
-	auto zero = lua["colors"]["zero"];
-	auto neg_color = lua["colors"]["negative_amp"];
-	auto g_color = lua["grid"]["color"];
+	if(!rgb) {
+		auto pos_color = lua["colors"]["positive_amp"];
+		auto zero = lua["colors"]["zero"];
+		auto neg_color = lua["colors"]["negative_amp"];
+		auto g_color = lua["grid"]["color"];
 
-	sf::Color color1(neg_color["r"],neg_color["g"],neg_color["b"],neg_color["a"]);
-	sf::Color color2(zero["r"],zero["g"],zero["b"],zero["a"]);
-	sf::Color color3(pos_color["r"],pos_color["g"],pos_color["b"],pos_color["a"]);
-	sf::Color grid_color(g_color["r"],g_color["g"],g_color["b"],g_color["a"]);
+		sf::Color color1(neg_color["r"],neg_color["g"],neg_color["b"],neg_color["a"]);
+		sf::Color color2(zero["r"],zero["g"],zero["b"],zero["a"]);
+		sf::Color color3(pos_color["r"],pos_color["g"],pos_color["b"],pos_color["a"]);
+		sf::Color grid_color(g_color["r"],g_color["g"],g_color["b"],g_color["a"]);
 
-	auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
-	mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
+		auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators);
+		mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
 
-	auto grid = std::make_unique<GridNode>(grid_size, grid_color);	
-	mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
+		auto grid = std::make_unique<GridNode>(grid_size, grid_color);	
+		mSceneLayers[static_cast<int>(Layer::Grid)]->attachChild(std::move(grid));
 
-	auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
-	ScaleNode* scale_node = color_scale.get();
-	mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
-	scale_node->setPosition(sf::Vector2f(1850, 890));
+		auto color_scale = std::make_unique<ScaleNode>("res/shaders/scale.vert", "res/shaders/scale.frag", color1, color2, color3);
+		ScaleNode* scale_node = color_scale.get();
+		mSceneLayers[static_cast<int>(Layer::UI)]->attachChild(std::move(color_scale));
+		scale_node->setPosition(sf::Vector2f(1850, 890));
+	}
+	else {
+		auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/rgb_waves.frag", generators);
+		mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
+	}
 
 	getContext().mGameData->numReceivers = receivers.size();
 }

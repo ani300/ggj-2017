@@ -100,3 +100,22 @@ sf::Color ColorGenerator::colorAt(sf::Vector2f pos) const {
 float ColorGenerator::waveFunction(float distance) const {
 	return 1.f/2.f*sin(2*M_PI/1*distance + angle) + 0.5f;
 }
+
+void ColorGenerator::setColor(EmitterColor color) {
+	color = color;
+}
+
+sf::Color ColorGenerator::getColor() {
+	switch(color_emitted) {
+	case EmitterColor::Red:
+		return sf::Color::Red;
+
+	case EmitterColor::Green:
+		return sf::Color::Green;
+
+	case EmitterColor::Blue:
+		return sf::Color::Blue;
+	}
+
+	return sf::Color::Black;
+}
