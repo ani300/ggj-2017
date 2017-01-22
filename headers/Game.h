@@ -13,6 +13,7 @@
 #include "ResultsScreen.h"
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
+#include "Animator.h"
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -47,9 +48,15 @@ class Game {
         SoundPlayer mSound;
         GameData mGameData;
         StatesStack mStatesStack;
+
+        Animator animator;
         
         sf::Text mStatisticsText;
         sf::Time mStatisticsUpdateTime;
         std::size_t mStatisticsNumFrames;
+
+
+        //float test = 0;
+        sf::Vector2f test = sf::Vector2f(0.f,0.f);
 };
 

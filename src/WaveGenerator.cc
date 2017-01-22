@@ -1,4 +1,5 @@
 #include "WaveGenerator.h"
+#include "Utils.h"
 #include <cmath>
 #include <stdlib.h>
 
@@ -35,9 +36,7 @@ void WaveGenerator::updateCurrent(sf::Time dt) {
 
 float WaveGenerator::amplitudeAt(sf::Vector2f pos) const {
 	sf::Vector2f genPos = getWorldPosition();
-	float dx = abs(genPos.x - pos.x);
-	float dy = abs(genPos.y - pos.y);
-	float distance = sqrt(dx*dx + dy*dy);
+	float distance = Utils::distance(genPos, pos);
 	float ampTarget = 0;
 
 	ampTarget = amplitude * sin(waveNumber*distance - angle);

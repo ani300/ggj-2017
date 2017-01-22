@@ -38,6 +38,13 @@ const sf::Time TimePerFrame = sf::seconds(1.f/60.f); // 60 fps
 const sf::Vector2u gameSize(1920,1080);
 
 namespace Utils {
+    inline float distance(sf::Vector2f a, sf::Vector2f b) {
+        float dx = abs(a.x - b.x);
+        float dy = abs(a.y - b.y);
+        return sqrt(dx*dx + dy*dy);
+    }
+
+
     inline std::wstring utf8_to_utf16(const std::string& utf8) {
         std::vector<unsigned long> unicode;
         size_t i = 0;
