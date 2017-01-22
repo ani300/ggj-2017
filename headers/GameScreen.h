@@ -28,6 +28,8 @@ public:
 void setLevel(Levels level);
 
 private:
+	sol::state lua;
+
 	void click(mouseButtons mouseButton, sf::Vector2f mouseClick);
 
 	enum class Layer {
@@ -103,7 +105,6 @@ private:
 	std::unordered_map<std::string, ReceiverTypes> receiver_name_map;
 	std::unordered_map<Levels, std::string> level_files_map;
 
-	sol::state lua;
 
 	TextNode* mText;
 

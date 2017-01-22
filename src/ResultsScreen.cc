@@ -114,6 +114,8 @@ bool ResultsScreen::update(sf::Time dt) {
 bool ResultsScreen::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyPressed) {
         requestStackPop();
+        requestStackPop();
+	requestStackPush(StateType::Game);
 	requestStackSetLevel(nextLevel);
     }
 
