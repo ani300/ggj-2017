@@ -14,17 +14,17 @@ MusicPlayer::MusicPlayer()
     mFilenames[Music::Game3TBase] = "res/music/game_3t_base.wav";
     mFilenames[Music::Game3TMel1] = "res/music/game_3t_melody1.wav";
     mFilenames[Music::Game3TMel2] = "res/music/game_3t_melody2.wav";
-    mFilenames[Music::Game3TMel3] = "res/music/game_3t_melody2.wav";
+    mFilenames[Music::Game3TMel3] = "res/music/game_3t_melody3.wav";
     mFilenames[Music::Winning] = "res/music/winningTheme.ogg";
 }
 
-void MusicPlayer::play(int player, Music::ID theme) {
+void MusicPlayer::play(int player, Music::ID theme, bool loop) {
     std::string filename = mFilenames[theme];
     if (!mMusicPlayers[player].openFromFile(filename)) {
         throw std:: runtime_error("Music " + filename + " could not be loaded.");
     }
     mMusicPlayers[player].setVolume(mVolume);
-    mMusicPlayers[player].setLoop(true);
+    mMusicPlayers[player].setLoop(loop);
     mMusicPlayers[player].play();
 }
 

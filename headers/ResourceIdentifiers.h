@@ -40,6 +40,7 @@ namespace Music
 {
         enum ID
         {
+                None,
                 MenuTheme,
                 Game4TBase,
                 Game4THarm1,

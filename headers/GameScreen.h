@@ -91,6 +91,8 @@ private:
 
 	MusicState mMusicState = MusicState::Off;
 	std::unordered_map<MusicState, std::vector<bool>> mMusicConfigs;
+	std::array<Music::ID, 5> mMusicToPlay;
+	sf::Time mMusicTimer;
 
 	SceneNode mSceneGraph;
 	std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;

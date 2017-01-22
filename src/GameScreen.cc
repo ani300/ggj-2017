@@ -22,8 +22,6 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneGraph.attachChild(std::move(layer));
 	}
 
-	getContext().mMusic->stop();
-
 	generator_name_map["StandardGenerator"] = GeneratorTypes::Standard;
 	generator_name_map["FrequencyGenerator"] = GeneratorTypes::Frequency;
 	generator_name_map["WavelengthGenerator"] = GeneratorTypes::Wavelength;
@@ -48,6 +46,10 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	mMusicConfigs[MusicState::T3Mel1]  = {1,0,0,0,0,0,1,0,0};
 	mMusicConfigs[MusicState::T3Mel2]  = {1,0,0,0,0,0,1,1,0};
 	mMusicConfigs[MusicState::T3On]    = {1,0,0,0,0,0,1,1,1};
+
+	for (std::size_t i = 0; i < mMusicToPlay.size(); ++i) {
+		mMusicToPlay[i] = Music::None;
+	}
 }
 
 void GameScreen::draw() {
@@ -72,6 +74,17 @@ bool GameScreen::update(sf::Time dt) {
 
 	MusicState old_state = mMusicState;
 	updateMusicState();
+	mMusicTimer += dt;
+	if (receivers.size() == 3) {
+		if (mMusicTimer.asSeconds() > 9) {
+			mMusicTimer -= sf::seconds(9);
+		}
+	}
+	else {
+		if (mMusicTimer.asSeconds() > 16) {
+			mMusicTimer -= sf::seconds(16);
+		}
+	}
 
 	if (old_state != mMusicState) {
 		std::cout << "Music changed! " << static_cast<int>(mMusicState) << std::endl;
@@ -82,84 +95,89 @@ bool GameScreen::update(sf::Time dt) {
 
 		// Base3T
 		if (mMusicConfigs[mMusicState][0] && !is_playing(0)) {
-			getContext().mMusic->play(0, Music::Game3TBase);
+			mMusicToPlay[0] = Music::Game3TBase;
 		}
-		else if (!mMusicConfigs[mMusicState][0] && !mMusicConfigs[mMusicState][0] && is_playing(0)) {
-			getContext().mMusic->stop();
+		else if (!mMusicConfigs[mMusicState][0] && !mMusicConfigs[mMusicState][1] && is_playing(0)) {
+			mMusicToPlay[0] = Music::None;
 		}
 		
 		// Base4T
 		if (mMusicConfigs[mMusicState][1] && !is_playing(0)) {
-			getContext().mMusic->play(0, Music::Game4TBase);
+			mMusicToPlay[0] = Music::Game4TBase;
 		}
 		else if (!mMusicConfigs[mMusicState][1] && !mMusicConfigs[mMusicState][0] && is_playing(0)) {
-			getContext().mMusic->stop();
+			mMusicToPlay[0] = Music::None;
 		}
 
 		// Harm1-4T
 		if (mMusicConfigs[mMusicState][2] && !is_playing(1)) {
-			getContext().mMusic->play(1, Music::Game4THarm1);
-			getContext().mMusic->getMusicPlayer(1).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
+			mMusicToPlay[1] = Music::Game4THarm1;
 		}
-		else if (!mMusicConfigs[mMusicState][2] && is_playing(1)) {
-			getContext().mMusic->getMusicPlayer(1).stop();
+		else if (!mMusicConfigs[mMusicState][2] && !mMusicConfigs[mMusicState][6] && is_playing(1)) {
+			mMusicToPlay[1] = Music::None;
 		}
 
 		// Harm2-4T
 		if (mMusicConfigs[mMusicState][3] && !is_playing(2)) {
-			getContext().mMusic->play(2, Music::Game4THarm2);
-			getContext().mMusic->getMusicPlayer(2).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
+			mMusicToPlay[2] = Music::Game4THarm2;
 		}
-		else if (!mMusicConfigs[mMusicState][3] && is_playing(2)) {
-			getContext().mMusic->getMusicPlayer(2).stop();
+		else if (!mMusicConfigs[mMusicState][3] && !mMusicConfigs[mMusicState][7] && is_playing(2)) {
+			mMusicToPlay[2] = Music::None;
 		}
 
 		// Mel1-4T
 		if (mMusicConfigs[mMusicState][4] && !is_playing(3)) {
-			getContext().mMusic->play(3, Music::Game4TMel1);
-			getContext().mMusic->getMusicPlayer(3).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
+			mMusicToPlay[3] = Music::Game4TMel1;
 		}
-		else if (!mMusicConfigs[mMusicState][4] && is_playing(3)) {
-			getContext().mMusic->getMusicPlayer(3).stop();
+		else if (!mMusicConfigs[mMusicState][4] && !mMusicConfigs[mMusicState][8] && is_playing(3)) {
+			mMusicToPlay[3] = Music::None;
 		}
 
 		// Mel2-4T
 		if (mMusicConfigs[mMusicState][5] && !is_playing(4)) {
-			getContext().mMusic->play(4, Music::Game4TMel2);
-			getContext().mMusic->getMusicPlayer(4).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
+			mMusicToPlay[4] = Music::Game4TMel2;
 		}
 		else if (!mMusicConfigs[mMusicState][5] && is_playing(4)) {
-			getContext().mMusic->getMusicPlayer(4).stop();
+			mMusicToPlay[4] = Music::None;
 		}
 		
 		// Mel1-3T
 		if (mMusicConfigs[mMusicState][6] && !is_playing(1)) {
-			getContext().mMusic->play(1, Music::Game3TMel1);
-			getContext().mMusic->getMusicPlayer(1).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
+			mMusicToPlay[1] = Music::Game3TMel1;
 		}
-		else if (!mMusicConfigs[mMusicState][6] && is_playing(1)) {
-			getContext().mMusic->getMusicPlayer(1).stop();
+		else if (!mMusicConfigs[mMusicState][6] && !mMusicConfigs[mMusicState][2] && is_playing(1)) {
+			mMusicToPlay[1] = Music::None;
 		}
 
 		// Mel2-3T
 		if (mMusicConfigs[mMusicState][7] && !is_playing(2)) {
-			getContext().mMusic->play(2, Music::Game3TMel2);
-			getContext().mMusic->getMusicPlayer(2).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
+			mMusicToPlay[2] = Music::Game3TMel2;
 		}
-		else if (!mMusicConfigs[mMusicState][7] && is_playing(2)) {
-			getContext().mMusic->getMusicPlayer(2).stop();
+		else if (!mMusicConfigs[mMusicState][7] && !mMusicConfigs[mMusicState][3] && is_playing(2)) {
+			mMusicToPlay[2] = Music::None;
 		}
 
 		// Mel3-3T
 		if (mMusicConfigs[mMusicState][8] && !is_playing(3)) {
-			getContext().mMusic->play(3, Music::Game3TMel3);
-			getContext().mMusic->getMusicPlayer(3).setPlayingOffset(getContext().mMusic->getMusicPlayer(0).getPlayingOffset());
+			mMusicToPlay[3] = Music::Game3TMel3;
+			
 		}
-		else if (!mMusicConfigs[mMusicState][8] && is_playing(3)) {
-			getContext().mMusic->getMusicPlayer(3).stop();
+		else if (!mMusicConfigs[mMusicState][8] && !mMusicConfigs[mMusicState][4] && is_playing(3)) {
+			mMusicToPlay[3] = Music::None;
 		}
-
+		// Play teh musik
+		getContext().mMusic->setPaused(true);
+		for (std::size_t i = 0; i < mMusicToPlay.size(); ++i) {
+			if (mMusicToPlay[i] != Music::None) {
+				getContext().mMusic->play(i, mMusicToPlay[i]);
+				getContext().mMusic->getMusicPlayer(i).setPlayingOffset(mMusicTimer);
+			}
+			else {
+				getContext().mMusic->getMusicPlayer(i).stop();
+			}
+		}
 	}
+
 
 	mSceneGraph.update(dt);
 	return true;
