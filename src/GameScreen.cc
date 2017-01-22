@@ -33,6 +33,7 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	receiver_name_map["Threshold"] = ReceiverTypes::Threshold;
 	receiver_name_map["AlwaysOn"] = ReceiverTypes::AlwaysOn;
 	receiver_name_map["AlwaysOff"] = ReceiverTypes::AlwaysOff;
+	receiver_name_map["RGB"] = ReceiverTypes::RGB;
 
 	level_files_map[Levels::Level1] = "res/levels/level1.lua";
 	level_files_map[Levels::Level2] = "res/levels/level2.lua";
@@ -450,8 +451,9 @@ void GameScreen::setLevel(Levels level) {
 				case GeneratorTypes::Color:
 					{
 						std::unique_ptr<WaveGenerator> generator = std::make_unique<WaveGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim");
-						generator->setColor(ColorGenerator::EmitterColor::Red);
 						generators.push_back(generator.get());
+						ColorGenerator* gen_ptr = static_cast<ColorGenerator*>(generator.get());	
+						gen_ptr->setGeneratorColor(ColorGenerator::EmitterColor::Red);
 						generator->setSize(sf::Vector2u(90,90));
 						generator->setAnimation("Generator");
 						mSceneLayers[static_cast<int>(Layer::Nodes)]->attachChild(std::move(generator));

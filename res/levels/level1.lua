@@ -1,4 +1,4 @@
-rgb = true
+rgb = false 
 time = true
 colors = {
 	positive_amp = {

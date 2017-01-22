@@ -101,7 +101,7 @@ float ColorGenerator::waveFunction(float distance) const {
 	return 1.f/2.f*sin(2*M_PI/1*distance + angle) + 0.5f;
 }
 
-void ColorGenerator::setColor(EmitterColor color) {
+void ColorGenerator::setGeneratorColor(EmitterColor color) {
 	color = color;
 }
 

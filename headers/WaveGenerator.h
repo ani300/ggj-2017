@@ -95,7 +95,7 @@ public:
 
 	sf::Color colorAt(sf::Vector2f pos) const;
 
-	void setColor(EmitterColor color);
+	void setGeneratorColor(EmitterColor color);
 	sf::Color getColor();
 
 protected:
