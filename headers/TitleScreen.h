@@ -9,6 +9,7 @@
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
 #include "WaveGenerator.h"
+#include "Animator.h"
 
 class TitleScreen: public State {
 
@@ -28,6 +29,9 @@ class TitleScreen: public State {
             Text,
             Count
         };
+
+        Animator animator;
+        float fader = 255.f;
 
         SceneNode mSceneGraph;
         std::array<SceneNode*, static_cast<std::size_t>(Layer::Count)> mSceneLayers;

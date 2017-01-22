@@ -13,7 +13,6 @@
 #include "ResultsScreen.h"
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
-#include "Animator.h"
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -48,8 +47,6 @@ class Game {
         SoundPlayer mSound;
         GameData mGameData;
         StatesStack mStatesStack;
-
-        Animator animator;
         
         sf::Text mStatisticsText;
         sf::Time mStatisticsUpdateTime;

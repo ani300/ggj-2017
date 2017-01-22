@@ -38,9 +38,9 @@ void Interpolation<float>::step(sf::Time dt){
     switch(easing){
         case GInterpolation::Easing::Linear:
             {
-            	//std::cout << "in:" << (*interpolated)<< std::endl;
-                if(abs((*interpolated) - target) > 0.001) {
-                    (*interpolated) += (original+target)/2 * dt.asSeconds() * rate;
+                if(abs((*interpolated) - target) > 0.01) {
+                    alpha += std::min( std::max(dt.asSeconds() * rate, 0.f),1.f);
+                    (*interpolated) = lerp(original, target, alpha);
                 }
                 else {
                 	(*interpolated) = target;
@@ -58,6 +58,7 @@ void Interpolation<float>::step(sf::Time dt){
         break;
     }
 };
+
 
 
 template<>
@@ -88,7 +89,6 @@ void Interpolation<sf::Vector2f>::step(sf::Time dt){
         break;
     }
 };
-
 
 Animator::Animator(){
 	interpolations = std::vector<GInterpolation*>();

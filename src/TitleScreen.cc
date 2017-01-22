@@ -9,6 +9,12 @@ TitleScreen::TitleScreen(StatesStack& stack, Context& context)
 		mSceneLayers[i] = layer.get();
 		mSceneGraph.attachChild(std::move(layer));
 	}
+
+	animator = Animator();
+	GInterpolation* inter = new Interpolation<float>(fader, 0.f, 2.f);
+
+    animator.interpolate(*inter);
+
 	// Prepara el fons de pantalla i la font
 	//sf::Font& font = getContext().mFonts->get(Fonts::Sansation);
 	//sf::Texture& backTexture = getContext().mTextures->get(Textures::Title);
@@ -67,10 +73,18 @@ TitleScreen::TitleScreen(StatesStack& stack, Context& context)
 }
 
 void TitleScreen::draw() {
+	sf::RectangleShape rectangle;
+	rectangle.setSize(sf::Vector2f(1920, 1080));
+	rectangle.setFillColor(sf::Color(0,0,0,fader));
+	rectangle.setPosition(0, 0);
+	
+
 	getContext().mRTexture->draw(mSceneGraph);
+	getContext().mRTexture->draw(rectangle);
 }
 
 bool TitleScreen::update(sf::Time dt) {
+	animator.update(dt);
 	mSceneGraph.update(dt);
 
 	return true;
@@ -85,17 +99,25 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 		sf::IntRect helpBounds = mButtonHelp->getBounds();
 		sf::IntRect exitBounds = mButtonExit->getBounds();
 		if (newGameBounds.contains(newPos)) {
-			getContext().mMusic->stop();
-			requestStackPop();
-			requestStackPush(StateType::Game);
-			requestStackSetLevel(Levels::Level2);
+			GInterpolation* inter = new Interpolation<float>(fader, 255.f, 2.f, [this](){
+				getContext().mMusic->stop();
+				requestStackPop();
+				requestStackPush(StateType::Game);
+				requestStackSetLevel(Levels::Level2);
+				
+			});
+			animator.interpolate(*inter);
 		}
 		else if (helpBounds.contains(newPos)) {
 			requestStackPop();
 			requestStackPush(StateType::Help);
 		}
 		else if (exitBounds.contains(newPos)) {
-			requestStackPop();
+			GInterpolation* inter = new Interpolation<float>(fader, 255.f, 2.f, [this](){
+				requestStackPop();
+				
+			});
+			animator.interpolate(*inter);
 		}
 		else {
 			std::cout << "kek" << std::endl;
