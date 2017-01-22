@@ -104,6 +104,7 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 				requestStackPush(StateType::Game);
 				getContext().mGameData->currentLevel = Levels::Level1;
 				requestStackSetLevel(Levels::Level1);
+				
 			});
 			animator.interpolate(*inter);
 		}
