@@ -43,29 +43,25 @@ TitleScreen::TitleScreen(StatesStack& stack, Context& context)
 	std::unique_ptr<SpriteNode> logo(new SpriteNode(logoTexture));
 	mLogo = logo.get();
 	mLogo->setPosition(640.f, 360.f);
-	mLogo->setRotation(-45);
-	mLogo->setSize(sf::Vector2u(50.f, 50.f));
+	mLogo->setSize(sf::Vector2u(551.f, 260.f));
 	mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(logo));
 
-	std::unique_ptr<SpriteNode> button1(new SpriteNode(startTexture));
+	std::unique_ptr<AnimationNode> button1(new AnimationNode(startTexture, "res/anim/start.anim"));
 	mButtonPlay = button1.get();
-	mButtonPlay->setPosition(750.f, 450.f);
-	mButtonPlay->setRotation(-45);
-	mButtonPlay->setSize(sf::Vector2u(200.f, 60.f));
+	mButtonPlay->setPosition(1600.f, 650.f);
+	mButtonPlay->setSize(sf::Vector2u(147.f, 70.f));
 	mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(button1));
 
-	std::unique_ptr<SpriteNode> button2(new SpriteNode(helpTexture));
+	std::unique_ptr<AnimationNode> button2(new AnimationNode(helpTexture, "res/anim/help.anim"));
 	mButtonHelp = button2.get();
-	mButtonHelp->setPosition(850.f, 550.f);
-	mButtonHelp->setRotation(-45);
-	mButtonHelp->setSize(sf::Vector2u(150.f, 60.f));
+	mButtonHelp->setPosition(1600.f, 750.f);
+	mButtonHelp->setSize(sf::Vector2u(118.f, 70.f));
 	mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(button2));
 
-	std::unique_ptr<SpriteNode> button3(new SpriteNode(exitTexture));
+	std::unique_ptr<AnimationNode> button3(new AnimationNode(exitTexture, "res/anim/exit.anim"));
 	mButtonExit = button3.get();
-	mButtonExit->setPosition(950.f, 650.f);
-	mButtonExit->setRotation(-45);
-	mButtonExit->setSize(sf::Vector2u(140.f, 60.f));
+	mButtonExit->setPosition(1600.f, 850.f);
+	mButtonExit->setSize(sf::Vector2u(110.f, 70.f));
 	mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(button3));
 
 	context.mMusic->play(0, Music::MenuTheme);
@@ -116,7 +112,6 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 		else if (exitBounds.contains(newPos)) {
 			GInterpolation* inter = new Interpolation<float>(fader, 255.f, 2.f, [this](){
 				requestStackPop();
-				
 			});
 			animator.interpolate(*inter);
 		}

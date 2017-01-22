@@ -38,7 +38,7 @@ receivers = {
 			b = 0,
 			a = 255
 		},
-		position = {240, 120}
+		position = {660, 360}
 	},
 	{
 		type = "RGB",
@@ -48,7 +48,7 @@ receivers = {
 			b = 0,
 			a = 255
 		},
-		position = {960, 900}
+		position = {960, 720}
 	},
 	{
 		type = "RGB",
@@ -58,7 +58,7 @@ receivers = {
 			b = 255,
 			a = 255
 		},
-		position = {1680, 120}
+		position = {1260, 360}
 	}
 }
 generators = {
