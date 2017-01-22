@@ -24,7 +24,8 @@ namespace Textures
 		Return,
 		HelpBackground,
                 ToolboxBackground,
-                ScaleBorder
+                ScaleBorder,
+                WinningBg
 	};
 }
 

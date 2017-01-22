@@ -1,22 +1,22 @@
-rgb = false 
+rgb = true
 time = true
 colors = {
 	positive_amp = {
-		r = 0,
+		r = 255,
 		g = 0,
-		b = 255,
+		b = 0,
 		a = 255
 	},
 	zero = {
 		r = 0,
-		g = 0,
+		g = 255,
 		b = 0,
 		a = 255
 	},
 	negative_amp = {
-		r = 255,
+		r = 0,
 		g = 0,
-		b = 0,
+		b = 255,
 		a = 255
 	}
 }
@@ -31,24 +31,26 @@ grid = {
 }
 receivers = {
 	{
-		type = "Threshold",
-		position = {1920/2, 800},
-		threshold_fn = function(amplitude)
-			return amplitude < 2 and amplitude > 1
-		end
+		type = "RGB",
+		color = {
+			r = 255,
+			g = 255,
+			b = 0,
+			a = 255
+		},
+		position = {500, 500}
 	},
-	{
-		type = "Threshold",
-		position = {1920/2, 300},
-		threshold_fn = function(amplitude)
-			return amplitude < 2 and amplitude > 1
-		end
-	}
 }
 generators = {
-	StandardGenerators = 2,
+	StandardGenerators = 0,
 	OffsetGenerators = 0,
 	WavelengthGenerators = 0,
 	FrequencyGenerators = 0,
-	EditableGenerators = 0
+	EditableGenerators = 0,
+	ColorGenerators = 3
+}
+generator_colors = {
+	"Red",
+	"Blue",
+	"Green"
 }
