@@ -1,22 +1,22 @@
 rgb = true
 time = true
 colors = {
-	positive_amp = {
-		r = 100,
-		g = 0,
-		b = 255,
-		a = 255
-	},
-	zero = {
-		r = 0,
-		g = 200,
-		b = 0,
-		a = 255
-	},
-	negative_amp = {
+	color1 = {
 		r = 255,
 		g = 0,
 		b = 0,
+		a = 255
+	},
+	color2 = {
+		r = 0,
+		g = 255,
+		b = 0,
+		a = 255
+	},
+	color3 = {
+		r = 0,
+		g = 0,
+		b = 255,
 		a = 255
 	}
 }
@@ -31,14 +31,21 @@ grid = {
 }
 receivers = {
 	{
-		type = "AlwaysOff",
+		type = "RGB",
+		color = {
+			r = 255,
+			g = 255,
+			b = 0,
+			a = 255
+		},
 		position = {500, 500}
 	},
 }
 generators = {
-	StandardGenerators = 1,
+	StandardGenerators = 0,
 	OffsetGenerators = 0,
 	WavelengthGenerators = 0,
 	FrequencyGenerators = 0,
-	EditableGenerators = 0
+	EditableGenerators = 0,
+	ColorGenerators = 3
 }

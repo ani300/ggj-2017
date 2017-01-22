@@ -10,7 +10,7 @@ class ColorGenerator;
 
 class ReceiverRGB: public Receiver {
 public:
-	ReceiverRGB(sf::Texture const& texture, std::vector<ColorGenerator*> const& generators, sf::Color objective);
+	ReceiverRGB(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators, sf::Color objective);
 
 private:
 	bool isOnRightNow();

@@ -1,7 +1,7 @@
 #include "ReceiverRGB.h"
-#include "ColorGenerator.h"
+#include "WaveGenerator.h"
 
-ReceiverRGB::ReceiverRGB(sf::Texture const& texture, std::vector<ColorGenerator*> const& generators, sf::Color objective) : 
+ReceiverRGB::ReceiverRGB(sf::Texture const& texture, std::vector<WaveGenerator*> const& generators, sf::Color objective) : 
 	Receiver(texture, generators),
 	mObjective(objective)
 {
@@ -20,7 +20,6 @@ bool ReceiverRGB::isOnRightNow() {
 		}
 	}
 	
-	sf::Color substracted = totalInput - mObjective;
 	int sub = (totalInput.r + totalInput.g + totalInput.b) - (mObjective.r + mObjective.g + mObjective.b);
 	return abs(sub) < 15;
 }
