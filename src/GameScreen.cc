@@ -141,7 +141,40 @@ void GameScreen::showMessage(std::string title, std::string msg, sf::Vector2f po
 
 
 void GameScreen::handleRealtimeInput(sf::Time dt) {
-	std::vector<SceneNode::Ptr> const& children = mSceneGraph.getChildren();
+	mousePos = sf::Mouse::getPosition(*getContext().mWindow);
+	newPos = Utils::correctMouse(mousePos, getContext().mScale);
+	oldPos = newfpos;
+	newfpos = sf::Vector2f(newPos.x, newPos.y);
+
+	std::vector<SceneNode*> children;
+	mSceneGraph.getAllChildren(children);
+	//Quieto
+	if(Utils::distance(oldPos, newfpos) < 0.01) {
+		for (std::size_t i = 0; i < children.size(); ++i) {
+			if(SpriteNode *child = dynamic_cast<SpriteNode*>(children[i])) {
+				sf::IntRect bounds = child->getBounds();
+				if (bounds.contains(newPos)) {
+					mouseOver = i;
+				}
+			  
+			}
+		}
+	}
+	//Movimiento
+	else {
+		if(hovering)
+		{
+			children[mouseOver]->onHoverOut();
+			mouseOver = -1;
+		}
+		if(mouseOver != -1)
+			children[mouseOver]->onMouseOut();
+		
+		hovering = false;
+		secondsToHover = HOVER_TIME;
+	}
+
+
 	if(mouseOver != -1) {
 		secondsToHover -= dt.asSeconds();
 		children[mouseOver]->onMouseOver();
@@ -153,8 +186,6 @@ void GameScreen::handleRealtimeInput(sf::Time dt) {
 
 	}
 	if (mSelectedGenerator != -1) {
-		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
-		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
 		generators[mSelectedGenerator]->setPosition(sf::Vector2f(newPos));
 		if((mToolbox->getBounds()).contains(newPos)) {
 			generators[mSelectedGenerator]->place(false);
@@ -360,42 +391,9 @@ sf::Vector2f GameScreen::snapGrid(sf::Vector2f pos, sf::Vector2i grid_size) {
 }
 
 bool GameScreen::handleEvent(const sf::Event& event) {
-	if (event.type == sf::Event::MouseMoved) {
-		sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
-		sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
-		sf::Vector2f newfpos = sf::Vector2f(newPos.x, newPos.y);
-		std::vector<SceneNode::Ptr> const& children = mSceneGraph.getChildren();
-		if(Utils::distance(oldPos, newfpos) < 0.01) {
-			for (std::size_t i = 0; i < children.size(); ++i) {
-				if(SpriteNode *child = dynamic_cast<SpriteNode*>(children[i].get())) {
-					sf::IntRect bounds = child->getBounds();
-					if (bounds.contains(newPos)) {
-						mouseOver = i;
-					}
-				  
-				}
-			}
-		}
-		else {
-			if(hovering)
-			{
-				children[mouseOver]->onHoverOut();
-				mouseOver = -1;
-			}
-			if(mouseOver != -1)
-				children[mouseOver]->onMouseOut();
-			
-			hovering = false;
-			secondsToHover = 2.f;
-		}
-
-		oldPos = newfpos;
-	}
+	
 	if (event.type == sf::Event::MouseButtonPressed) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
-			// Check if clicking on a generator
-			sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
-			sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
 			for (std::size_t i = 0; i < generators.size(); ++i) {
 				sf::IntRect generator_bounds = generators[i]->getBounds();
 				if (generator_bounds.contains(newPos)) {
@@ -406,8 +404,6 @@ bool GameScreen::handleEvent(const sf::Event& event) {
 	}
 	if (event.type == sf::Event::MouseButtonReleased) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
-			sf::Vector2i mousePos = sf::Mouse::getPosition(*getContext().mWindow);
-			sf::Vector2i newPos = Utils::correctMouse(mousePos, getContext().mScale);
 
 			if (mSelectedGenerator >= 0) {
 				if((mToolbox->getBounds()).contains(newPos)) {

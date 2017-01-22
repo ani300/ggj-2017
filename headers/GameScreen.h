@@ -19,6 +19,7 @@ class Receiver;
 class GameScreen: public State {
 
 public:
+	const float HOVER_TIME = 0.5f;
 	//Constructor with name of the image it wants to display
 	GameScreen(StatesStack& stack, Context& context);
 
@@ -86,11 +87,14 @@ private:
 
 	void showMessage(std::string title, std::string msg, sf::Vector2f pos, sf::Vector2f size);
 	
-	float secondsToHover = 2.f;
+	float secondsToHover = HOVER_TIME;
 	//Scene child below the mouse
 	int mouseOver = -1;
 	bool hovering = false;
 	sf::Vector2f oldPos = sf::Vector2f(0.f, 0.f);
+	sf::Vector2i mousePos;
+	sf::Vector2i newPos;
+	sf::Vector2f newfpos;
 	//Index is scenegraph children
 	void handleOnHover(int index);
 	void handleHoverOut(int index);

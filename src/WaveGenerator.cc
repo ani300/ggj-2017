@@ -117,7 +117,7 @@ void ColorGenerator::setGeneratorColor(EmitterColor color) {
 }
 
 sf::Color ColorGenerator::getGeneratorColor() {
-	std::cout << static_cast<int>(color_emit) << std::endl;
+	//std::cout << static_cast<int>(color_emit) << std::endl;
 	switch(color_emit) {
 	case EmitterColor::Red:
 		return sf::Color::Red;

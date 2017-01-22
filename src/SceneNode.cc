@@ -31,8 +31,11 @@ void SceneNode::onHoverOut(){}
 void SceneNode::onMouseOver(){}
 void SceneNode::onMouseOut(){}
 
-std::vector<SceneNode::Ptr>& SceneNode::getChildren() {
-	return mChildren;
+void SceneNode::getAllChildren(std::vector<SceneNode*>& v){
+	for(auto const& c  : mChildren){
+		v.push_back(c.get());
+		c->getAllChildren(v);
+	}
 }
 
 void SceneNode::updateCurrent(sf::Time) {

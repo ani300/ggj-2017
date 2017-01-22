@@ -25,6 +25,15 @@ void SpriteNode::setSize(sf::Vector2u desiredSize){
     mSize = sf::Vector2f(desiredSize.x, desiredSize.y);
 }
 
+void SpriteNode::onHover(){
+    std::cout << "On hover" << std::endl;
+}
+
+void SpriteNode::onHoverOut(){
+    std::cout << "On hover out" << std::endl;
+}
+
+
 void SpriteNode::setColor(sf::Color color){
     mSprite.setColor(color);
 }

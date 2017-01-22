@@ -14,6 +14,8 @@ class SpriteNode: public SceneNode {
         sf::IntRect getBounds();
 
         sf::Vector2f mSize;
+        virtual void onHover() override;
+        virtual void onHoverOut() override;
 
     protected:
         sf::Sprite mSprite;
