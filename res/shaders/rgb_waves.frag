@@ -20,7 +20,7 @@ uniform float frequency4;
 uniform float wavelength4 = 1.0;
 
 vec4 sum_of_sources() {
-    vec4 color(0.5,0.5,0.5,1.0);
+    vec4 color = vec4(0.5,0.5,0.5,1.0);
     if (color1.a > 0.) {
         float dist1 = distance(vec2(gl_FragCoord.x, 1080.0 - gl_FragCoord.y), source_pos1);
         float w1 = 2.0*3.141592*frequency1;
