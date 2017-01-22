@@ -23,6 +23,20 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneLayers[i] = layer.get();
 		mSceneGraph.attachChild(std::move(layer));
 	}
+	animator = Animator();
+	//Show text
+	GInterpolation* step2a = new Interpolation<float>(textOpacity, 255.f, 1.f);
+	GInterpolation* step2b = new Interpolation<float>(textLeft, 80.f, 1.f);
+	//Just wait
+	GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a, step2b](){
+		animator.interpolate(*step2a);
+		animator.interpolate(*step2b);
+	});
+    animator.interpolate(*step1);
+
+
+	showMessage("How to play", "Drag the wave generators from your left to the void", 
+		sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
 
 	generator_name_map["StandardGenerators"] = GeneratorTypes::Standard;
 	generator_name_map["FrequencyGenerators"] = GeneratorTypes::Frequency;
@@ -74,6 +88,26 @@ bool GameScreen::isLevelCompleted() {
 }
 
 bool GameScreen::update(sf::Time dt) {
+	animator.update(dt);
+	//Update text tutorial
+	tutorialTitle->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
+	sf::Vector2f pos1 = tutorialTitle->getPosition();
+    tutorialTitle->setPosition(textLeft * 1.2, pos1.y );
+
+    sf::Vector2f pos2 = tutorialBody->getPosition();
+    tutorialBody->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
+    tutorialBody->setPosition(textLeft, pos2.y);
+    if(firstMove){
+    	GInterpolation* step4a = new Interpolation<float>(textOpacity, 1.f, 1.f, [this](){
+    		tutorialTitle->setPosition(1920.f, 1080.f);
+    		tutorialBody->setPosition(1920.f, 1080.f);
+    	});
+    	GInterpolation* step4b = new Interpolation<float>(textLeft, 130.f, 1.f);
+    	animator.interpolate(*step4a);
+    	animator.interpolate(*step4b);
+    }
+    ///----tutorial
+
 	handleRealtimeInput(dt);
 
 	if(isLevelCompleted()) {
@@ -111,30 +145,32 @@ bool GameScreen::update(sf::Time dt) {
 }
 
 void GameScreen::showMessage(std::string title, std::string msg, sf::Vector2f pos, sf::Vector2f size) {
-	sf::Texture& messageBg = getContext().mTextures->get(Textures::ToolboxBackground);
+	/*sf::Texture& messageBg = getContext().mTextures->get(Textures::ToolboxBackground);
 	std::unique_ptr<SpriteNode> message(new SpriteNode(messageBg));
     SpriteNode* mMsgbg = message.get();
     mMsgbg->setPosition(pos.x, pos.y);
     mMsgbg->setSize(sf::Vector2u(size.x, size.y));
-    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(message));
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(message));*/
 
 
     sf::Font& font = getContext().mFonts->get(Fonts::Sansation);
     std::unique_ptr<TextNode> titlem(new TextNode(font, title));
-    TextNode* mTitle = titlem.get();
-    mTitle->setCharacterSize(30);
-    mTitle->setStyle(sf::Text::Bold);
-    mTitle->setColor(sf::Color::White);
-    mTitle->setPosition(pos.x, pos.y - size.y/1.5 );
+    tutorialTitle = titlem.get();
+    tutorialTitle->setCharacterSize(50);
+    tutorialTitle->setStyle(sf::Text::Bold);
+    tutorialTitle->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
+    tutorialTitle->setPosition(textLeft + pos.x, pos.y - size.y/3 );
     //mTitle->setSize(sf::Vector2u(size.x, 80));
-    mTitle->centerText();
+    //tutorialTitle->centerText();
     mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(titlem));
 
     std::unique_ptr<TextNode> msgm(new TextNode(font, msg));
-    TextNode* mMsg = msgm.get();
-    mMsg->setCharacterSize(20);
-    mTitle->setColor(sf::Color::White);
-    mMsg->setPosition(pos.x, pos.y - size.y/1.5 );
+    tutorialBody = msgm.get();
+    tutorialBody->setCharacterSize(40);
+    tutorialBody->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
+    tutorialBody->setStyle(sf::Text::Regular);
+    //margin-top:20.f
+    tutorialBody->setPosition(textLeft + pos.x - size.x/2, pos.y - size.y/3 + 70.f );
     //mMsg->setSize(sf::Vector2u(size.x, 80));
     mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(msgm));
 }
@@ -194,6 +230,7 @@ void GameScreen::handleRealtimeInput(sf::Time dt) {
 		}
 		else
 		{
+			firstMove = true;
 			generators[mSelectedGenerator]->place(true);
 		}
 	}

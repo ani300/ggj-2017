@@ -12,6 +12,7 @@
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
 #include "WaveGenerator.h"
+#include "Animator.h"
 #include "sol/sol.h"
 
 class WaveGenerator;
@@ -19,7 +20,7 @@ class Receiver;
 class GameScreen: public State {
 
 public:
-	const float HOVER_TIME = 1f;
+	const float HOVER_TIME = 1.f;
 	//Constructor with name of the image it wants to display
 	GameScreen(StatesStack& stack, Context& context);
 
@@ -27,7 +28,7 @@ public:
 	void draw();
 	bool update(sf::Time dt);
 	bool handleEvent(const sf::Event& event);
-void setLevel(Levels level);
+	void setLevel(Levels level);
 
 private:
 	sol::state lua;
@@ -99,6 +100,14 @@ private:
 	void handleOnHover(int index);
 	void handleHoverOut(int index);
 
+	//ANIMATIONS
+	Animator animator;
+	TextNode* tutorialTitle;
+	TextNode* tutorialBody;
+	float textOpacity = 1.f;
+	float textLeft = -10.f;
+	bool firstMove = false;
+	float timer = 5.f;
 
 	sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2f grid_size);
 	sf::Vector2f snapGrid(sf::Vector2f pos, sf::Vector2i grid_size);
@@ -137,3 +146,4 @@ private:
 	bool rgb;
 	bool time;
 };
+
