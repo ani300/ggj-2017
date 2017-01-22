@@ -28,9 +28,9 @@ bool Receiver::isOn() {
 	
 	currentFrame = (currentFrame + 1) % history_length;
 
-	std::cout << "ActiveFrames: " << activeFramesCount << std::endl;
+//	std::cout << "ActiveFrames: " << activeFramesCount << std::endl;
 
-	std::cout << "Ratio: " << static_cast<double>(activeFramesCount)/static_cast<double>(history_length) << " " << activation_threshold << std::endl;
+//	std::cout << "Ratio: " << static_cast<double>(activeFramesCount)/static_cast<double>(history_length) << " " << activation_threshold << std::endl;
 	return static_cast<double>(activeFramesCount)/static_cast<double>(history_length) > activation_threshold;
 }
 

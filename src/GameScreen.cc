@@ -22,6 +22,8 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneGraph.attachChild(std::move(layer));
 	}
 
+	getContext().mMusic->stop();
+
 	generator_name_map["StandardGenerator"] = GeneratorTypes::Standard;
 	generator_name_map["FrequencyGenerator"] = GeneratorTypes::Frequency;
 	generator_name_map["WavelengthGenerator"] = GeneratorTypes::Wavelength;
@@ -38,13 +40,11 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	mMusicConfigs[MusicState::Off]     = {0,0,0,0,0,0,0,0,0};
 	mMusicConfigs[MusicState::Base3]   = {1,0,0,0,0,0,0,0,0}; 
 	mMusicConfigs[MusicState::Base4]   = {0,1,0,0,0,0,0,0,0};
-	mMusicConfigs[MusicState::T1On]    = {0,1,1,1,1,1,0,0,0};
+	mMusicConfigs[MusicState::T4On]    = {0,1,1,1,1,1,0,0,0};
 	mMusicConfigs[MusicState::T2Harm]  = {0,1,1,1,0,0,0,0,0};
-	mMusicConfigs[MusicState::T2On]    = {0,1,1,1,1,1,0,0,0};
 	mMusicConfigs[MusicState::T4Harm1] = {0,1,1,0,0,0,0,0,0}; 
 	mMusicConfigs[MusicState::T4Harm2] = {0,1,1,1,0,0,0,0,0};
 	mMusicConfigs[MusicState::T4Mel1]  = {0,1,1,1,1,0,0,0,0};
-	mMusicConfigs[MusicState::T4On]    = {0,1,1,1,1,1,0,0,0};
 	mMusicConfigs[MusicState::T3Mel1]  = {1,0,0,0,0,0,1,0,0};
 	mMusicConfigs[MusicState::T3Mel2]  = {1,0,0,0,0,0,1,1,0};
 	mMusicConfigs[MusicState::T3On]    = {1,0,0,0,0,0,1,1,1};
@@ -74,15 +74,17 @@ bool GameScreen::update(sf::Time dt) {
 	updateMusicState();
 
 	if (old_state != mMusicState) {
+		std::cout << "Music changed! " << static_cast<int>(mMusicState) << std::endl;
 		// Update playing music accordingly
 		auto is_playing = [this](int player) -> bool {
 			return getContext().mMusic->getMusicPlayer(player).getStatus() == sf::SoundSource::Playing;
 		};
+
 		// Base3T
 		if (mMusicConfigs[mMusicState][0] && !is_playing(0)) {
 			getContext().mMusic->play(0, Music::Game3TBase);
 		}
-		else if (!mMusicConfigs[mMusicState][0] && is_playing(0)) {
+		else if (!mMusicConfigs[mMusicState][0] && !mMusicConfigs[mMusicState][0] && is_playing(0)) {
 			getContext().mMusic->stop();
 		}
 		
@@ -90,7 +92,7 @@ bool GameScreen::update(sf::Time dt) {
 		if (mMusicConfigs[mMusicState][1] && !is_playing(0)) {
 			getContext().mMusic->play(0, Music::Game4TBase);
 		}
-		else if (!mMusicConfigs[mMusicState][1] && is_playing(0)) {
+		else if (!mMusicConfigs[mMusicState][1] && !mMusicConfigs[mMusicState][0] && is_playing(0)) {
 			getContext().mMusic->stop();
 		}
 
@@ -226,7 +228,7 @@ void GameScreen::updateMusicState() {
 
 		if (receivers.size() == 1) {
 			if (num_working_receivers == 1) {
-				mMusicState = MusicState::T1On;
+				mMusicState = MusicState::T4On;
 			}
 			else {
 				mMusicState = MusicState::Base4;
@@ -237,7 +239,7 @@ void GameScreen::updateMusicState() {
 				mMusicState = MusicState::T2Harm;
 			}
 			else if (num_working_receivers == 2) {
-				mMusicState = MusicState::T2On;
+				mMusicState = MusicState::T4On;
 			}
 			else {
 				mMusicState = MusicState::Base4;
