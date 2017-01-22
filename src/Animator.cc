@@ -39,10 +39,11 @@ void Interpolation<float>::step(sf::Time dt){
         case GInterpolation::Easing::Linear:
             {
             	//std::cout << "in:" << (*interpolated)<< std::endl;
-                if(abs((*interpolated) - target) > 0.01) {
+                if(abs((*interpolated) - target) > 0.001) {
                     (*interpolated) += (original+target)/2 * dt.asSeconds() * rate;
                 }
                 else {
+                	(*interpolated) = target;
                     ended = true;
                     cb();
                 }
@@ -72,6 +73,7 @@ void Interpolation<sf::Vector2f>::step(sf::Time dt){
                     	);
                 }
                 else {
+                	(*interpolated) = target;
                     ended = true;
                     cb();
                 }

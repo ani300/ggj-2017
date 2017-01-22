@@ -57,7 +57,7 @@ Game::Game() :
     animator = Animator();
     //Interpolation<float> inter = Interpolation<float>(test, 10.f, 1.f);
     //GInterpolation* inter = new Interpolation<float>(test, 10.f, 1.f);
-    //GInterpolation* inter = new Interpolation<sf::Vector2f>(test, sf::Vector2f(10.f, 10.f), 1.f, [](){
+    //GInterpolation* inter = new Interpolation<sf::Vector2f>(test, sf::Vector2f(10.f, 10.f), 0.5f, [](){
     //  std::cout << "Callback!" << std::endl;
     //});
     //animator.interpolate((*inter));
@@ -108,6 +108,7 @@ void Game::processInput() {
 }
 
 void Game::update(sf::Time dt) {
+    //std::cout << test.x << ", " << test.y << std::endl;
     animator.update(dt);
     mStatesStack.update(dt);
 }
