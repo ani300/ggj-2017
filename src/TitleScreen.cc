@@ -124,7 +124,7 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 			requestStackPop();
 			requestStackPush(StateType::Game);
 			getContext().mGameData->currentLevel = Levels::Level4;
-			requestStackSetLevel(Levels::Level4);
+			requestStackSetLevel(Levels::Level1);
 		}
 	}
 	return true;
