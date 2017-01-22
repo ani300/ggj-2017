@@ -24,7 +24,9 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 		mSceneGraph.attachChild(std::move(layer));
 	}
 	animator = Animator();
-	showMessage("", "", sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
+	showMessage1("", "");
+	showMessage2("", "");
+	showMessage3("", "");
 	generator_name_map["StandardGenerators"] = GeneratorTypes::Standard;
 	generator_name_map["FrequencyGenerators"] = GeneratorTypes::Frequency;
 	generator_name_map["WavelengthGenerators"] = GeneratorTypes::Wavelength;
@@ -68,6 +70,60 @@ GameScreen::GameScreen(StatesStack& stack, Context& context) :
 	{
 		tutorialFirstMessage();
 	}
+
+	if(getContext().mGameData->currentLevel == Levels::Level2)
+	{
+		showMessage1("1", "To win activate all receivers");
+		showMessage2("2", "These two receivers need amplitude bigger than one");
+		//Show text
+		GInterpolation* step2a_1 = new Interpolation<float>(textOpacity1, 255.f, 1.f);
+		GInterpolation* step2b_1 = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(500.f,320.f), 3.f);
+		GInterpolation* step2a_2 = new Interpolation<float>(textOpacity2, 255.f, 1.f);
+		GInterpolation* step2b_2 = new Interpolation<sf::Vector2f>(textPos2, sf::Vector2f(500.f,620.f), 3.f);
+		//Just wait
+		GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a_1, step2b_1, step2a_2, step2b_2](){
+			animator.interpolate(*step2a_1);
+			animator.interpolate(*step2b_1);
+			animator.interpolate(*step2a_2);
+			animator.interpolate(*step2b_2);
+		});
+		animator.interpolate(*step1);
+	}
+	if(getContext().mGameData->currentLevel == Levels::Level3)
+	{
+		showMessage1("", "This receiver always wants to be at darkness");
+		//Show text
+		GInterpolation* step2a_1 = new Interpolation<float>(textOpacity1, 255.f, 1.f);
+		GInterpolation* step2b_1 = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(420.f,540.f), 3.f);
+		GInterpolation* step2a_2 = new Interpolation<float>(textOpacity2, 255.f, 1.f);
+		GInterpolation* step2b_2 = new Interpolation<sf::Vector2f>(textPos2, sf::Vector2f(470.f,650.f), 3.f);
+		//Just wait
+		GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a_1, step2b_1, step2a_2, step2b_2](){
+			animator.interpolate(*step2a_1);
+			animator.interpolate(*step2b_1);
+			animator.interpolate(*step2a_2);
+			animator.interpolate(*step2b_2);
+		});
+		animator.interpolate(*step1);
+	}
+	if(getContext().mGameData->currentLevel == Levels::Level4)
+	{
+		showMessage1("1", "These are RGB generators. \n They make different colors.\n We have Red, Green and Blue generators");
+		showMessage2("2", "And this is an RGB receiver, obviously.\n It receives the same color it looks like");
+		//Show text
+		GInterpolation* step2a_1 = new Interpolation<float>(textOpacity1, 255.f, 1.f);
+		GInterpolation* step2b_1 = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(200.f,50.f), 3.f);
+		GInterpolation* step2a_2 = new Interpolation<float>(textOpacity2, 255.f, 1.f);
+		GInterpolation* step2b_2 = new Interpolation<sf::Vector2f>(textPos2, sf::Vector2f(450.f,550.f), 3.f);
+		//Just wait
+		GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a_1, step2b_1, step2a_2, step2b_2](){
+			animator.interpolate(*step2a_1);
+			animator.interpolate(*step2b_1);
+			animator.interpolate(*step2a_2);
+			animator.interpolate(*step2b_2);
+		});
+		animator.interpolate(*step1);
+	}
 }
 
 void GameScreen::draw() {
@@ -85,45 +141,56 @@ bool GameScreen::isLevelCompleted() {
 
 void GameScreen::tutorialFirstMessage(){
 
-	showMessage("How to play", "Drag the wave generators from your left to the void", 
-		sf::Vector2f(300.f,50.f), sf::Vector2f(100.f,50.f));
+	showMessage1("1", "This is a wave generator");
+	showMessage2("2", "This is a threshold receiver. \n If in the last 2 seconds it sense a wave with a \n certain amplitude it will trigger");
 	//Show text
-	GInterpolation* step2a = new Interpolation<float>(textOpacity, 255.f, 1.f);
-	GInterpolation* step2b = new Interpolation<float>(textLeft, 80.f, 1.f);
+	GInterpolation* step2a_1 = new Interpolation<float>(textOpacity1, 255.f, 1.f);
+	GInterpolation* step2b_1 = new Interpolation<sf::Vector2f>(textPos1, sf::Vector2f(30.f,65.f), 3.f);
+	GInterpolation* step2a_2 = new Interpolation<float>(textOpacity2, 255.f, 1.f);
+	GInterpolation* step2b_2 = new Interpolation<sf::Vector2f>(textPos2, sf::Vector2f(500.f,500.f), 3.f);
 	//Just wait
-	GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a, step2b](){
-		animator.interpolate(*step2a);
-		animator.interpolate(*step2b);
+	GInterpolation* step1 = new Interpolation<float>(timer, 0.f, 1.f, [this, step2a_1, step2b_1, step2a_2, step2b_2](){
+		animator.interpolate(*step2a_1);
+		animator.interpolate(*step2b_1);
+		animator.interpolate(*step2a_2);
+		animator.interpolate(*step2b_2);
 	});
 	animator.interpolate(*step1);
 
 }
 
+
 void GameScreen::tutorialFirstMessageOff(){
-	if(getContext().mGameData->currentLevel == Levels::Level1 && firstMove)
+	/*if(getContext().mGameData->currentLevel == Levels::Level1 && firstMove)
 	{
 		firstMove = false;
-	    GInterpolation* step4a = new Interpolation<float>(textOpacity, 1.f, 1.f, [this](){
+	    GInterpolation* step4a = new Interpolation<float>(textOpacity1, 1.f, 1.f, [this](){
     		tutorialTitle->setPosition(1920.f, 1080.f);
     		tutorialBody->setPosition(1920.f, 1080.f);
     	});
-    	GInterpolation* step4b = new Interpolation<float>(textLeft, 130.f, 1.f);
+    	GInterpolation* step4b = new Interpolation<float>(textPos, 130.f, 1.f);
     	animator.interpolate(*step4a);
     	animator.interpolate(*step4b);
 		
-	}
+	}*/
 }
 
 bool GameScreen::update(sf::Time dt) {
 	animator.update(dt);
 	//Update text tutorial
-	tutorialTitle->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
-	sf::Vector2f pos1 = tutorialTitle->getPosition();
-    tutorialTitle->setPosition(textLeft * 1.2, pos1.y );
+	tutorialTitle1->setColor(sf::Color(textOpacity1,textOpacity1,textOpacity1,textOpacity1));
+    tutorialTitle1->setPosition(textPos1.x, textPos1.y);
 
-    sf::Vector2f pos2 = tutorialBody->getPosition();
-    tutorialBody->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
-    tutorialBody->setPosition(textLeft, pos2.y);
+    tutorialBody1->setColor(sf::Color(textOpacity1,textOpacity1,textOpacity1,textOpacity1));
+    tutorialBody1->setPosition(textPos1.x, textPos1.y + 70.f);
+
+    tutorialTitle2->setColor(sf::Color(textOpacity2,textOpacity2,textOpacity2,textOpacity2));
+    tutorialTitle2->setPosition(textPos2.x, textPos2.y);
+
+    tutorialBody2->setColor(sf::Color(textOpacity2,textOpacity2,textOpacity2,textOpacity2));
+    tutorialBody2->setPosition(textPos2.x, textPos2.y + 70.f);
+
+    
     ///----tutorial
 
 	handleRealtimeInput(dt);
@@ -161,7 +228,7 @@ bool GameScreen::update(sf::Time dt) {
 	return true;
 }
 
-void GameScreen::showMessage(std::string title, std::string msg, sf::Vector2f pos, sf::Vector2f size) {
+void GameScreen::showMessage1(std::string title, std::string msg) {
 	/*sf::Texture& messageBg = getContext().mTextures->get(Textures::ToolboxBackground);
 	std::unique_ptr<SpriteNode> message(new SpriteNode(messageBg));
     SpriteNode* mMsgbg = message.get();
@@ -172,22 +239,83 @@ void GameScreen::showMessage(std::string title, std::string msg, sf::Vector2f po
 
     sf::Font& font = getContext().mFonts->get(Fonts::Sansation);
     std::unique_ptr<TextNode> titlem(new TextNode(font, title));
-    tutorialTitle = titlem.get();
-    tutorialTitle->setCharacterSize(50);
-    tutorialTitle->setStyle(sf::Text::Bold);
-    tutorialTitle->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
-    tutorialTitle->setPosition(textLeft + pos.x, pos.y - size.y/3 );
+    tutorialTitle1 = titlem.get();
+    tutorialTitle1->setCharacterSize(50);
+    tutorialTitle1->setStyle(sf::Text::Bold);
+    tutorialTitle1->setColor(sf::Color(textOpacity1,textOpacity1,textOpacity1,textOpacity1));
+    tutorialTitle1->setPosition(textPos1.x, textPos1.y);
     //mTitle->setSize(sf::Vector2u(size.x, 80));
     //tutorialTitle->centerText();
     mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(titlem));
 
     std::unique_ptr<TextNode> msgm(new TextNode(font, msg));
-    tutorialBody = msgm.get();
-    tutorialBody->setCharacterSize(40);
-    tutorialBody->setColor(sf::Color(textOpacity,textOpacity,textOpacity,textOpacity));
-    tutorialBody->setStyle(sf::Text::Regular);
+    tutorialBody1 = msgm.get();
+    tutorialBody1->setCharacterSize(40);
+    tutorialBody1->setColor(sf::Color(textOpacity1,textOpacity1,textOpacity1,textOpacity1));
+    tutorialBody1->setStyle(sf::Text::Regular);
     //margin-top:20.f
-    tutorialBody->setPosition(textLeft + pos.x - size.x/2, pos.y - size.y/3 + 70.f );
+    tutorialBody1->setPosition(textPos1.x, textPos1.y+70.f);
+    //mMsg->setSize(sf::Vector2u(size.x, 80));
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(msgm));
+}
+
+void GameScreen::showMessage2(std::string title, std::string msg) {
+	/*sf::Texture& messageBg = getContext().mTextures->get(Textures::ToolboxBackground);
+	std::unique_ptr<SpriteNode> message(new SpriteNode(messageBg));
+    SpriteNode* mMsgbg = message.get();
+    mMsgbg->setPosition(pos.x, pos.y);
+    mMsgbg->setSize(sf::Vector2u(size.x, size.y));
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(message));*/
+
+
+    sf::Font& font = getContext().mFonts->get(Fonts::Sansation);
+    std::unique_ptr<TextNode> titlem(new TextNode(font, title));
+    tutorialTitle2 = titlem.get();
+    tutorialTitle2->setCharacterSize(50);
+    tutorialTitle2->setStyle(sf::Text::Bold);
+    tutorialTitle2->setColor(sf::Color(textOpacity2,textOpacity2,textOpacity2,textOpacity2));
+    tutorialTitle2->setPosition(textPos2.x, textPos2.y);
+    //mTitle->setSize(sf::Vector2u(size.x, 80));
+    //tutorialTitle->centerText();
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(titlem));
+
+    std::unique_ptr<TextNode> msgm(new TextNode(font, msg));
+    tutorialBody2 = msgm.get();
+    tutorialBody2->setCharacterSize(40);
+    tutorialBody2->setColor(sf::Color(textOpacity2,textOpacity2,textOpacity2,textOpacity2));
+    tutorialBody2->setStyle(sf::Text::Regular);
+    //margin-top:20.f
+    tutorialBody2->setPosition(textPos2.x, textPos2.y+70.f);
+    //mMsg->setSize(sf::Vector2u(size.x, 80));
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(msgm));
+}
+void GameScreen::showMessage3(std::string title, std::string msg) {
+	/*sf::Texture& messageBg = getContext().mTextures->get(Textures::ToolboxBackground);
+	std::unique_ptr<SpriteNode> message(new SpriteNode(messageBg));
+    SpriteNode* mMsgbg = message.get();
+    mMsgbg->setPosition(pos.x, pos.y);
+    mMsgbg->setSize(sf::Vector2u(size.x, size.y));
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(message));*/
+
+
+    sf::Font& font = getContext().mFonts->get(Fonts::Sansation);
+    std::unique_ptr<TextNode> titlem(new TextNode(font, title));
+    tutorialTitle3 = titlem.get();
+    tutorialTitle3->setCharacterSize(50);
+    tutorialTitle3->setStyle(sf::Text::Bold);
+    tutorialTitle3->setColor(sf::Color(textOpacity3,textOpacity3,textOpacity3,textOpacity3));
+    tutorialTitle3->setPosition(textPos2.x, textPos2.y);
+    //mTitle->setSize(sf::Vector2u(size.x, 80));
+    //tutorialTitle->centerText();
+    mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(titlem));
+
+    std::unique_ptr<TextNode> msgm(new TextNode(font, msg));
+    tutorialBody3 = msgm.get();
+    tutorialBody3->setCharacterSize(40);
+    tutorialBody3->setColor(sf::Color(textOpacity3,textOpacity3,textOpacity3,textOpacity3));
+    tutorialBody3->setStyle(sf::Text::Regular);
+    //margin-top:20.f
+    tutorialBody3->setPosition(textPos2.x, textPos2.y+70.f);
     //mMsg->setSize(sf::Vector2u(size.x, 80));
     mSceneLayers[static_cast<int>(Layer::Text)]->attachChild(std::move(msgm));
 }

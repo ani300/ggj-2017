@@ -85,6 +85,7 @@ bool ResultsScreen::handleEvent(const sf::Event& event) {
 		requestStackPop();
 		requestStackPop();
 		requestStackPush(StateType::Game);
+		getContext().mGameData->currentLevel = nextLevel;
 		requestStackSetLevel(nextLevel);
 	}
 

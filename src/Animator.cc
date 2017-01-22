@@ -68,9 +68,11 @@ void Interpolation<sf::Vector2f>::step(sf::Time dt){
             {
             	//std::cout << "in:" << (*interpolated)<< std::endl;
                 if(Utils::distance((*interpolated), target) > 0.01) {
+                    alpha += std::min( std::max(dt.asSeconds() * rate, 0.f),1.f);
+                    
                     (*interpolated) = sf::Vector2f(
-                    	interpolated->x + (interpolated->x+target.x)/2* dt.asSeconds() * rate,
-                    	interpolated->y + (interpolated->y+target.y)/2* dt.asSeconds() * rate
+                    	lerp(original.x, target.x, alpha),
+                    	lerp(original.y, target.y, alpha)
                     	);
                 }
                 else {

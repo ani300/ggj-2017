@@ -128,8 +128,8 @@ bool TitleScreen::handleEvent(const sf::Event& event) {
 		if (event.key.code == sf::Keyboard::Return) {
 			requestStackPop();
 			requestStackPush(StateType::Game);
-			getContext().mGameData->currentLevel = Levels::Level1;
-			requestStackSetLevel(Levels::Level1);
+			getContext().mGameData->currentLevel = Levels::Level4;
+			requestStackSetLevel(Levels::Level4);
 		}
 	}
 	return true;

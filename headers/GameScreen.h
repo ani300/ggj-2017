@@ -89,7 +89,9 @@ private:
 
 	void tutorialFirstMessage();
 	void tutorialFirstMessageOff();
-	void showMessage(std::string title, std::string msg, sf::Vector2f pos, sf::Vector2f size);
+	void showMessage1(std::string title, std::string msg);
+	void showMessage2(std::string title, std::string msg);
+	void showMessage3(std::string title, std::string msg);
 	
 	float secondsToHover = HOVER_TIME;
 	//Scene child below the mouse
@@ -105,10 +107,19 @@ private:
 
 	//ANIMATIONS
 	Animator animator;
-	TextNode* tutorialTitle;
-	TextNode* tutorialBody;
-	float textOpacity = 1.f;
-	float textLeft = -10.f;
+	TextNode* tutorialTitle1;
+	TextNode* tutorialBody1;
+	TextNode* tutorialTitle2;
+	TextNode* tutorialBody2;
+	TextNode* tutorialTitle3;
+	TextNode* tutorialBody3;
+	float textOpacity1 = 1.f;
+	float textOpacity2 = 1.f;
+	float textOpacity3 = 1.f;
+	sf::Vector2f textPos1 = sf::Vector2f(0.f, 0.f);
+	sf::Vector2f textPos2 = sf::Vector2f(0.f, 0.f);
+	sf::Vector2f textPos3 = sf::Vector2f(0.f, 0.f);
+
 	float timer = 5.f;
 	bool firstMove = true;
 
