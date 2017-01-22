@@ -1,19 +1,19 @@
 rgb = true
 time = true
 colors = {
-	color1 = {
+	positive_amp = {
 		r = 255,
 		g = 0,
 		b = 0,
 		a = 255
 	},
-	color2 = {
+	zero = {
 		r = 0,
 		g = 255,
 		b = 0,
 		a = 255
 	},
-	color3 = {
+	negative_amp = {
 		r = 0,
 		g = 0,
 		b = 255,
@@ -48,4 +48,9 @@ generators = {
 	FrequencyGenerators = 0,
 	EditableGenerators = 0,
 	ColorGenerators = 3
+}
+generator_colors = {
+	"Red",
+	"Blue",
+	"Green"
 }

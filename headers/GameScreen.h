@@ -11,6 +11,7 @@
 #include "InvisibleNode.h"
 #include "ResourceHolder.h"
 #include "ResourceIdentifiers.h"
+#include "WaveGenerator.h"
 #include "sol/sol.h"
 
 class WaveGenerator;
@@ -107,6 +108,7 @@ private:
 	std::unordered_map<std::string, GeneratorTypes> generator_name_map;
 	std::unordered_map<std::string, ReceiverTypes> receiver_name_map;
 	std::unordered_map<Levels, std::string> level_files_map;
+	std::unordered_map<std::string, ColorGenerator::EmitterColor> color_name_map;
 
 	sf::Time mLevelCompletedSecond;
 
