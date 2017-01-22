@@ -450,7 +450,7 @@ void GameScreen::setLevel(Levels level) {
 					break;
 				case GeneratorTypes::Color:
 					{
-						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim", ColorGenerator::EmitterColor::Red);
+						std::unique_ptr<ColorGenerator> generator = std::make_unique<ColorGenerator>(mContext.mTextures->get(Textures::WaveGenerator), "res/anim/generator.anim"/*, ColorGenerator::EmitterColor::Red*/);
 						generators.push_back(generator.get());
 						generator->setSize(sf::Vector2u(90,90));
 						generator->setAnimation("Generator");
@@ -495,7 +495,7 @@ void GameScreen::setLevel(Levels level) {
 		sf::Color color3(pos_color["r"],pos_color["g"],pos_color["b"],pos_color["a"]);
 		sf::Color grid_color(g_color["r"],g_color["g"],g_color["b"],g_color["a"]);
 
-		auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators);
+		auto wave_pattern = std::make_unique<WavePatternNode>("res/shaders/sine_waves.frag", generators, color1, color2, color3);
 		mSceneLayers[static_cast<int>(Layer::WavePattern)]->attachChild(std::move(wave_pattern));
 
 		auto grid = std::make_unique<GridNode>(grid_size, grid_color);	

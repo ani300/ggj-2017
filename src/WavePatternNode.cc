@@ -33,7 +33,8 @@ void WavePatternNode::updateCurrent(sf::Time dt) {
 			mShader.setUniform("frequency" + num, mGeneratorList[i]->getFrequency());
 			mShader.setUniform("wavelength" + num, mGeneratorList[i]->getWavelength());
 			if (mRGB) {
-				std::cout << static_cast<ColorGenerator*>(mGeneratorList[i])->getGeneratorColor().r << std::endl;
+				sf::Color col = static_cast<ColorGenerator*>(mGeneratorList[i])->getGeneratorColor();
+				std::cout << int(col.r) << " " << int(col.g) << " " << int(col.b) << std::endl;
 				mShader.setUniform("color" + num, sf::Glsl::Vec4(static_cast<ColorGenerator*>(mGeneratorList[i])->getGeneratorColor()));
 			}
 			else {

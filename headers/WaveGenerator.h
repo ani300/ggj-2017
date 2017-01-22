@@ -90,7 +90,7 @@ public:
 	};
 
 	ColorGenerator(sf::Texture const& texture, std::string const& file);
-	ColorGenerator(sf::Texture const& texture, std::string const& file, EmitterColor);
+	ColorGenerator(sf::Texture const& texture, std::string const& file, EmitterColor emitter_color);
 	~ColorGenerator() {};
 
 	sf::Color colorAt(sf::Vector2f pos) const;
@@ -101,5 +101,5 @@ public:
 protected:
 	virtual float waveFunction(float distance) const override;
 
-	EmitterColor color_emitted;
+	EmitterColor color_emit;
 };
